@@ -44,7 +44,11 @@ public class Client extends JFrame{
 	public Boolean[] gedrucktJoker = new Boolean[3];
 	public Boolean[] gedrucktHand = new Boolean[14];
 	
+<<<<<<< HEAD
 	public ArrayList<Card> hand; 
+=======
+	String pfad = System.getProperty("user.home") + "\\Workspace\\Haggis\\images\\";
+>>>>>>> master
 	
 	private Image imageRückseite;
 	private ImageIcon rückseite;
@@ -92,7 +96,7 @@ public class Client extends JFrame{
 		enemyKarten.setLayout(new GridLayout(2,3));
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefügt wird
-		image = new ImageIcon("C:\\workspace\\Haggis\\images\\icon.jpg").getImage();
+		image = new ImageIcon(pfad +"icon.jpg").getImage();
 		icon = new ImageIcon(image.getScaledInstance(150, 150, Image.SCALE_DEFAULT));	
 		JLabel lblImage = new JLabel();
 		lblImage.setIcon(icon);
@@ -114,7 +118,7 @@ public class Client extends JFrame{
 		enemyKarten.add(lblHolder);		
 		
 		//Added alle Componente dem JPanel enemy
-		enemy.setBorder(new EmptyBorder(0,425,0,0));
+		enemy.setBorder(new EmptyBorder(0,425,80,0));
 		enemy.add(lblImage);
 		enemy.add(Box.createHorizontalStrut(20));
 		enemy.add(enemyKarten);
@@ -122,36 +126,38 @@ public class Client extends JFrame{
 		/*
 		 * DER CENTER TEIL DES JFRAMES
 		 * */
-		
-		JPanel haggis = new JPanel();
 		JPanel spiel = new JPanel();
+		JPanel haggis = new JPanel();
+		JPanel spielfeld = new JPanel();
+		
 		
 		spiel.setLayout(new BoxLayout(spiel, BoxLayout.X_AXIS));
 		haggis.setLayout(new BoxLayout(haggis, BoxLayout.Y_AXIS));
+		spielfeld.setLayout(new BoxLayout(spielfeld, BoxLayout.Y_AXIS));
 		
 		//Erstellt das JLabel mit der Anzahl Haggis Karten
 		JLabel haggisKarten = new JLabel("Haggis: " + haggisAnzahl);
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefügt wird
-		imageRückseite = new ImageIcon("C:\\workspace\\Haggis\\images\\rueckseite.jpg").getImage();
+		imageRückseite = new ImageIcon(pfad +"rueckseite.jpg").getImage();
 		rückseite = new ImageIcon(imageRückseite.getScaledInstance(150, 200, Image.SCALE_DEFAULT));	
 		JLabel lblHaggis = new JLabel();
 		lblHaggis.setIcon(rückseite);
 		
-		//JLabel welches das Spielfeld ist
-		JPanel spielfeld = new JPanel();
-		spielfeld.setPreferredSize(new Dimension(900, 300));
-		spielfeld.setMaximumSize(new Dimension(900, 300));
-		spielfeld.setMinimumSize(new Dimension(900, 300));
-		spielfeld.setLayout(new BoxLayout(spielfeld, BoxLayout.X_AXIS));
+		//JPanel fuer den Oberen Teil des Spielfeld
+		JPanel spielfeldoben = new JPanel();
+		spielfeldoben.setPreferredSize(new Dimension(800, 200));
+		spielfeldoben.setMaximumSize(new Dimension(800, 200));
+		spielfeldoben.setMinimumSize(new Dimension(800, 200));
+		spielfeldoben.setLayout(new BoxLayout(spielfeldoben, BoxLayout.X_AXIS));
 			
 		Color bg = new Color(135,210,229);
-		spielfeld.setOpaque(true);
-		spielfeld.setBackground(bg);
+		spielfeldoben.setOpaque(true);
+		spielfeldoben.setBackground(bg);
 		
-		//Schleife welches 8 Labels in der Mitte erstell in der die Karten dann ausgepsielt werden
-		spielfeld.add(Box.createHorizontalStrut(30));
-		for(int i = 0;i<8;i++){
+		//Schleife welches 7 Labels im oberen Spielfeld erstellt
+		spielfeldoben.add(Box.createHorizontalStrut(30));
+		for(int i = 0;i<7;i++){
 			JLabel anzeigeKarte = new JLabel();
 			anzeigeKarte.setPreferredSize(new Dimension(100, 150));
 			anzeigeKarte.setMaximumSize(new Dimension(100, 150));
@@ -159,15 +165,47 @@ public class Client extends JFrame{
 			anzeigeKarte.setOpaque(true);
 			anzeigeKarte.setBackground(Color.black);
 			anzeigeKarten[i] = anzeigeKarte;
-			spielfeld.add(anzeigeKarten[i]);
-			spielfeld.add(Box.createHorizontalStrut(5));
+			spielfeldoben.add(anzeigeKarten[i]);
+			spielfeldoben.add(Box.createHorizontalStrut(5));
 		}
+		
+		//JPanel fuer den unteren Teil des Spielfelds
+		JPanel spielfelunten = new JPanel();
+		spielfelunten.setPreferredSize(new Dimension(800, 200));
+		spielfelunten.setMaximumSize(new Dimension(800, 200));
+		spielfelunten.setMinimumSize(new Dimension(800, 200));
+		spielfelunten.setLayout(new BoxLayout(spielfelunten, BoxLayout.X_AXIS));
+					
+
+		spielfelunten.setOpaque(true);
+		spielfelunten.setBackground(bg);
+				
+		//Schleife welches 7 Labels im unteren Teil des Spielfelds erstellt
+		spielfelunten.add(Box.createHorizontalStrut(30));
+		for(int i = 0;i<7;i++){
+			JLabel anzeigeKarte = new JLabel();
+			anzeigeKarte.setPreferredSize(new Dimension(100, 150));
+			anzeigeKarte.setMaximumSize(new Dimension(100, 150));
+			anzeigeKarte.setMinimumSize(new Dimension(100, 150));
+			anzeigeKarte.setOpaque(true);
+			anzeigeKarte.setBackground(Color.black);
+			anzeigeKarten[i] = anzeigeKarte;
+			spielfelunten.add(anzeigeKarten[i]);
+			spielfelunten.add(Box.createHorizontalStrut(5));
+		}
+		
 		
 		haggis.add(haggisKarten);
 		haggis.add(lblHaggis);
+		haggis.setBorder(new EmptyBorder(0,0,0,50));
+		
+		spielfeld.add(spielfeldoben);
+		spielfeld.add(spielfelunten);
 		
 		spiel.add(haggis);
+		
 		spiel.add(spielfeld);
+		
 		
 		
 		/*
@@ -232,9 +270,6 @@ public class Client extends JFrame{
 		
 		JLabel lbljokerkarten = new JLabel("Jokerkarten");
 		lbljokerkarten.setBounds(jokerKartenBound, -50, 100, 150);
-
-		
-		
 	
 		JLabel lbleigeneKarten = new JLabel("Handkarten");
 		lbleigeneKarten.setBounds(kartenBound, -50 ,100,150);
@@ -289,12 +324,14 @@ public class Client extends JFrame{
 		enemy.setBackground(background);
 		spiel.setBackground(background);
 		spielSteuerung.setBackground(background);
+		titelSteuerung.setBackground(background);
 		
 		
 		linksTitel.add(lbljokerkarten);
 		rechtsTitel.add(lbleigeneKarten);
 		titelSteuerung.add(linksTitel);
 		titelSteuerung.add(rechtsTitel);
+		titelSteuerung.setBorder(new EmptyBorder(100,0,0,0));
 		
 		rechtsSteuerung.add(eigeneKartenButtons);
 		linksSteuerung.add(jokerkarten);
