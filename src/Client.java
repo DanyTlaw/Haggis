@@ -44,11 +44,11 @@ public class Client extends JFrame{
 	public Boolean[] gedrucktJoker = new Boolean[3];
 	public Boolean[] gedrucktHand = new Boolean[14];
 	
-<<<<<<< HEAD
+
 	public ArrayList<Card> hand; 
-=======
+
 	String pfad = System.getProperty("user.home") + "\\Workspace\\Haggis\\images\\";
->>>>>>> master
+
 	
 	private Image imageRückseite;
 	private ImageIcon rückseite;
