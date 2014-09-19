@@ -1,7 +1,7 @@
 import javax.swing.ImageIcon;
 
 //Diese Klasse enthält die Logik einer Karte
-public class Card {
+public class Card implements Comparable<Card> {
 	
 	int wert;
 	String name;
@@ -11,6 +11,9 @@ public class Card {
 	
 	
 	//Konstruktor	
+	public Card(){
+		
+	}
 	public Card(int wert, String name, ImageIcon bild, int punkte, String farbe){
 		
 		this.wert = wert;
@@ -59,5 +62,16 @@ public class Card {
 	public void setFarbe(String farbe){
 		this.farbe = farbe;
 	}
+	@Override
+	public int compareTo(Card compare) {
+		int wert =  ((Card) compare).getWert();
+		return this.wert - wert;
+	}
+	
+
+
+
+	
+
 	
 }
