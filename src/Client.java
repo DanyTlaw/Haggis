@@ -44,7 +44,11 @@ public class Client extends JFrame{
 	public Boolean[] gedrucktJoker = new Boolean[3];
 	public Boolean[] gedrucktHand = new Boolean[14];
 	
+
+	public ArrayList<Card> hand; 
+
 	String pfad = System.getProperty("user.home") + "\\Workspace\\Haggis\\images\\";
+
 	
 	private Image imageRückseite;
 	private ImageIcon rückseite;
@@ -59,7 +63,13 @@ public class Client extends JFrame{
 	public Border gedrucktBorder = new LineBorder(Color.BLUE, 2);
 	
 	public static void main(String[] args){
+		Deck d = new Deck();
+		d.aufteilen(2);
+		d.aufzeigen();
 		Client c = new Client();
+		c.setHand(d.getHandKarten1());
+		c.ladetBilder(c.getHand());
+		c.setVisible(true);
 	}
 
 	
@@ -343,7 +353,7 @@ public class Client extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		mainPanel.setBackground(background);
 	
-		this.setVisible(true);
+
 		this.setSize(1100, 1000);
 		
 	}
@@ -359,6 +369,161 @@ public class Client extends JFrame{
 		return gedruckt;
 	}
 
+	//Funktion welche die Bilder in die einzelnen Buttons ladet
+	public void ladetBilder(ArrayList<Card> hand){
+		
+		
+		//Diese ArrayList dient dazu die Karten an einen Spieler zu verteilen. 
+		ArrayList<Card> spielerHand = hand;
+		
+		//Diese for Schleife dient dazu dem Spieler die JokerKarten zu verteilen
+		
+		//Die Zähler Variable stellt die Anzahl Karten dar die in diesem Moment noch zu verteilen sind
+		int zähler = 17;
+		for(int i = 0; i<zähler; i++){
+			
+			if(spielerHand.get(i).getName().equals("bube")){
+				
+				jokerKarten[0].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+			}
+			
+			else if(spielerHand.get(i).getName().equals("dame")){
+				
+				jokerKarten[1].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+			}
+			
+			else if(spielerHand.get(i).getName().equals("koenig")){
+				
+				jokerKarten[2].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+			}
+			
+		}
+		
+		zähler = 14;
+		int handplatz = 0;
+		for(int i = 0; i< zähler; i++){
+			
+			if(spielerHand.get(i).getWert()==2){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			
+			else if(spielerHand.get(i).getWert()==3){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			
+			else if(spielerHand.get(i).getWert()==4){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==5){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==6){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==7){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==8){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==9){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==10){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==11){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==12){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			else if(spielerHand.get(i).getWert()==13){
+				
+				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
+				spielerHand.remove(i);
+				zähler--;
+				i--;
+				handplatz++;
+			}
+			
+		}
+		
+		
+	}
+	
+	//Getters und Setters
+	public void setHand(ArrayList<Card> hand){
+		this.hand = hand;
+	}
+	
+	public ArrayList<Card> getHand(){
+		return this.hand;
+	}
 	
 	/*
 	 *HANDLER WELCHE DIE EINGEBANE IN DEM CLIENT BEARBEITET 

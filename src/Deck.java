@@ -518,6 +518,23 @@ public class Deck {
 		}
 	}
 	
+	//Getters und Setters
+	public ArrayList<Card> getHandKarten1(){
+		return this.handKarten1;
+	}
+	
+	public void setHandKarten1(ArrayList<Card> handkarten){
+		this.handKarten1 = handkarten;
+	}
+	
+	public void setHandKarten2(ArrayList<Card> handkarten){
+		this.handKarten2 = handkarten;
+	}
+	
+	public ArrayList<Card> getHandKarten2(){
+		return this.handKarten2;
+	}
+	
 	//Testmethode um zu schauen ob zwei Kartenhände erstellt wurde und ihre Kartenname werde ausgegeben
 	public void aufzeigen(){
 		System.out.println("Spieler1 :");
