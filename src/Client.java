@@ -72,8 +72,11 @@ public class Client extends JFrame{
 	public Border gedrucktBorder = new LineBorder(Color.BLUE, 2);
 	
 	public static void main(String[] args){
-
+		Deck d = new Deck();
+		d.aufteilen(2);
 		Client c = new Client();
+		c.setHand(d.getHandKarten1());
+		c.ladetBilder(c.getHand());
 		c.setVisible(true);
 	}
 
@@ -81,6 +84,7 @@ public class Client extends JFrame{
 	public Client(){
 		
 		clickHandler cHandler = new clickHandler();
+		buttonHandler bHandler = new buttonHandler();
 		
 		//Gibt dem Client ein BorderLayout
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -260,7 +264,7 @@ public class Client extends JFrame{
 
 	
 		jbtSpielen = new JButton("Spielen");
-		jbtSpielen.addActionListener(cHandler);
+		jbtSpielen.addActionListener(bHandler);
 		jbtPassen = new JButton("Passen");
 		jbtBeenden = new JButton("Beenden");
 		/*
@@ -527,7 +531,15 @@ public class Client extends JFrame{
 			}
 		}
 		
-
+		//Sortiert die FeldKarten nach grösse
+		Collections.sort(feldKarten);
+		
+		//Zeigt die FeldKarten in der mitte auf den Labels an
+		for(int i =0;i<feldKarten.size();i++){
+			anzeigeKarten[i].setIcon(feldKarten.get(i).getBild());
+		}
+		
+		
 	}
 	
 	/*
@@ -538,9 +550,7 @@ public class Client extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource()== jbtSpielen){
-				karteAuspielen();
-			}
+
 			
 			//Handlet die gedruckten Karten und setzt ihnen einen Border oder nicht (JokerKarten)
 			for(int i = 0;i<3;i++){
@@ -578,7 +588,18 @@ public class Client extends JFrame{
 		
 		}
 	}
+	
+	public class buttonHandler implements ActionListener{
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getSource()== jbtSpielen){
+				karteAuspielen();
+			}
+		}
+		
+	}
 	
 }	
 

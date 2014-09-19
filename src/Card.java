@@ -14,6 +14,7 @@ public class Card implements Comparable<Card> {
 	public Card(){
 		
 	}
+	
 	public Card(int wert, String name, ImageIcon bild, int punkte, String farbe){
 		
 		this.wert = wert;
