@@ -47,8 +47,8 @@ public class Client extends JFrame{
 
 	public ArrayList<Card> hand; 
 
-	String pfad = System.getProperty("user.home") + "\\Workspace\\Haggis\\images\\";
-
+	public String pfad = System.getProperty("user.dir") + "\\images\\";
+	
 	
 	private Image imageRückseite;
 	private ImageIcon rückseite;
@@ -63,12 +63,14 @@ public class Client extends JFrame{
 	public Border gedrucktBorder = new LineBorder(Color.BLUE, 2);
 	
 	public static void main(String[] args){
+
 		Deck d = new Deck();
 		d.aufteilen(2);
 		d.aufzeigen();
 		Client c = new Client();
 		c.setHand(d.getHandKarten1());
 		c.ladetBilder(c.getHand());
+		System.out.println(c.pfad);
 		c.setVisible(true);
 	}
 
@@ -78,11 +80,11 @@ public class Client extends JFrame{
 		clickHandler cHandler = new clickHandler();
 		
 		//Gibt dem Client ein BorderLayout
-		getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		
 		//JPanel für das ganze Frame wird erstellt für die HIntergrundfarbe
 		JPanel mainPanel = new JPanel();
-		
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		setContentPane(mainPanel);
 		/*
 		 * DER NORTH TEIL DES JFRAMES
@@ -134,6 +136,7 @@ public class Client extends JFrame{
 		spiel.setLayout(new BoxLayout(spiel, BoxLayout.X_AXIS));
 		haggis.setLayout(new BoxLayout(haggis, BoxLayout.Y_AXIS));
 		spielfeld.setLayout(new BoxLayout(spielfeld, BoxLayout.Y_AXIS));
+
 		
 		//Erstellt das JLabel mit der Anzahl Haggis Karten
 		JLabel haggisKarten = new JLabel("Haggis: " + haggisAnzahl);
@@ -146,9 +149,9 @@ public class Client extends JFrame{
 		
 		//JPanel fuer den Oberen Teil des Spielfeld
 		JPanel spielfeldoben = new JPanel();
-		spielfeldoben.setPreferredSize(new Dimension(800, 200));
-		spielfeldoben.setMaximumSize(new Dimension(800, 200));
-		spielfeldoben.setMinimumSize(new Dimension(800, 200));
+		spielfeldoben.setPreferredSize(new Dimension(800, 170));
+		spielfeldoben.setMaximumSize(new Dimension(800, 170));
+		spielfeldoben.setMinimumSize(new Dimension(800, 170));
 		spielfeldoben.setLayout(new BoxLayout(spielfeldoben, BoxLayout.X_AXIS));
 			
 		Color bg = new Color(135,210,229);
@@ -171,9 +174,9 @@ public class Client extends JFrame{
 		
 		//JPanel fuer den unteren Teil des Spielfelds
 		JPanel spielfelunten = new JPanel();
-		spielfelunten.setPreferredSize(new Dimension(800, 200));
-		spielfelunten.setMaximumSize(new Dimension(800, 200));
-		spielfelunten.setMinimumSize(new Dimension(800, 200));
+		spielfelunten.setPreferredSize(new Dimension(800, 170));
+		spielfelunten.setMaximumSize(new Dimension(800, 170));
+		spielfelunten.setMinimumSize(new Dimension(800, 170));
 		spielfelunten.setLayout(new BoxLayout(spielfelunten, BoxLayout.X_AXIS));
 					
 
@@ -331,7 +334,7 @@ public class Client extends JFrame{
 		rechtsTitel.add(lbleigeneKarten);
 		titelSteuerung.add(linksTitel);
 		titelSteuerung.add(rechtsTitel);
-		titelSteuerung.setBorder(new EmptyBorder(100,0,0,0));
+		titelSteuerung.setBorder(new EmptyBorder(10,0,0,0));
 		
 		rechtsSteuerung.add(eigeneKartenButtons);
 		linksSteuerung.add(jokerkarten);
@@ -345,9 +348,9 @@ public class Client extends JFrame{
 		
 
 		
-		this.add(enemy,BorderLayout.NORTH);
-		this.add(spiel, BorderLayout.CENTER);
-		this.add(spielSteuerung, BorderLayout.SOUTH);
+		this.add(enemy);
+		this.add(spiel);
+		this.add(spielSteuerung);
 		
 		this.setTitle("Haggis");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -355,6 +358,7 @@ public class Client extends JFrame{
 	
 
 		this.setSize(1100, 1000);
+		
 		
 	}
 	
