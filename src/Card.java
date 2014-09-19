@@ -6,15 +6,18 @@ public class Card {
 	int wert;
 	String name;
 	ImageIcon bild;
+	int punkte;
+	String farbe;
 	
 	
-	//Konstruktor
-	public Card(int wert, String name, ImageIcon bild){
+	//Konstruktor	
+	public Card(int wert, String name, ImageIcon bild, int punkte, String farbe){
 		
 		this.wert = wert;
 		this.name = name;
 		this.bild = bild;
-		
+		this.punkte = punkte;
+		this.farbe = farbe;
 	}
 	
 	//Getters und Setters
@@ -40,6 +43,21 @@ public class Card {
 	
 	public void setBild(ImageIcon bild){
 		this.bild = bild;
+	}
+	public int getPunkte(){
+		return this.punkte;
+	}
+	
+	public void setPunkte(int punkte){
+		this.punkte = punkte;
+	}
+	
+	public String getFarbe(){
+		return this.farbe;
+	}
+	
+	public void setFarbe(String farbe){
+		this.farbe = farbe;
 	}
 	
 }

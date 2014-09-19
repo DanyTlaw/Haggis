@@ -199,30 +199,7 @@ public class Client extends JFrame{
 		rechtsSteuerung.setMaximumSize(new Dimension(500,200));
 		rechtsSteuerung.setMinimumSize(new Dimension(500,200));
 		
-		//Alle Container für das  Panel jokerkarten werden gemacht
-
-		
-
-		
-		//Erstellt ein Label mit der Karte Bube
-		jBube = new ImageIcon("C:\\workspace\\Haggis\\images\\Bube.jpg").getImage();
-		jBubeIcon = new ImageIcon(jBube.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
-		JLabel lblIconBube = new JLabel();
-		lblIconBube.setIcon(jBubeIcon);
-		
-		//Erstellt ein Label mit der Karte Bube
-		jDame = new ImageIcon("C:\\workspace\\Haggis\\images\\Dame.jpg").getImage();
-		jDameIcon = new ImageIcon(jDame.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
-		JLabel lblIconDame = new JLabel();
-		lblIconDame.setIcon(jDameIcon);
-		
-		//Erstellt ein Label mit der Karte Bube
-		jKönig = new ImageIcon("C:\\workspace\\Haggis\\images\\König.jpg").getImage();
-		jKönigIcon = new ImageIcon(jKönig.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
-		JLabel lblIconKönig = new JLabel();
-		lblIconKönig.setIcon(jKönigIcon);
-				
-		
+		//Alle Container für das  Panel jokerkarten werden gemacht		
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
 		buttons.setAlignmentX(LEFT_ALIGNMENT);
