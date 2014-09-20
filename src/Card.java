@@ -8,7 +8,9 @@ public class Card implements Comparable<Card> {
 	ImageIcon bild;
 	int punkte;
 	String farbe;
-	
+	boolean joker;
+	int jokerWert;
+	String jokerFarbe;
 	
 	//Konstruktor	
 	public Card(){
@@ -22,6 +24,27 @@ public class Card implements Comparable<Card> {
 		this.bild = bild;
 		this.punkte = punkte;
 		this.farbe = farbe;
+	}
+	public Card(int wert, String name, ImageIcon bild, int punkte, String farbe, boolean joker){
+		
+		this.wert = wert;
+		this.name = name;
+		this.bild = bild;
+		this.punkte = punkte;
+		this.farbe = farbe;
+		this.joker =joker;
+	}
+	
+	public Card(int wert, String name, ImageIcon bild, int punkte, String farbe, boolean joker, int jokerWert, String jokerFarbe){
+		
+		this.wert = wert;
+		this.name = name;
+		this.bild = bild;
+		this.punkte = punkte;
+		this.farbe = farbe;
+		this.joker =joker;
+		this.jokerWert = jokerWert;
+		this.jokerFarbe = jokerFarbe;
 	}
 	
 	//Getters und Setters
@@ -63,6 +86,31 @@ public class Card implements Comparable<Card> {
 	public void setFarbe(String farbe){
 		this.farbe = farbe;
 	}
+	
+	public void setJoker(Boolean Joker){
+		this.joker = Joker;
+	}
+	
+	public boolean getJoker(){
+		return this.joker;
+	}
+	
+	public int getJokerWert(){
+		return this.jokerWert;
+	}
+	
+	public void setJokerWert(int jokerWert){
+		this.jokerWert = jokerWert;
+	}
+	
+	public String getJokerFarbe(){
+		return this.jokerFarbe;
+	}
+	
+	public void setJokerFarbe(String jfarbe){
+		this.jokerFarbe = jfarbe;
+	}
+	
 	@Override
 	public int compareTo(Card compare) {
 		int wert =  ((Card) compare).getWert();

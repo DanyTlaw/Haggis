@@ -293,9 +293,9 @@ public class Deck {
 		
 		//JokerKarten
 		
-		bube = new Card(11, "bube", iconBube,2,"");	
-		dame = new Card(12, "dame", iconDame,3,"");	
-		koenig = new Card(13, "koenig", iconKoenig,5,"");
+		bube = new Card(11, "bube", iconBube,2,"",true);	
+		dame = new Card(12, "dame", iconDame,3,"",true);	
+		koenig = new Card(13, "koenig", iconKoenig,5,"",true);
 
 
 		//Fügt alle Karten der ArrayList hinzu
