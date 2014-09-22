@@ -6,7 +6,10 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -40,13 +43,19 @@ public class Client extends JFrame{
 	
 	public JButton[] btnKarte = new JButton[14];
 	public JButton[] jokerKarten = new JButton[3];
-	public JLabel[] anzeigeKarten = new JLabel[8];
+	public JLabel[] anzeigeKarten = new JLabel[14];
 	public Boolean[] gedrucktJoker = new Boolean[3];
 	public Boolean[] gedrucktHand = new Boolean[14];
 	
-
+	public JButton jbtSpielen;
+	public JButton jbtPassen;
+	public JButton jbtBeenden;
+	
 	public ArrayList<Card> hand; 
-
+	
+	//ArrayListe für die Karten welche im SpielFeld sind
+	public ArrayList<Card> feldKarten = new ArrayList<Card>();
+	
 	public String pfad = System.getProperty("user.dir") + "\\images\\";
 	
 	
@@ -63,14 +72,11 @@ public class Client extends JFrame{
 	public Border gedrucktBorder = new LineBorder(Color.BLUE, 2);
 	
 	public static void main(String[] args){
-
 		Deck d = new Deck();
 		d.aufteilen(2);
-		d.aufzeigen();
 		Client c = new Client();
 		c.setHand(d.getHandKarten1());
 		c.ladetBilder(c.getHand());
-		System.out.println(c.pfad);
 		c.setVisible(true);
 	}
 
@@ -78,6 +84,7 @@ public class Client extends JFrame{
 	public Client(){
 		
 		clickHandler cHandler = new clickHandler();
+		buttonHandler bHandler = new buttonHandler();
 		
 		//Gibt dem Client ein BorderLayout
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -120,7 +127,7 @@ public class Client extends JFrame{
 		enemyKarten.add(lblHolder);		
 		
 		//Added alle Componente dem JPanel enemy
-		enemy.setBorder(new EmptyBorder(0,425,80,0));
+		enemy.setBorder(new EmptyBorder(0,425,10,0));
 		enemy.add(lblImage);
 		enemy.add(Box.createHorizontalStrut(20));
 		enemy.add(enemyKarten);
@@ -185,7 +192,7 @@ public class Client extends JFrame{
 				
 		//Schleife welches 7 Labels im unteren Teil des Spielfelds erstellt
 		spielfelunten.add(Box.createHorizontalStrut(30));
-		for(int i = 0;i<7;i++){
+		for(int i = 7;i<14;i++){
 			JLabel anzeigeKarte = new JLabel();
 			anzeigeKarte.setPreferredSize(new Dimension(100, 150));
 			anzeigeKarte.setMaximumSize(new Dimension(100, 150));
@@ -252,11 +259,23 @@ public class Client extends JFrame{
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
 		buttons.setAlignmentX(LEFT_ALIGNMENT);
-		JButton jbtSpielen = new JButton("Spielen");
-		JButton jbtPassen = new JButton("Passen");
-		JButton jbtBeenden = new JButton("Beenden");
 		
 		
+
+	
+		jbtSpielen = new JButton("Spielen");
+		jbtSpielen.addActionListener(bHandler);
+		jbtPassen = new JButton("Passen");
+		jbtBeenden = new JButton("Beenden");
+		/*
+		jbtSpielen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				karteAuspielen();
+			
+			}
+		});
+		*/
+		jbtSpielen.addActionListener(cHandler);
 		buttons.add(jbtSpielen);
 		buttons.setBorder(new EmptyBorder(0,0,0,10));
 		buttons.add(jbtPassen);
@@ -378,141 +397,107 @@ public class Client extends JFrame{
 		
 		
 		//Diese ArrayList dient dazu die Karten an einen Spieler zu verteilen. 
-		ArrayList<Card> spielerHand = hand;
+		ArrayList<Card> spielerHand = new ArrayList<Card>();
+		
+		for(Card str: hand){
+			Card copy = new Card(str.getWert(),str.getName(),str.getBild(),str.getPunkte(),str.getFarbe());
+			spielerHand.add(copy);
+		}
 		
 		//Diese for Schleife dient dazu dem Spieler die JokerKarten zu verteilen
 		
 		//Die Zähler Variable stellt die Anzahl Karten dar die in diesem Moment noch zu verteilen sind
-		int zähler = 17;
-		for(int i = 0; i<zähler; i++){
+		
+		for(int i = 0; i<3; i++){
 			
 			if(spielerHand.get(i).getName().equals("bube")){
 				
 				jokerKarten[0].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
+				spielerHand.set(i, new Card());
+
 			}
 			
 			else if(spielerHand.get(i).getName().equals("dame")){
 				
 				jokerKarten[1].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
+				spielerHand.set(i, new Card());
+
 			}
 			
 			else if(spielerHand.get(i).getName().equals("koenig")){
 				
 				jokerKarten[2].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
+				spielerHand.set(i, new Card());
+
 			}
 			
 		}
 		
-		zähler = 14;
-		int handplatz = 0;
-		for(int i = 0; i< zähler; i++){
+
+		for(int i = 3; i< 17; i++){
 			
 			if(spielerHand.get(i).getWert()==2){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());			
+
 			}
 			
 			else if(spielerHand.get(i).getWert()==3){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			
 			else if(spielerHand.get(i).getWert()==4){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==5){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==6){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==7){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==8){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==9){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==10){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==11){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==12){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			else if(spielerHand.get(i).getWert()==13){
 				
-				btnKarte[handplatz].setIcon(spielerHand.get(i).getBild());
-				spielerHand.remove(i);
-				zähler--;
-				i--;
-				handplatz++;
+				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
+				spielerHand.set(i, new Card());
 			}
 			
 		}
@@ -529,16 +514,43 @@ public class Client extends JFrame{
 		return this.hand;
 	}
 	
-	/*
-	 *HANDLER WELCHE DIE EINGEBANE IN DEM CLIENT BEARBEITET 
-	 * 
-	*/
+	
+	//Methode um eine Karte auszuspielen 			anzeigeKarten[i].setIcon(jokerKarten[i].getIcon());jokerKarten[i].setVisible(false);
 
+	public void karteAuspielen(){
+		for(int i = 0;i<3;i++){
+			if(jokerKarten[i].getBorder() == gedrucktBorder){
+				feldKarten.add(hand.get(i));
+				
+				
+			}
+		}
+		for(int i = 3;i<17;i++){
+			if(btnKarte[i-3].getBorder() == gedrucktBorder){
+				feldKarten.add(hand.get(i));
+			}
+		}
+		
+		//Sortiert die FeldKarten nach grösse
+		Collections.sort(feldKarten);
+		
+		//Zeigt die FeldKarten in der mitte auf den Labels an
+		for(int i =0;i<feldKarten.size();i++){
+			anzeigeKarten[i].setIcon(feldKarten.get(i).getBild());
+		}
+		
+		
+	}
+	
+	/*
+	*HANDLER WELCHE DIE EINGEBANE IN DEM CLIENT BEARBEITET 
+	 * 
+	*/	
 	public class clickHandler implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			
 			//Handlet die gedruckten Karten und setzt ihnen einen Border oder nicht (JokerKarten)
 			for(int i = 0;i<3;i++){
@@ -571,10 +583,24 @@ public class Client extends JFrame{
 					}
 				}
 			}
-		
+			
+
 		
 		}
 	}
+	
+	public class buttonHandler implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getSource()== jbtSpielen){
+				karteAuspielen();
+			}
+		}
+		
+	}
+	
 }	
 
 
