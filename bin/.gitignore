@@ -3,3 +3,10 @@
 /Client$clickHandler.class
 /Client.class
 /Deck.class
+/LoginGUI.class
+/Server.class
+/GameLoop.class
+/Spieler.class
+/Spieltisch$buttonHandler.class
+/Spieltisch$clickHandler.class
+/Spieltisch.class
