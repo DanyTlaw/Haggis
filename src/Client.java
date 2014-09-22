@@ -445,145 +445,300 @@ public class Client extends JFrame{
 			//Sortiert die FeldKarten nach grösse
 			Collections.sort(gespielteKarten);
 			
-			//Alle Kontrollen werden durchgeführt ob es gültig auszuspielende Karten sind
-			//Wenn die Karte eine einzelkarte ist dann Spiel sie aus
-			if(istEinzel(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
 			
-			//Wenn die Karten ein Paar sind dann Spiel sie aus
-			else if(istPaar(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten Drillinge sind dann Spiele sie aus
-			else if(istDrilling(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten Vierlinge sind dann Spiele sie aus
-			else if(istVierling(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten Fünflinge sind dann Spiele sie aus
-			else if(istFünfling(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten Sechslinge sind dann Spiele sie aus
-			else if(istSechsling(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}		
-			
-			//Wenn die Karten Sieblinge sind dann Spiele sie aus
-			else if(istSiebling(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten Achtlinge sind dann Spiele sie aus
-			else if(istAchtling(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine dreier Strasse sind spiele sie aus
-			else if(istStrasseDrei(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine vierer Strasse sind spiele sie aus
-			else if(istStrasseVier(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine fünfer Strasse sind spiele sie aus
-			else if(istStrasseFünf(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine sechser Strasse sind spiele sie aus
-			else if(istStrasseSechs(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine siebner Strasse sind spiele sie aus
-			else if(istStrasseSieben(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine achter Strasse sind spiele sie aus
-			else if(istStrasseAcht(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine neuner Strasse sind spiele sie aus
-			else if(istStrasseNeun(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine zehner Strasse sind spiele sie aus
-			else if(istStrasseZehn(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine elfer Strasse sind spiele sie aus
-			else if(istStrasseElf(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine zwölfer Strasse sind spiele sie aus
-			else if(istStrasseZwölf(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine Paar Strasse ist spiele sie aus
-			else if(istPaarStrasse(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine Drilling Strasse ist spiele sie aus
-			else if(istDrillingStrasse(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine Vierling Strasse ist spiele sie aus
-			else if(istVierlingStrasse(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn die Karten eine Fünfling Strasse ist spiele sie aus
-			else if(istFünflingStrasse(gespielteKarten)){
-				karteAnzeigen();
-				gespielteKarten.removeAll(gespielteKarten);
-			}
-			
-			//Wenn es keine gültige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ungültig ist
-			else{
-				JOptionPane.showMessageDialog (this, "Bitte überprüfen Sie die Karten nochmals","Ungültige Zug",1);
-				gespielteKarten.removeAll(gespielteKarten);
-			}
+			//Wenn bereits Karten ausgespielt wurden, muss Stechlogik überprüft werden
+			if(feldKarten.size()>0){
 				
+				System.out.println("feldkarten>0");
+				
+				//Wenn eine Einzelkarte gespielt wurde und sie höcher ist wie die bereits gespielte Karte, stich erfolgreich
+				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					System.out.println("ist gestochen");
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+					
+				}
+								
+				//Wenn die Karten ein Paar sind und sie höcher sind wie das bereits gespielte Paar, Stich erfolgreich
+				else if(istPaar(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					System.out.println("gespielte Karte :" + gespielteKarten.get(0).getWert());
+					System.out.println("feld Karte :" + feldKarten.get(0).getWert());
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Drillinge sind und sie höcher sind wie die bereits gespielten Drillinge, stich erfolgreich
+				else if(istDrilling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Vierlinge sind und sie höcher sind wie die bereits gespielten Vierling, Stich erfolgriech
+				else if(istVierling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Fünflinge sind und sie höcher sind wie die bereits gespielten Fünflinge Stich erfolgreich
+				else if(istFünfling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Sechslinge sind und sie höcher sind wie die bereits gespielten Sechslinge, Stich erfolgreich
+				else if(istSechsling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}		
+				
+				//Wenn die Karten Sieblinge sind und sie höcher sind wie die bereits gespielten Sieblinge, Stich erfolgreich
+				else if(istSiebling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Achtlinge sind und sie höcher sind wie die bereits gespielten Achtlinge, Stich erfolgreich
+				else if(istAchtling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine dreier Strasse sind und sie höcher sind wie die bereits gespielte dreier Strasse, stich erfolgreich
+				else if(istStrasseDrei(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine vierer Strasse sind und sie höcher sind wie die bereits gespielte vierer Strasse, stich erfolgreich
+				else if(istStrasseVier(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine fünfer Strasse sind und sie höcher sind wie die bereits gespielte fünfer Strasse, stich erfolgreich
+				else if(istStrasseFünf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine sechser Strasse sind und sie höcher sind wie die bereits gespielte sechser Strasse, stich erfolgreich
+				else if(istStrasseSechs(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine siebner Strasse sind und sie höcher sind wie die bereits gespielte siebner Strasse, stich erfolgreich
+				else if(istStrasseSieben(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine achter Strasse sind und sie höcher sind wie die bereits gespielte achter Strasse, stich erfolgriech
+				else if(istStrasseAcht(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine neuner Strasse sind und sie höcher sind wie die bereits gespielte neuner Strasse, stich erfolgreich
+				else if(istStrasseNeun(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine zehner Strasse sind und sie höcher sind wie die bereits gespielte zehner Strasse, stich erfolgriech
+				else if(istStrasseZehn(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine elfer Strasse sind und sie höcher sind wie die bereits gespielte elfer Strasse, stich erfolgriech
+				else if(istStrasseElf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine zwölfer Strasse sind und sie höcher sind wie die bereits gespielte zwölfer Strasse, stich erfolgreich
+				else if(istStrasseZwölf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Paar Strasse ist spiele und sie höcher ist wie die bereits gespielte Paar Strasse, stich erfolgreich
+				else if(istPaarStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Drilling Strasse ist und sie höcher ist wie die bereits gespielte Drilling Strasse, stich erfolgreich
+				else if(istDrillingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Vierling Strasse ist und sie höcher ist wie die bereits gespielte Vierling Strasse, stich erfolgreich
+				else if(istVierlingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Fünfling Strasse ist und sie höcher ist wie die bereits gespielte Fünflng Strasse, Stich erfolgreich
+				else if(istFünflingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn es keine gültige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ungültig ist
+				else{
+					JOptionPane.showMessageDialog (this, "Bitte überprüfen Sie die Karten nochmals","Ungültige Zug",1);
+					gespielteKarten.removeAll(gespielteKarten);
+				}
+					
+			
+				
+			//Falls noch keine FeldKarten ausgespielt wurden muss nur die Ausspiellogik betrachtet werden	
+			}else{
+				//Alle Kontrollen werden durchgeführt ob es gültig auszuspielende Karten sind
+				//Wenn die Karte eine einzelkarte ist dann Spiel sie aus
+				if(istEinzel(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten ein Paar sind dann Spiel sie aus
+				else if(istPaar(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Drillinge sind dann Spiele sie aus
+				else if(istDrilling(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Vierlinge sind dann Spiele sie aus
+				else if(istVierling(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Fünflinge sind dann Spiele sie aus
+				else if(istFünfling(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Sechslinge sind dann Spiele sie aus
+				else if(istSechsling(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}		
+				
+				//Wenn die Karten Sieblinge sind dann Spiele sie aus
+				else if(istSiebling(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten Achtlinge sind dann Spiele sie aus
+				else if(istAchtling(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine dreier Strasse sind spiele sie aus
+				else if(istStrasseDrei(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine vierer Strasse sind spiele sie aus
+				else if(istStrasseVier(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine fünfer Strasse sind spiele sie aus
+				else if(istStrasseFünf(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine sechser Strasse sind spiele sie aus
+				else if(istStrasseSechs(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine siebner Strasse sind spiele sie aus
+				else if(istStrasseSieben(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine achter Strasse sind spiele sie aus
+				else if(istStrasseAcht(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine neuner Strasse sind spiele sie aus
+				else if(istStrasseNeun(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine zehner Strasse sind spiele sie aus
+				else if(istStrasseZehn(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine elfer Strasse sind spiele sie aus
+				else if(istStrasseElf(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine zwölfer Strasse sind spiele sie aus
+				else if(istStrasseZwölf(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Paar Strasse ist spiele sie aus
+				else if(istPaarStrasse(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Drilling Strasse ist spiele sie aus
+				else if(istDrillingStrasse(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Vierling Strasse ist spiele sie aus
+				else if(istVierlingStrasse(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn die Karten eine Fünfling Strasse ist spiele sie aus
+				else if(istFünflingStrasse(gespielteKarten)){
+					karteAnzeigen();
+					kartenFeldKopieren(gespielteKarten);
+				}
+				
+				//Wenn es keine gültige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ungültig ist
+				else{
+					JOptionPane.showMessageDialog (this, "Bitte überprüfen Sie die Karten nochmals","Ungültige Zug",1);
+					gespielteKarten.removeAll(gespielteKarten);
+				}
+					
+			}
+			
+			
 		}
 	}
 	
@@ -593,6 +748,23 @@ public class Client extends JFrame{
 	/***************************************************************************************
 	Methoden welche zur Hilfe benutzt werden und oft aufgerufen werden
 	****************************************************************************************/
+	
+	//Methode welche die gespielten Karten in die Feldkarten kopiert
+	public void kartenFeldKopieren(ArrayList<Card> karten){
+			
+		for(int i = 0;i<karten.size();i++){
+			
+			if(feldKarten.size()<karten.size()){
+				feldKarten.add(new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+			}else if(feldKarten.size()==karten.size()){
+				feldKarten.set(i,new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+			}
+		
+		}
+		
+		gespielteKarten.removeAll(gespielteKarten);
+		
+	}
 	
 	//Methode welche die Karten in der Mitte anzeigt
 	public void karteAnzeigen(){
@@ -776,28 +948,36 @@ public class Client extends JFrame{
 		
 	}
 	
+	//Methode welche anhand der Reihenfolge der Farben des Sets die anderen Sets farblich sortiert
 	public boolean karteFarbeSortieren(int set, ArrayList<Card> karten){
 		
 		int überprüfen = 0;
 		int kartePosition = 0;
-		String[] farben = new String[set];
-		Card[] temp = new Card[set];
+		String[] farben = new String[set]; //Dieser Array dient zur Vergleichsbasis der Farben
+		Card[] temp = new Card[set]; // Hier werden die nächsten Karten des sets zwischengespeichert
 		int karteErsetzen =set;
 
+		//Diese Schleife nimmt jede Karte des Sets und fügt sie dem farben Array hinzu
 		for(int i =0;i<set;i++){
 
 			farben[i] = karten.get(i).getFarbe();
 						
 		}
 		
+		//Diese Schleife wird für jedes weitere Set durchgeführt (Drilling -1 = 2)
 		for(int i = 0;i<karten.size()/set-1; i++){
 			
+			//Speichert das nächst grössere Set der Strasse in den temp Array
 			for(int k = 0; k<set; k++){
 				temp[k] = karten.get(kartePosition+set);
 				kartePosition++;
 			}
 			
+			//Die erste Karte in einem set wird mit jeder Karte des folgenden Sets verglichen dann die nächsten		
+			//Für jede anzahl Karte in einem Set wird diese Schleife durchgeführt, weil alle verglichen werden müssen
 			for(int j = 0; j<set; j++){
+				
+				//Diese Schleife überprüft die Farben und setzt die richtige Karte an die richtige Reihenfolge
 				for(int k = 0;k<set;k++){
 					if(farben[j].equals(temp[k].getFarbe())){
 						karten.set(karteErsetzen, temp[k]);
@@ -820,12 +1000,15 @@ public class Client extends JFrame{
 	//Methode welche überprüft ob es das gleiche Set ist (Paar, Drilling etc)
 	public boolean istSet(ArrayList<Card> karten, int set){
 		
+
 		int bedingung = 0;
 		
 		int kartePosition = 0;	
 		
 		//Wenn eine Strasse aus Sets >1 zb Paar, Drilling etc besteht braucht es folgenge Logik
 		if(set>1){
+			
+	
 			
 			//Es muss für jedes Set in der Strasse einmal das Set überprüft werden
 			for(int i = 0;i<karten.size()/set;i++){
@@ -849,6 +1032,7 @@ public class Client extends JFrame{
 			}
 			
 		}else{
+
 			for(int i = 0;i<karten.size()-1;i++){
 				
 				if(karten.get(i).getWert() == karten.get(i+1).getWert()){
@@ -856,7 +1040,8 @@ public class Client extends JFrame{
 				}
 				
 			}
-			if(bedingung==karten.size()-1){
+
+			if(bedingung==karten.size()-1){				
 				return true;
 			}else{
 				return false;
@@ -900,7 +1085,7 @@ public class Client extends JFrame{
 	}
 	
 	/***************************************************************************************
-	Methoden welche kontrolliert ob die bei einem neuen Stich auszuspielenden Karten legitim 
+	Methoden welche kontrolliert ob die bei einem neuen Hand auszuspielenden Karten legitim 
 	sind oder nicht, gibt einen true wert zurück	
 	****************************************************************************************/
 	//Methode zum überprüfen ob es eine einzelKarte ist
@@ -930,7 +1115,7 @@ public class Client extends JFrame{
 		if(karten.size()==2){
 			//Wenn der Wert beider Karten gleich ist dann ist es ein Paar
 			if(istSet(karten,1)){
-				
+				return true;
 			}else{
 				return false;
 			}
@@ -1170,7 +1355,6 @@ public class Client extends JFrame{
 		return false;
 	}
 	
-	
 	//Methode zum überprüfen ob es eine siebner Strasse ist
 	public boolean istStrasseSieben(ArrayList<Card> karten){
 		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
@@ -1350,8 +1534,7 @@ public class Client extends JFrame{
 		return false;
 	}
 	
-	//Methode zum überprüfen ob es eine Drilling Strasse ist
-	//MUSS NOCH GEMACHT WERDEN
+
 	//Methode zum überprüfen ob es eine Drilling Strasse ist
 	public boolean istDrillingStrasse(ArrayList<Card> karten){
 		
@@ -1405,13 +1588,6 @@ public class Client extends JFrame{
 		return false;
 	}
 
-
-		
-
-
-	
-	//Methode zum überprüfen ob es eine Vierling Strasse ist
-
 	//Methode zum überprüfen ob es eine VierlingStrasse ist
 	public boolean istVierlingStrasse(ArrayList<Card> karten){
 		
@@ -1464,9 +1640,7 @@ public class Client extends JFrame{
 		}
 		return false;
 	}
-	
-	//Methode zum überprüfen ob es eine Fünfling Strasse ist
-	//MUSS NOCH GEMACHT WERDEN
+
 	//Methode zum überprüfen ob es eine Fünfling Strasse ist
 	public boolean istFünflingStrasse(ArrayList<Card> karten){
 		
@@ -1520,6 +1694,13 @@ public class Client extends JFrame{
 		return false;
 	
 	} 
+	
+	/***************************************************************************************
+	Methoden welche kontrolliert ob die bei einem neuen Hand auszuspielenden Karten legitim 
+	sind oder nicht, gibt einen true wert zurück	
+	****************************************************************************************/
+	
+	
 	
 	/***************************************************************************************
 	Handler welcher für das Anwählen von Karten zuständig ist
