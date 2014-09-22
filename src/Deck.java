@@ -1,10 +1,10 @@
-import java.awt.Image;
+﻿import java.awt.Image;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-//Diese Klasse enth�lt die Logik eines Deckes
+//Diese Klasse enthaelt die Logik eines Deckes
 public class Deck {
 	
 	public static void main(String[] args){
@@ -234,7 +234,7 @@ public class Deck {
 		Image imageDame = new ImageIcon(pfad + "Dame.jpg").getImage();
 		ImageIcon iconDame = new ImageIcon(imageDame.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageKoenig = new ImageIcon(pfad + "König.jpg").getImage();
+		Image imageKoenig = new ImageIcon(pfad + "Koenig.jpg").getImage();
 		ImageIcon iconKoenig = new ImageIcon(imageKoenig.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
 		//Variablen fuer Graue Karten
