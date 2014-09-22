@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.UIManager;
@@ -56,6 +57,9 @@ public class Client extends JFrame{
 	//ArrayListe für die Karten welche im SpielFeld sind
 	public ArrayList<Card> feldKarten = new ArrayList<Card>();
 	
+	//ArrayListe für die Karten welche ausgepspielt werden
+	public ArrayList<Card> gespielteKarten = new ArrayList<Card>();
+	
 	public String pfad = System.getProperty("user.dir") + "\\images\\";
 	
 	
@@ -68,6 +72,9 @@ public class Client extends JFrame{
 	private Image jKönig;
 	private ImageIcon jKönigIcon;
 	
+	
+	//ArrayList zum testen
+	ArrayList<Card> test = new ArrayList<Card>();
 	//Border erstellen
 	public Border gedrucktBorder = new LineBorder(Color.BLUE, 2);
 	
@@ -77,6 +84,7 @@ public class Client extends JFrame{
 		Client c = new Client();
 		c.setHand(d.getHandKarten1());
 		c.ladetBilder(c.getHand());
+
 		c.setVisible(true);
 	}
 
@@ -93,9 +101,9 @@ public class Client extends JFrame{
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		setContentPane(mainPanel);
-		/*
-		 * DER NORTH TEIL DES JFRAMES
-		 * */
+		/***************************************************************************************
+		NORTH TEIL DES FRAMES
+		****************************************************************************************/
 		
 		//JPanel welche alle informationen über den Gegner beinhaltet
 		JPanel enemy = new JPanel();
@@ -132,9 +140,9 @@ public class Client extends JFrame{
 		enemy.add(Box.createHorizontalStrut(20));
 		enemy.add(enemyKarten);
 		
-		/*
-		 * DER CENTER TEIL DES JFRAMES
-		 * */
+		/***************************************************************************************
+		CENTER TEIL DES FRAMES
+		****************************************************************************************/
 		JPanel spiel = new JPanel();
 		JPanel haggis = new JPanel();
 		JPanel spielfeld = new JPanel();
@@ -218,9 +226,9 @@ public class Client extends JFrame{
 		
 		
 		
-		/*
-		 * DER SOUTH TEIL DES FRAMES
-		 * */
+		/***************************************************************************************
+		SOUTH TEIL DES FRAMES
+		****************************************************************************************/
 		
 		JPanel spielSteuerung = new JPanel();
 		spielSteuerung.setLayout(new BoxLayout(spielSteuerung, BoxLayout.Y_AXIS));
@@ -381,6 +389,269 @@ public class Client extends JFrame{
 		
 	}
 	
+
+	
+	//Getters und Setters
+	public void setHand(ArrayList<Card> hand){
+		this.hand = hand;
+	}
+	
+	public ArrayList<Card> getHand(){
+		return this.hand;
+	}
+	
+	
+	//Methode um eine Karte auszuspielen
+	public void karteAuspielen(){
+	int jokerWert = 1;
+	String jokerFarbe = "";
+		
+		//Ist eine Karte angewählt wird sie der ArrayList gespielteKarte hinzugefügt (JokerKarten)
+		for(int i = 0;i<3;i++){
+			if(jokerKarten[i].getBorder() == gedrucktBorder){
+				//Fordert den Spieler auf Falls eine Jokerkarte ausgewählt wurde eine Karte und eine Farbe einzugeben
+				jokerWert = jokerWert(i);
+				
+				//Nur im dreispielermodus gebraucht
+				jokerFarbe = jokerFarbe();
+				
+				
+				
+				//Diese zeile erstellt eine Copy der Karte in die kartenKontrolle		
+				gespielteKarten.add(new Card(hand.get(i).getWert(),hand.get(i).getName(),hand.get(i).getBild(),hand.get(i).getPunkte(),hand.get(i).getFarbe(),hand.get(i).getJoker(),jokerWert,jokerFarbe));
+				
+				
+				
+			}
+		}
+		//Ist eine Karte angewählt wird sie der ArrayList gespielteKarte hinzugefügt (Hand Karten)
+		for(int i = 3;i<17;i++){
+			if(btnKarte[i-3].getBorder() == gedrucktBorder){
+				//Diese zeile erstellt eine Copy der Karte in die kartenKontrolle
+
+
+				gespielteKarten.add(new Card(hand.get(i).getWert(),hand.get(i).getName(),hand.get(i).getBild(),hand.get(i).getPunkte(),hand.get(i).getFarbe()));
+	
+			}
+		}
+		
+		
+		if(jokerWert==0 || jokerFarbe.equals("0")){
+			
+			JOptionPane.showMessageDialog (this, "Sie haben flasche Angaben zur Jokerkarte gemacht","Ungültige Werte",1);
+			gespielteKarten.removeAll(gespielteKarten);
+			
+		}else{
+			//Sortiert die FeldKarten nach grösse
+			Collections.sort(gespielteKarten);
+			
+			//Alle Kontrollen werden durchgeführt ob es gültig auszuspielende Karten sind
+			//Wenn die Karte eine einzelkarte ist dann Spiel sie aus
+			if(istEinzel(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten ein Paar sind dann Spiel sie aus
+			else if(istPaar(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten Drillinge sind dann Spiele sie aus
+			else if(istDrilling(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten Vierlinge sind dann Spiele sie aus
+			else if(istVierling(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten Fünflinge sind dann Spiele sie aus
+			else if(istFünfling(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten Sechslinge sind dann Spiele sie aus
+			else if(istSechsling(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}		
+			
+			//Wenn die Karten Sieblinge sind dann Spiele sie aus
+			else if(istSiebling(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten Achtlinge sind dann Spiele sie aus
+			else if(istAchtling(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine dreier Strasse sind spiele sie aus
+			else if(istStrasseDrei(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine vierer Strasse sind spiele sie aus
+			else if(istStrasseVier(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine fünfer Strasse sind spiele sie aus
+			else if(istStrasseFünf(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine sechser Strasse sind spiele sie aus
+			else if(istStrasseSechs(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine siebner Strasse sind spiele sie aus
+			else if(istStrasseSieben(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine achter Strasse sind spiele sie aus
+			else if(istStrasseAcht(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine neuner Strasse sind spiele sie aus
+			else if(istStrasseNeun(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine zehner Strasse sind spiele sie aus
+			else if(istStrasseZehn(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine elfer Strasse sind spiele sie aus
+			else if(istStrasseElf(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine zwölfer Strasse sind spiele sie aus
+			else if(istStrasseZwölf(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine Paar Strasse ist spiele sie aus
+			else if(istPaarStrasse(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine Drilling Strasse ist spiele sie aus
+			else if(istDrillingStrasse(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine Vierling Strasse ist spiele sie aus
+			else if(istVierlingStrasse(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn die Karten eine Fünfling Strasse ist spiele sie aus
+			else if(istFünflingStrasse(gespielteKarten)){
+				karteAnzeigen();
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+			
+			//Wenn es keine gültige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ungültig ist
+			else{
+				JOptionPane.showMessageDialog (this, "Bitte überprüfen Sie die Karten nochmals","Ungültige Zug",1);
+				gespielteKarten.removeAll(gespielteKarten);
+			}
+				
+		}
+	}
+	
+	
+	
+	
+	/***************************************************************************************
+	Methoden welche zur Hilfe benutzt werden und oft aufgerufen werden
+	****************************************************************************************/
+	
+	//Methode welche die Karten in der Mitte anzeigt
+	public void karteAnzeigen(){
+		for(int i =0;i<gespielteKarten.size();i++){
+			anzeigeKarten[i].setIcon(gespielteKarten.get(i).getBild());
+		}
+	}
+	
+	//Methode welche den Spieler auffordert einen Wert für den Joker einzugeben und diese zurück gibt
+	public int jokerWert(int i){
+		
+
+		String str = JOptionPane.showInputDialog (null, "Wert für die Jokerkarte:");
+		int karteWert = Integer.parseInt(str);
+		
+		//Überprüft um welche Jokerkarte es sich handelt und gibt falls nötig die anweisung einen Richtigen Wert enzugeben = return 0
+		if(i==0){
+			if(karteWert > 11 || karteWert <2){
+				JOptionPane.showMessageDialog (this, "Ein Bube kann nur den Wert zwischen 2 - 11 annehmen","Ungültiger Wert",1);
+				return 0;
+			}
+		}
+		else if(i==1){
+			if(karteWert > 12 || karteWert <2){
+				JOptionPane.showMessageDialog (this, "Eine Dame kann nur den Wert zwischen 2 - 12 annehmen","Ungültiger Wert",1);
+				return 0;
+			}
+		}
+		else if(i==2){
+			if(karteWert > 13 && karteWert <2){
+				JOptionPane.showMessageDialog (this, "Ein König kann nur den Wert zwischen 2 - 13 annehmen","Ungültiger Wert",1);
+				return 0;
+			}
+		}
+		return karteWert;
+	}
+	
+	//Methode welche den Spieler auffordert eine Farbe für den Joker einzugeben und diese zurück gibt
+	public String jokerFarbe(){
+		
+		String farbe = JOptionPane.showInputDialog (null, "Wert für die Jokerfarbe:");
+		//Überprüft ob die eingegeben farbe keine von den zulässigen ist und teilt die möglichkeiten dem Benutzer mit
+		if(farbe.equals("rot") || farbe.equals("gruen") || farbe.equals("gelb") || farbe.equals("grau") || farbe.equals("orange")){
+			return farbe;
+		}
+		JOptionPane.showMessageDialog (this, "Gültige Farben sind: rot, gelb, grau, gruen, orange","Ungültige Farbe",1);
+		return "0";
+	}
+	
+	//Methode welche den Wert und die Farbe einer Jokerkarte wechselt
+	public void jokerWertWechsel(ArrayList<Card> karten){
+		for(int i =0; i<karten.size();i++){
+			if(karten.get(i).getJoker()){
+				karten.get(i).setWert(karten.get(i).getJokerWert());
+				karten.get(i).setFarbe(karten.get(i).getJokerFarbe());
+			}
+		}
+	}
+	
 	//Funktion welche den Boolean wert wechslet und so sieht ob die Karte gedruckt ist oder nicht 
 	public boolean gedruckt(boolean gedruckt){
 		if(gedruckt){
@@ -505,47 +776,754 @@ public class Client extends JFrame{
 		
 	}
 	
-	//Getters und Setters
-	public void setHand(ArrayList<Card> hand){
-		this.hand = hand;
-	}
-	
-	public ArrayList<Card> getHand(){
-		return this.hand;
-	}
-	
-	
-	//Methode um eine Karte auszuspielen 			anzeigeKarten[i].setIcon(jokerKarten[i].getIcon());jokerKarten[i].setVisible(false);
+	public boolean karteFarbeSortieren(int set, ArrayList<Card> karten){
+		
+		int überprüfen = 0;
+		int kartePosition = 0;
+		String[] farben = new String[set];
+		Card[] temp = new Card[set];
+		int karteErsetzen =set;
 
-	public void karteAuspielen(){
-		for(int i = 0;i<3;i++){
-			if(jokerKarten[i].getBorder() == gedrucktBorder){
-				feldKarten.add(hand.get(i));
-				
-				
+		for(int i =0;i<set;i++){
+
+			farben[i] = karten.get(i).getFarbe();
+						
+		}
+		
+		for(int i = 0;i<karten.size()/set-1; i++){
+			
+			for(int k = 0; k<set; k++){
+				temp[k] = karten.get(kartePosition+set);
+				kartePosition++;
 			}
-		}
-		for(int i = 3;i<17;i++){
-			if(btnKarte[i-3].getBorder() == gedrucktBorder){
-				feldKarten.add(hand.get(i));
+			
+			for(int j = 0; j<set; j++){
+				for(int k = 0;k<set;k++){
+					if(farben[j].equals(temp[k].getFarbe())){
+						karten.set(karteErsetzen, temp[k]);
+						karteErsetzen++;
+						überprüfen++;
+					}
+				}
 			}
+			
 		}
-		
-		//Sortiert die FeldKarten nach grösse
-		Collections.sort(feldKarten);
-		
-		//Zeigt die FeldKarten in der mitte auf den Labels an
-		for(int i =0;i<feldKarten.size();i++){
-			anzeigeKarten[i].setIcon(feldKarten.get(i).getBild());
+		if(überprüfen == karten.size()-
+				set){
+			return true;
+		}else{
+			return false;
 		}
-		
 		
 	}
 	
-	/*
-	*HANDLER WELCHE DIE EINGEBANE IN DEM CLIENT BEARBEITET 
-	 * 
-	*/	
+	//Methode welche überprüft ob es das gleiche Set ist (Paar, Drilling etc)
+	public boolean istSet(ArrayList<Card> karten, int set){
+		
+		int bedingung = 0;
+		
+		int kartePosition = 0;	
+		
+		//Wenn eine Strasse aus Sets >1 zb Paar, Drilling etc besteht braucht es folgenge Logik
+		if(set>1){
+			
+			//Es muss für jedes Set in der Strasse einmal das Set überprüft werden
+			for(int i = 0;i<karten.size()/set;i++){
+				
+				//Für jedes einzelne Set muss die Anzahl Karten des set minus 1 überprüft werden bsp. Paar erste mit zweite Karte = 1 überprüfung
+				for(int j = 0; j<set-1;j++){
+					
+					//Vergleicht zwei Karten innerhalb eines Sets
+					if(karten.get(kartePosition).getWert() == karten.get(kartePosition+1).getWert()){
+						bedingung++;
+					}
+				}
+				kartePosition+=set;
+			}
+			
+			//Die Bedingung wird durch eine Mathematische reihe getroffen
+			if(bedingung==karten.size()/set*(set-1)){
+				return true;
+			}else{
+				return false;
+			}
+			
+		}else{
+			for(int i = 0;i<karten.size()-1;i++){
+				
+				if(karten.get(i).getWert() == karten.get(i+1).getWert()){
+					bedingung++;
+				}
+				
+			}
+			if(bedingung==karten.size()-1){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	
+	public boolean istStrasse(ArrayList<Card> karten, int set){
+		
+		int bedingungWert = 0;
+		int bedingungFarbe = 0;
+		int kartePosition = 0;
+		
+		//Wenn der Wert der drei Karten immer um eins höher ist
+		for(int i = 0; i < karten.size()/set-1; i++){
+			if(karten.get(kartePosition).getWert() == karten.get(kartePosition+set).getWert()-1){
+				bedingungWert++;
+				kartePosition+=set;
+			}
+		}
+		if(set==1){
+			for(int i = 0;i< karten.size()-1;i++){
+				if(karten.get(i).getFarbe().equals(karten.get(i+1).getFarbe())){
+					bedingungFarbe++;
+				}
+			}
+		}
+		if(bedingungWert==karten.size()/set-1){
+			if(set>1){
+				System.out.println("bedingungWert :" + bedingungWert);
+				return true;
+			}else{
+				if((bedingungFarbe == karten.size()-1)){
+					return true;
+				}
+			}
+				
+		}
+		System.out.println("bedingungWert :" + bedingungWert);
+		return false;
+	}
+	
+	/***************************************************************************************
+	Methoden welche kontrolliert ob die bei einem neuen Stich auszuspielenden Karten legitim 
+	sind oder nicht, gibt einen true wert zurück	
+	****************************************************************************************/
+	//Methode zum überprüfen ob es eine einzelKarte ist
+	public boolean istEinzel(ArrayList<Card> karten){
+		
+		//Ist nur eine Karte in den zu überprüfenden Karte ist es immer eine einzelne Karte
+		if(karten.size()==1){
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
+	
+	//Methode zum überprüfen ob es ein Paar ist
+	public boolean istPaar(ArrayList<Card> karten){
+		
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Ein Paar ist nur möglich wenn es zwei Karten sind
+		if(karten.size()==2){
+			//Wenn der Wert beider Karten gleich ist dann ist es ein Paar
+			if(istSet(karten,1)){
+				
+			}else{
+				return false;
+			}
+			
+			
+		}
+
+		return false;
+	}
+
+	//Methode zum überprüfen ob es ein Drilling ist
+	public boolean istDrilling(ArrayList<Card> karten){
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		
+		//Ein Drilling ist nur möglich wenn es drei Karten sind
+		if(karten.size()==3){
+			//Wenn der Wert aller drei Karten gleich ist, ist es ein Drilling
+			if(istSet(karten,1)){
+				return true;
+			}else{
+				return false;
+			}		
+		}			
+		return false;
+	}
+
+	//Methode zum überprüfen ob es ein Vierling ist
+	public boolean istVierling(ArrayList<Card> karten){
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Ein Vierling ist nur möglich wenn es 4 Karten sind
+		if(karten.size()==4){
+			
+			//Wenn alle 4 Karten gleich sind ist es ein Vierling
+			if(istSet(karten,1)){
+				return true;
+			}else{
+				return false;
+			}
+			
+		}
+	
+		return false;
+	}
+
+	//Methode zum überprüfen ob es ein Fünfling ist
+	public boolean istFünfling(ArrayList<Card> karten){
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Wenn es 5 Karten sind dann ist es ein Fünfling
+		if(karten.size()==5){
+			
+			//Wenn alle 5 Karten gleich sind dann ist es ein Fünfling
+			if(istSet(karten,1)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	
+		
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es ein Sechsling ist
+	public boolean istSechsling(ArrayList<Card> karten){
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Wenn es 6 Karten sind dann ist es ein Sechsling
+		if(karten.size()==6){
+			
+			//Überprüfung ob alle Karten des Sets den gleichen Wert haben
+			if(istSet(karten,1)){
+				return true;
+			}else {
+				return false;
+			}
+			
+
+		}	
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es ein Siebling ist
+	public boolean istSiebling(ArrayList<Card> karten){
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Wenn es 7 Karten sind dann ist es ein Siebling
+		if(karten.size()==7){
+			
+			//Überprüfung ob alle Karten des Sets den gleichen Wert haben
+			if(istSet(karten,1)){
+				return true;
+			}else{
+				return false;
+			}
+			
+			
+		}
+			
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es ein Achtling ist
+	public boolean istAchtling(ArrayList<Card> karten){
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Wenn es 8 Karten sind dann ist es ein Achtling
+		if(karten.size()==8){
+			
+			//Überprüfung ob alle Karten des Sets den gleichen Wert haben
+			if(istSet(karten,1)){
+				return true;
+			}else{
+				return false;	
+			}		
+		}
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine dreier Strasse ist
+	public boolean istStrasseDrei(ArrayList<Card> karten){
+		
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus drei Karten hat drei Karten =)
+		if(karten.size()==3){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+						
+		}
+		
+		return false;
+	}
+
+	//Methode zum überprüfen ob es eine vierer Strasse ist
+	public boolean istStrasseVier(ArrayList<Card> karten){
+		
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus vier Karten hat vier Karten =)
+		if(karten.size()==4){
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+			
+		}
+		
+		return false;
+		
+	}
+	
+	//Methode zum überprüfen ob es einee fünfer Strasse ist
+	public boolean istStrasseFünf(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus fünf Karten hat fünf Karten =)
+		if(karten.size()==5){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine sechser Strasse ist
+	public boolean istStrasseSechs(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus sechs Karten hat sechs Karten =)
+		if(karten.size()==6){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	//Methode zum überprüfen ob es eine siebner Strasse ist
+	public boolean istStrasseSieben(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus sieben Karten hat sieben Karten =)
+		if(karten.size()==7){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine achter Strasse ist
+	public boolean istStrasseAcht(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus acht Karten hat acht Karten =)
+		if(karten.size()==8){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine neuner Strasse ist
+	public boolean istStrasseNeun(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus neun Karten hat neun Karten =)
+		if(karten.size()==9){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine zehner Strasse ist
+	public boolean istStrasseZehn(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus zehn Karten hat zehn Karten =)
+		if(karten.size()==10){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine elfer Strasse ist
+	public boolean istStrasseElf(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus elf Karten hat elf Karten =)
+		if(karten.size()==11){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	//Methode zum überprüfen ob es eine zwölfer Strasse ist
+	public boolean istStrasseZwölf(ArrayList<Card> karten){
+		//Sortiert die Karten neu sodass die Jokerkarten an den platz kommt wie ihr Wert eingegeben wurde
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		//Eine Strasse aus zwölf Karten hat zwölf Karten =)
+		if(karten.size()==12){
+			
+			if(istStrasse(karten, 1)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine Strasse mit Paaren ist
+	public boolean istPaarStrasse(ArrayList<Card> karten){
+		
+		int kartePosition = 0;
+		int überprüfen = 0; //Checkt ob es sich um Paare handelt
+		boolean überprüfen4 = false; //Checkt ob die PaarStrasse farblich korrekt ist
+
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		
+		if(karten.size()>3){
+			
+			//Da es nur Paar sind sollte die ausgewählten Karten durch 2 teilbar sein
+			if (karten.size()%2 == 0) { 
+				
+
+				
+				//Wenn die letzte überprüfung stimmt geht es weiter
+				if(istSet(karten,2)){
+					System.out.println("istSet funktioniert");							
+					//Wenn die letzte überprüfung stimmt geht es weiter
+					if(istStrasse(karten,2)){
+						
+						System.out.println("istStrasse funktioniert");	
+						//Überprüfung damit Jokerkarten nicht eine bereits existierende karte kopieren können
+						for(int i = 0;i < karten.size()/2; i++){
+							if(karten.get(kartePosition).getFarbe() != karten.get(kartePosition+1).getFarbe()){
+								überprüfen++;
+								kartePosition+=2;
+							}				
+						}
+					
+						if(überprüfen== karten.size()/2){
+							überprüfen4 = karteFarbeSortieren(2, karten);
+							
+							//Wenn die letzte überprüfung stimmt ist es eine zulässige Paarstrasse
+							if(überprüfen4){
+								return true;
+							}
+							
+						}					
+					}
+				}
+			}			
+		}
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine Drilling Strasse ist
+	//MUSS NOCH GEMACHT WERDEN
+	//Methode zum überprüfen ob es eine Drilling Strasse ist
+	public boolean istDrillingStrasse(ArrayList<Card> karten){
+		
+		int kartePosition = 0;
+		int überprüfen = 0; //Checkt ob es sich um Paare handelt
+		boolean überprüfen4 = false; //Checkt ob die PaarStrasse farblich korrekt ist
+
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		
+		if(karten.size()>5){
+			
+			//Da es nur Paar sind sollte die ausgewählten Karten durch 2 teilbar sein
+			if (karten.size()%3 == 0) { 
+				
+
+				
+				//Wenn die letzte überprüfung stimmt geht es weiter
+				if(istSet(karten,3)){
+					System.out.println("istSet funktioniert");							
+					//Wenn die letzte überprüfung stimmt geht es weiter
+					if(istStrasse(karten,3)){
+						
+						System.out.println("istStrasse funktioniert");	
+						//Überprüfung damit Jokerkarten nicht eine bereits existierende karte kopieren können
+						for(int i = 0;i < karten.size()/3; i++){
+							if(karten.get(kartePosition).getFarbe() != karten.get(kartePosition+1).getFarbe()){
+								überprüfen++;
+								kartePosition+=3;
+							}				
+						}
+					
+						if(überprüfen== karten.size()/3){
+							überprüfen4 = karteFarbeSortieren(3, karten);
+							
+							//Wenn die letzte überprüfung stimmt ist es eine zulässige Paarstrasse
+							if(überprüfen4){
+								return true;
+							}
+							
+						}					
+					}
+				}
+			}			
+		}
+		return false;
+	}
+
+
+		
+
+
+	
+	//Methode zum überprüfen ob es eine Vierling Strasse ist
+
+	//Methode zum überprüfen ob es eine VierlingStrasse ist
+	public boolean istVierlingStrasse(ArrayList<Card> karten){
+		
+		int kartePosition = 0;
+		int überprüfen = 0; //Checkt ob es sich um Paare handelt
+		boolean überprüfen4 = false; //Checkt ob die PaarStrasse farblich korrekt ist
+
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		
+		if(karten.size()>7){
+			
+			//Da es nur Paar sind sollte die ausgewählten Karten durch 2 teilbar sein
+			if (karten.size()%4 == 0) { 
+				
+
+				
+				//Wenn die letzte überprüfung stimmt geht es weiter
+				if(istSet(karten,4)){
+					System.out.println("istSet funktioniert");							
+					//Wenn die letzte überprüfung stimmt geht es weiter
+					if(istStrasse(karten,4)){
+						
+						System.out.println("istStrasse funktioniert");	
+						//Überprüfung damit Jokerkarten nicht eine bereits existierende karte kopieren können
+						for(int i = 0;i < karten.size()/4; i++){
+							if(karten.get(kartePosition).getFarbe() != karten.get(kartePosition+1).getFarbe()){
+								überprüfen++;
+								kartePosition+=4;
+							}				
+						}
+					
+						if(überprüfen== karten.size()/4){
+							überprüfen4 = karteFarbeSortieren(4, karten);
+							
+							//Wenn die letzte überprüfung stimmt ist es eine zulässige Paarstrasse
+							if(überprüfen4){
+								return true;
+							}
+							
+						}					
+					}
+				}
+			}			
+		}
+		return false;
+	}
+	
+	//Methode zum überprüfen ob es eine Fünfling Strasse ist
+	//MUSS NOCH GEMACHT WERDEN
+	//Methode zum überprüfen ob es eine Fünfling Strasse ist
+	public boolean istFünflingStrasse(ArrayList<Card> karten){
+		
+		int kartePosition = 0;
+		int überprüfen = 0; //Checkt ob es sich um Paare handelt
+		boolean überprüfen4 = false; //Checkt ob die PaarStrasse farblich korrekt ist
+
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		
+		if(karten.size()>9){
+			
+			//Da es nur Paar sind sollte die ausgewählten Karten durch 2 teilbar sein
+			if (karten.size()%5 == 0) { 
+				
+
+				
+				//Wenn die letzte überprüfung stimmt geht es weiter
+				if(istSet(karten,5)){
+					System.out.println("istSet funktioniert");							
+					//Wenn die letzte überprüfung stimmt geht es weiter
+					if(istStrasse(karten,5)){
+						
+						System.out.println("istStrasse funktioniert");	
+						//Überprüfung damit Jokerkarten nicht eine bereits existierende karte kopieren können
+						for(int i = 0;i < karten.size()/5; i++){
+							if(karten.get(kartePosition).getFarbe() != karten.get(kartePosition+1).getFarbe()){
+								überprüfen++;
+								kartePosition+=5;
+							}				
+						}
+					
+						if(überprüfen== karten.size()/5){
+							überprüfen4 = karteFarbeSortieren(5, karten);
+							
+							//Wenn die letzte überprüfung stimmt ist es eine zulässige Paarstrasse
+							if(überprüfen4){
+								return true;
+							}
+							
+						}					
+					}
+				}
+			}			
+		}
+		return false;
+	
+	} 
+	
+	/***************************************************************************************
+	Handler welcher für das Anwählen von Karten zuständig ist
+	****************************************************************************************/
 	public class clickHandler implements ActionListener{
 
 		@Override
@@ -588,6 +1566,10 @@ public class Client extends JFrame{
 		
 		}
 	}
+	
+	/***************************************************************************************
+	Handler welcher für das klicken der Buttons zuständig ist
+	****************************************************************************************/
 	
 	public class buttonHandler implements ActionListener{
 
