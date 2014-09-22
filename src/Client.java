@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-﻿import java.awt.BorderLayout;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,16 +11,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-=======
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
->>>>>>> a4ca466c2b0604d6a751bb1ef1eee8013ef817ee
+
 
 
 public class Client {
 
-<<<<<<< HEAD
+
 public class Client extends JFrame{
 
 	private Image image;
@@ -67,7 +67,7 @@ public class Client extends JFrame{
 	private ImageIcon jDameIcon;
 	private Image jKoenig;
 	private ImageIcon jKoenigIcon;
-=======
+
 	LoginGUI login;
 	Socket socket;
 	ObjectOutputStream out;
@@ -76,11 +76,11 @@ public class Client extends JFrame{
 	
 	
 	
->>>>>>> a4ca466c2b0604d6a751bb1ef1eee8013ef817ee
+
 	
 	
 	public static void main(String[] args){
-<<<<<<< HEAD
+
 		Deck d = new Deck();
 		d.aufteilen(2);
 		Client c = new Client();
@@ -387,12 +387,12 @@ public class Client extends JFrame{
 	
 
 		this.setSize(1100, 1000);
-=======
+
 		String hostName = "localhost";
 		int portNummer = 50000;
 		Client c = new Client(hostName, portNummer);
 		
->>>>>>> a4ca466c2b0604d6a751bb1ef1eee8013ef817ee
+
 		
 		
 	}
@@ -406,7 +406,7 @@ public class Client extends JFrame{
 	
 	public void init(String hostName, int portNummer){
 		
-<<<<<<< HEAD
+
 		//Ist eine Karte angewaehlt wird sie der ArrayList gespielteKarte hinzugefuegt (JokerKarten)
 		for(int i = 0;i<3;i++){
 			if(jokerKarten[i].getBorder() == gedrucktBorder){
@@ -429,19 +429,19 @@ public class Client extends JFrame{
 		for(int i = 3;i<17;i++){
 			if(btnKarte[i-3].getBorder() == gedrucktBorder){
 				//Diese zeile erstellt eine Copy der Karte in die kartenKontrolle
-=======
+
 		try {
 			socket = new Socket(hostName, portNummer);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 			in = new ObjectInputStream(socket.getInputStream());
->>>>>>> a4ca466c2b0604d6a751bb1ef1eee8013ef817ee
+
 
 		} catch (Exception e) {
 			System.out.println(e.toString());
 			System.exit(1);
 		}
-<<<<<<< HEAD
+
 		
 		
 		if(jokerWert==0 || jokerFarbe.equals("0")){
@@ -746,10 +746,10 @@ public class Client extends JFrame{
 					
 			}
 			
-			
-		}
+		}	
+	}	
 	}
-	
+}
 	
 	
 	
@@ -950,8 +950,8 @@ public class Client extends JFrame{
 				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
 				spielerHand.set(i, new Card());
 			}
-			
 		}
+		
 		
 		
 	}
@@ -1775,10 +1775,9 @@ public class Client extends JFrame{
 }	
 
 
-=======
-	
-	}
-	
+
 	
 }
->>>>>>> a4ca466c2b0604d6a751bb1ef1eee8013ef817ee
+	
+	
+	
