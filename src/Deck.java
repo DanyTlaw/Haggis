@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-//Diese Klasse enthält die Logik eines Deckes
+//Diese Klasse enthï¿½lt die Logik eines Deckes
 public class Deck {
 	
 	public static void main(String[] args){
@@ -14,8 +14,8 @@ public class Deck {
 	}
 	
 	
-	//Bilder für die Karten
-	//Variablen für Graue Karten
+	//Bilder fuer die Karten
+	//Variablen fuer Graue Karten
 	public Card grau2;
 	public Card grau3;
 	public Card grau4;
@@ -26,7 +26,7 @@ public class Deck {
 	public Card grau9;
 	public Card grau10;
 	
-	//Variablen für Gelbe Karten
+	//Variablen fuer Gelbe Karten
 	public Card gelb2;
 	public Card gelb3;
 	public Card gelb4;
@@ -37,7 +37,7 @@ public class Deck {
 	public Card gelb9;
 	public Card gelb10;
 	
-	//Variablen für orange Karten
+	//Variablen fuer orange Karten
 	public Card orange2;
 	public Card orange3;
 	public Card orange4;
@@ -48,7 +48,7 @@ public class Deck {
 	public Card orange9;
 	public Card orange10;	
 	
-	//Variablen für rote Karten
+	//Variablen fuer rote Karten
 	public Card rot2;
 	public Card rot3;
 	public Card rot4;
@@ -59,7 +59,7 @@ public class Deck {
 	public Card rot9;
 	public Card rot10;
 	
-	//Variablen für grüne Karten
+	//Variablen fuer gruene Karten
 	public Card gruen2;
 	public Card gruen3;
 	public Card gruen4;
@@ -85,158 +85,159 @@ public class Deck {
 	//Konstruktor welche ein Deck mit allen 54 Karten vom Typ Card erstellt
 	public Deck(){
 		
+		String pfad = System.getProperty("user.dir") + "//images//";
 		
 		//Graue Icons
-		Image imageGrau2 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau02.jpg").getImage();
+		Image imageGrau2 = new ImageIcon(pfad + "grau02.jpg").getImage();
 		ImageIcon iconGrau2 = new ImageIcon(imageGrau2.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 
-		Image imageGrau3 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau03.jpg").getImage();
+		Image imageGrau3 = new ImageIcon(pfad + "grau03.jpg").getImage();
 		ImageIcon iconGrau3 = new ImageIcon(imageGrau3.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGrau4 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau04.jpg").getImage();
+		Image imageGrau4 = new ImageIcon(pfad + "grau04.jpg").getImage();
 		ImageIcon iconGrau4 = new ImageIcon(imageGrau4.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGrau5 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau05.jpg").getImage();
+		Image imageGrau5 = new ImageIcon(pfad + "grau05.jpg").getImage();
 		ImageIcon iconGrau5 = new ImageIcon(imageGrau5.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGrau6 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau06.jpg").getImage();
+		Image imageGrau6 = new ImageIcon(pfad + "grau06.jpg").getImage();
 		ImageIcon iconGrau6 = new ImageIcon(imageGrau6.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGrau7 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau07.jpg").getImage();
+		Image imageGrau7 = new ImageIcon(pfad + "grau07.jpg").getImage();
 		ImageIcon iconGrau7 = new ImageIcon(imageGrau7.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGrau8 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau08.jpg").getImage();
+		Image imageGrau8 = new ImageIcon(pfad + "grau08.jpg").getImage();
 		ImageIcon iconGrau8 = new ImageIcon(imageGrau8.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGrau9 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau09.jpg").getImage();
+		Image imageGrau9 = new ImageIcon(pfad + "grau09.jpg").getImage();
 		ImageIcon iconGrau9 = new ImageIcon(imageGrau9.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGrau10 = new ImageIcon("C:\\workspace\\Haggis\\images\\grau10.jpg").getImage();
+		Image imageGrau10 = new ImageIcon(pfad + "grau10.jpg").getImage();
 		ImageIcon iconGrau10 = new ImageIcon(imageGrau10.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
 		//Gelbe Icons
-		Image imageGelb2 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb02.jpg").getImage();
+		Image imageGelb2 = new ImageIcon(pfad + "gelb02.jpg").getImage();
 		ImageIcon iconGelb2 = new ImageIcon(imageGelb2.getScaledInstance(100, 150, Image.SCALE_DEFAULT));	
 		
-		Image imageGelb3 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb03.jpg").getImage();
+		Image imageGelb3 = new ImageIcon(pfad + "gelb03.jpg").getImage();
 		ImageIcon iconGelb3 = new ImageIcon(imageGelb3.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGelb4 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb04.jpg").getImage();
+		Image imageGelb4 = new ImageIcon(pfad + "gelb04.jpg").getImage();
 		ImageIcon iconGelb4 = new ImageIcon(imageGelb4.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGelb5 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb05.jpg").getImage();
+		Image imageGelb5 = new ImageIcon(pfad + "gelb05.jpg").getImage();
 		ImageIcon iconGelb5 = new ImageIcon(imageGelb5.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGelb6 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb06.jpg").getImage();
+		Image imageGelb6 = new ImageIcon(pfad + "gelb06.jpg").getImage();
 		ImageIcon iconGelb6 = new ImageIcon(imageGelb6.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGelb7 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb07.jpg").getImage();
+		Image imageGelb7 = new ImageIcon(pfad + "gelb07.jpg").getImage();
 		ImageIcon iconGelb7 = new ImageIcon(imageGelb7.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGelb8 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb08.jpg").getImage();
+		Image imageGelb8 = new ImageIcon(pfad + "gelb08.jpg").getImage();
 		ImageIcon iconGelb8 = new ImageIcon(imageGelb8.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGelb9 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb09.jpg").getImage();
+		Image imageGelb9 = new ImageIcon(pfad + "gelb09.jpg").getImage();
 		ImageIcon iconGelb9 = new ImageIcon(imageGelb9.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGelb10 = new ImageIcon("C:\\workspace\\Haggis\\images\\gelb10.jpg").getImage();
+		Image imageGelb10 = new ImageIcon(pfad + "gelb10.jpg").getImage();
 		ImageIcon iconGelb10 = new ImageIcon(imageGelb10.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
 		//Gruene Icons
-		Image imageGruen2 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen02.jpg").getImage();
+		Image imageGruen2 = new ImageIcon(pfad + "gruen02.jpg").getImage();
 		ImageIcon iconGruen2 = new ImageIcon(imageGruen2.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen3 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen03.jpg").getImage();
+		Image imageGruen3 = new ImageIcon(pfad + "gruen03.jpg").getImage();
 		ImageIcon iconGruen3 = new ImageIcon(imageGruen3.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen4 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen04.jpg").getImage();
+		Image imageGruen4 = new ImageIcon(pfad + "gruen04.jpg").getImage();
 		ImageIcon iconGruen4 = new ImageIcon(imageGruen4.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen5 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen05.jpg").getImage();
+		Image imageGruen5 = new ImageIcon(pfad + "gruen05.jpg").getImage();
 		ImageIcon iconGruen5 = new ImageIcon(imageGruen5.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen6 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen06.jpg").getImage();
+		Image imageGruen6 = new ImageIcon(pfad + "gruen06.jpg").getImage();
 		ImageIcon iconGruen6 = new ImageIcon(imageGruen6.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen7 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen07.jpg").getImage();
+		Image imageGruen7 = new ImageIcon(pfad + "gruen07.jpg").getImage();
 		ImageIcon iconGruen7 = new ImageIcon(imageGruen7.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen8 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen08.jpg").getImage();
+		Image imageGruen8 = new ImageIcon(pfad + "gruen08.jpg").getImage();
 		ImageIcon iconGruen8 = new ImageIcon(imageGruen8.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen9 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen09.jpg").getImage();
+		Image imageGruen9 = new ImageIcon(pfad + "gruen09.jpg").getImage();
 		ImageIcon iconGruen9 = new ImageIcon(imageGruen9.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageGruen10 = new ImageIcon("C:\\workspace\\Haggis\\images\\gruen10.jpg").getImage();
+		Image imageGruen10 = new ImageIcon(pfad + "gruen10.jpg").getImage();
 		ImageIcon iconGruen10 = new ImageIcon(imageGruen10.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
 		//Orange Icons
-		Image imageOrange2 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange02.jpg").getImage();
+		Image imageOrange2 = new ImageIcon(pfad + "orange02.jpg").getImage();
 		ImageIcon iconOrange2 = new ImageIcon(imageOrange2.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange3 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange03.jpg").getImage();
+		Image imageOrange3 = new ImageIcon(pfad + "orange03.jpg").getImage();
 		ImageIcon iconOrange3 = new ImageIcon(imageOrange3.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange4 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange04.jpg").getImage();
+		Image imageOrange4 = new ImageIcon(pfad + "orange04.jpg").getImage();
 		ImageIcon iconOrange4 = new ImageIcon(imageOrange4.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange5 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange05.jpg").getImage();
+		Image imageOrange5 = new ImageIcon(pfad + "orange05.jpg").getImage();
 		ImageIcon iconOrange5 = new ImageIcon(imageOrange5.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange6 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange06.jpg").getImage();
+		Image imageOrange6 = new ImageIcon(pfad + "orange06.jpg").getImage();
 		ImageIcon iconOrange6 = new ImageIcon(imageOrange6.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange7 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange07.jpg").getImage();
+		Image imageOrange7 = new ImageIcon(pfad + "orange07.jpg").getImage();
 		ImageIcon iconOrange7 = new ImageIcon(imageOrange7.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange8 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange08.jpg").getImage();
+		Image imageOrange8 = new ImageIcon(pfad + "orange08.jpg").getImage();
 		ImageIcon iconOrange8 = new ImageIcon(imageOrange8.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange9 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange09.jpg").getImage();
+		Image imageOrange9 = new ImageIcon(pfad + "orange09.jpg").getImage();
 		ImageIcon iconOrange9 = new ImageIcon(imageOrange9.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageOrange10 = new ImageIcon("C:\\workspace\\Haggis\\images\\orange10.jpg").getImage();
+		Image imageOrange10 = new ImageIcon(pfad + "orange10.jpg").getImage();
 		ImageIcon iconOrange10 = new ImageIcon(imageOrange10.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
 		//Rote Icons
-		Image imageRot2 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot02.jpg").getImage();
+		Image imageRot2 = new ImageIcon(pfad + "rot02.jpg").getImage();
 		ImageIcon iconRot2 = new ImageIcon(imageRot2.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot3 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot03.jpg").getImage();
+		Image imageRot3 = new ImageIcon(pfad + "rot03.jpg").getImage();
 		ImageIcon iconRot3 = new ImageIcon(imageRot3.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot4 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot04.jpg").getImage();
+		Image imageRot4 = new ImageIcon(pfad + "rot04.jpg").getImage();
 		ImageIcon iconRot4 = new ImageIcon(imageRot4.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot5 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot05.jpg").getImage();
+		Image imageRot5 = new ImageIcon(pfad + "rot05.jpg").getImage();
 		ImageIcon iconRot5 = new ImageIcon(imageRot5.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot6 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot06.jpg").getImage();
+		Image imageRot6 = new ImageIcon(pfad + "rot06.jpg").getImage();
 		ImageIcon iconRot6 = new ImageIcon(imageRot6.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot7 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot07.jpg").getImage();
+		Image imageRot7 = new ImageIcon(pfad + "rot07.jpg").getImage();
 		ImageIcon iconRot7 = new ImageIcon(imageRot7.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot8 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot08.jpg").getImage();
+		Image imageRot8 = new ImageIcon(pfad + "rot08.jpg").getImage();
 		ImageIcon iconRot8 = new ImageIcon(imageRot8.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot9 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot09.jpg").getImage();
+		Image imageRot9 = new ImageIcon(pfad + "rot09.jpg").getImage();
 		ImageIcon iconRot9 = new ImageIcon(imageRot9.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageRot10 = new ImageIcon("C:\\workspace\\Haggis\\images\\rot10.jpg").getImage();
+		Image imageRot10 = new ImageIcon(pfad + "rot10.jpg").getImage();
 		ImageIcon iconRot10 = new ImageIcon(imageRot10.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
 		//Jokerkarten Icons
-		Image imageBube = new ImageIcon("C:\\workspace\\Haggis\\images\\Bube.jpg").getImage();
+		Image imageBube = new ImageIcon(pfad + "Bube.jpg").getImage();
 		ImageIcon iconBube = new ImageIcon(imageBube.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageDame = new ImageIcon("C:\\workspace\\Haggis\\images\\Dame.jpg").getImage();
+		Image imageDame = new ImageIcon(pfad + "Dame.jpg").getImage();
 		ImageIcon iconDame = new ImageIcon(imageDame.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		Image imageKoenig = new ImageIcon("C:\\workspace\\Haggis\\images\\König.jpg").getImage();
+		Image imageKoenig = new ImageIcon(pfad + "KÃ¶nig.jpg").getImage();
 		ImageIcon iconKoenig = new ImageIcon(imageKoenig.getScaledInstance(100, 150, Image.SCALE_DEFAULT));
 		
-		//Variablen für Graue Karten
+		//Variablen fuer Graue Karten
 		grau2 = new Card(2,"grau2",iconGrau2,0,"grau");
 		grau3 = new Card(3, "grau3",iconGrau3,1,"grau");
 		grau4 = new Card(4, "grau4",iconGrau4,0,"grau");
@@ -247,7 +248,7 @@ public class Deck {
 		grau9 = new Card(9, "grau9",iconGrau9,1,"grau");
 		grau10 = new Card(10, "grau10",iconGrau10,0,"grau");
 		
-		//Variablen für Gelbe Karten
+		//Variablen fuer Gelbe Karten
 		gelb2 = new Card(2, "gelb2",iconGelb2,0,"gelb");
 		gelb3 = new Card(3, "gelb3",iconGelb3,1,"gelb");
 		gelb4 = new Card(4, "gelb4",iconGelb4,0,"gelb");
@@ -258,7 +259,7 @@ public class Deck {
 		gelb9 = new Card(9, "gelb9",iconGelb9,1,"gelb");
 		gelb10 = new Card(10, "gelb10",iconGelb10,0,"gelb");
 		
-		//Variablen für orange Karten
+		//Variablen fuer orange Karten
 		orange2 = new Card(2, "orange2",iconOrange2,0,"orange");
 		orange3 = new Card(3, "orange3",iconOrange3,1,"orange");
 		orange4 = new Card(4, "orange4",iconOrange4,0,"orange");
@@ -269,7 +270,7 @@ public class Deck {
 		orange9 = new Card(9, "orange9",iconOrange9,1,"orange");
 		orange10 = new Card(10, "orange10",iconOrange10,0,"orange");	
 		
-		//Variablen für rote Karten
+		//Variablen fuer rote Karten
 		rot2 = new Card(2, "rot2",iconRot2,0,"rot");
 		rot3 = new Card(3, "rot3",iconRot3,1,"rot");
 		rot4 = new Card(4, "rot4",iconRot4,0,"rot");
@@ -280,7 +281,7 @@ public class Deck {
 		rot9 = new Card(9, "rot9",iconRot9,1,"rot");
 		rot10 = new Card(10, "rot10",iconRot10,0,"rot");
 		
-		//Variablen für grüne Karten
+		//Variablen fuer gruene Karten
 		gruen2 = new Card(2, "gruen2",iconGruen2,0,"gruen");
 		gruen3 = new Card(3, "gruen3",iconGruen3,1,"gruen");
 		gruen4 = new Card(4, "gruen4",iconGruen4,0,"gruen");
@@ -298,7 +299,7 @@ public class Deck {
 		koenig = new Card(13, "koenig", iconKoenig,5,"",true);
 
 
-		//Fügt alle Karten der ArrayList hinzu
+		//Fï¿½gt alle Karten der ArrayList hinzu
 		deck.add(grau2);
 		deck.add(grau3);
 		deck.add(grau4);
@@ -409,7 +410,7 @@ public class Deck {
 					break;
 				}
 			}
-			//Schleife welche einen König entfernt
+			//Schleife welche einen Koenig entfernt
 			for(int i =0;i<deck.size();i++){
 				if(deck.get(i).getName().equals("koenig")){
 					deck.remove(i);
@@ -463,7 +464,7 @@ public class Deck {
 				k++;
 			}
 			
-			//While Schleife welche beiden Spielern einen König gibt
+			//While Schleife welche beiden Spielern einen Koenig gibt
 			k = 0;
 			while(true){
 				if(spieler1){
@@ -490,7 +491,7 @@ public class Deck {
 
 			
 			for(int i = 0; i<28;i++){
-				//Variable welche dafür sorgt das die Karten abwechselnd verteilt werden
+				//Variable welche dafuer sorgt das die Karten abwechselnd verteilt werden
 				
 				
 				int decZufallZahl = (int) (Math.random()*deck.size()+1);
@@ -535,7 +536,7 @@ public class Deck {
 		return this.handKarten2;
 	}
 	
-	//Testmethode um zu schauen ob zwei Kartenhände erstellt wurde und ihre Kartenname werde ausgegeben
+	//Testmethode um zu schauen ob zwei Kartenhaende erstellt wurde und ihre Kartenname werde ausgegeben
 	public void aufzeigen(){
 		System.out.println("Spieler1 :");
 		for(int i = 0;i<17;i++){
