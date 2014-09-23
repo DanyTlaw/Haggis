@@ -1,6 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.io.IOException;
 =======
+=======
+>>>>>>> origin
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+<<<<<<< HEAD
+>>>>>>> origin
+=======
 >>>>>>> origin
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,6 +28,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import javax.swing.JOptionPane;
+
 
 
 
@@ -85,6 +92,10 @@ public class Client extends JFrame{
 	static Gameobjekt game;
 	static int client_ID;
 	
+<<<<<<< HEAD
+=======
+	
+>>>>>>> origin
 
 	
 	
@@ -964,6 +975,7 @@ public class Client extends JFrame{
 		
 		
 	}
+<<<<<<< HEAD
 	
 	//Methode welche anhand der Reihenfolge der Farben des Sets die anderen Sets farblich sortiert
 	public boolean karteFarbeSortieren(int set, ArrayList<Card> karten){
@@ -1098,6 +1110,110 @@ public class Client extends JFrame{
 		}
 	}
 =======
+=======
+	
+	//Methode welche anhand der Reihenfolge der Farben des Sets die anderen Sets farblich sortiert
+	public boolean karteFarbeSortieren(int set, ArrayList<Card> karten){
+		
+		int ueberpruefen = 0;
+		int kartePosition = 0;
+		String[] farben = new String[set]; //Dieser Array dient zur Vergleichsbasis der Farben
+		Card[] temp = new Card[set]; // Hier werden die naechsten Karten des sets zwischengespeichert
+		int karteErsetzen =set;
+
+		//Diese Schleife nimmt jede Karte des Sets und fuegt sie dem farben Array hinzu
+		for(int i =0;i<set;i++){
+
+			farben[i] = karten.get(i).getFarbe();
+						
+		}
+		
+		//Diese Schleife wird fuer jedes weitere Set durchgefuehrt (Drilling -1 = 2)
+		for(int i = 0;i<karten.size()/set-1; i++){
+			
+			//Speichert das naechst groessere Set der Strasse in den temp Array
+			for(int k = 0; k<set; k++){
+				temp[k] = karten.get(kartePosition+set);
+				kartePosition++;
+			}
+			
+			//Die erste Karte in einem set wird mit jeder Karte des folgenden Sets verglichen dann die n�chsten		
+			//Fuer jede anzahl Karte in einem Set wird diese Schleife durchgefuehrt, weil alle verglichen werden m�ssen
+			for(int j = 0; j<set; j++){
+				
+				//Diese Schleife ueberprueft die Farben und setzt die richtige Karte an die richtige Reihenfolge
+				for(int k = 0;k<set;k++){
+					if(farben[j].equals(temp[k].getFarbe())){
+						karten.set(karteErsetzen, temp[k]);
+						karteErsetzen++;
+						ueberpruefen++;
+					}
+				}
+			}
+			
+		}
+		if(ueberpruefen == karten.size()-
+				set){
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
+	//Methode welche ueberprueft ob es das gleiche Set ist (Paar, Drilling etc)
+	public boolean istSet(ArrayList<Card> karten, int set){
+		
+
+		int bedingung = 0;
+		
+		int kartePosition = 0;	
+		
+		//Wenn eine Strasse aus Sets >1 zb Paar, Drilling etc besteht braucht es folgenge Logik
+		if(set>1){
+			
+	
+			
+			//Es muss fuer jedes Set in der Strasse einmal das Set ueberprueft werden
+			for(int i = 0;i<karten.size()/set;i++){
+				
+				//Fuer jedes einzelne Set muss die Anzahl Karten des set minus 1 ueberprueft werden bsp. Paar erste mit zweite Karte = 1 �berpr�fung
+				for(int j = 0; j<set-1;j++){
+					
+					//Vergleicht zwei Karten innerhalb eines Sets
+					if(karten.get(kartePosition).getWert() == karten.get(kartePosition+1).getWert()){
+						bedingung++;
+					}
+				}
+				kartePosition+=set;
+			}
+			
+			//Die Bedingung wird durch eine Mathematische reihe getroffen
+			if(bedingung==karten.size()/set*(set-1)){
+				return true;
+			}else{
+				return false;
+			}
+			
+		}else{
+
+			for(int i = 0;i<karten.size()-1;i++){
+				
+				if(karten.get(i).getWert() == karten.get(i+1).getWert()){
+					bedingung++;
+				}
+				
+			}
+
+			if(bedingung==karten.size()-1){				
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	
+>>>>>>> origin
 	public boolean istStrasse(ArrayList<Card> karten, int set){
 		
 		int bedingungWert = 0;
@@ -1817,6 +1933,9 @@ public class Client extends JFrame{
 
 
 
+<<<<<<< HEAD
+>>>>>>> origin
+=======
 >>>>>>> origin
 	
 }
