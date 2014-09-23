@@ -20,6 +20,8 @@ public class LoginGUI extends JFrame implements ActionListener{
 	private JButton jbtStart;
 	private JTextField txtName;
 	
+	public static Spieltisch tisch;
+	
 	public LoginGUI(ObjectOutputStream out, ObjectInputStream in){
 		this.out = out;
 		this.in = in;
@@ -51,7 +53,8 @@ public class LoginGUI extends JFrame implements ActionListener{
 				this.out.writeObject(spieler);
 				
 				setVisible(false);
-				Spieltisch  tisch = new Spieltisch(this.out, this.in);
+				tisch = new Spieltisch(this.out, this.in);
+				System.out.println(tisch);
 				}
 			}catch (java.io.IOException IOException){
 				IOException.printStackTrace();
@@ -60,6 +63,10 @@ public class LoginGUI extends JFrame implements ActionListener{
 			
 		}
 		
+	}
+	
+	public Spieltisch getTisch(){
+		return this.tisch;
 	}
 	
 }

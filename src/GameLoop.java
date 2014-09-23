@@ -3,6 +3,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 
 public class GameLoop extends Thread{
 
@@ -39,6 +41,24 @@ public class GameLoop extends Thread{
 						out.writeObject(client_ID);
 						client_ID++;
 						System.out.println("erfolgreich verbunden");
+						
+						// creating Masterobject
+						if (userlist.size() == 2) {
+
+							Gameobjekt game = new Gameobjekt(userlist);
+							//sleep - otherwise complications with Clients (update-problem)
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							// send Masterobject to Clients
+							Iterator<ObjectOutputStream> i = outlist.iterator();
+							while (i.hasNext()) {
+								i.next().writeObject(game);
+								System.out.println("gesendet game");
+							}
+						}
 					}
 				}
 			}catch (ClassNotFoundException cnfException) {

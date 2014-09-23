@@ -1,6 +1,11 @@
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
+
+import javax.swing.JOptionPane;
+
 
 
 public class Client {
@@ -11,7 +16,8 @@ public class Client {
 	ObjectInputStream in;
 	Object inputObject;
 	
-	
+	static Gameobjekt game;
+	static int client_ID;
 	
 	
 	
@@ -26,8 +32,8 @@ public class Client {
 	
 	public Client(String hostName, int portNummer){
 		init(hostName, portNummer);
-		LoginGUI login = new LoginGUI(this.out, this.in);
-	
+		login = new LoginGUI(this.out, this.in);
+		erhalteObjektVomServer();
 	}
 	
 	
@@ -46,5 +52,35 @@ public class Client {
 	
 	}
 	
+	public void erhalteObjektVomServer() {
+		// receive the UserObject and do whatever the client has to do...
+		try {
+			while ((inputObject = in.readObject()) != null) {
+				System.out.println("habe das gameobjekt erhalten");
+				if (inputObject instanceof Gameobjekt) {
+					game = (Gameobjekt) inputObject;
+					System.out.println("Es ist enie Gameobject");
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					System.out.println("ICH komme bis zur letzten aufruf");
+					System.out.println(game.getSpieler(client_ID).getHandKarten().size());
+					System.out.println("Hier ist das Tisch objekt" + login.getTisch());
+					login.getTisch().ladetBilder(game.getSpieler(client_ID).getHandKarten());
+				} 
+				// set Client_ID
+				else if (inputObject instanceof Integer) {
+					client_ID = (int) inputObject;
+					System.out.println("das ist meine ID" + client_ID);
+				} 
+				
+
+			}
+		} catch (ClassNotFoundException | IOException cnfException) {
+			cnfException.printStackTrace();
+		}
+	}
 	
 }

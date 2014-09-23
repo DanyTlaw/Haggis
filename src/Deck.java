@@ -7,12 +7,6 @@ import javax.swing.JLabel;
 //Diese Klasse enth�lt die Logik eines Deckes
 public class Deck {
 	
-	public static void main(String[] args){
-		Deck d = new Deck();
-		d.aufteilen(2);
-		d.aufzeigen();
-	}
-	
 	
 	//Bilder fuer die Karten
 	//Variablen fuer Graue Karten
@@ -79,6 +73,7 @@ public class Deck {
 	
 	public ArrayList<Card> deck = new ArrayList<Card>();
 	
+	public ArrayList<ArrayList<Card>> haende = new ArrayList<ArrayList<Card>>(3);
 	public ArrayList<Card> handKarten1 = new ArrayList<Card>();
 	public ArrayList<Card> handKarten2 = new ArrayList<Card>();
 	
@@ -386,16 +381,7 @@ public class Deck {
 					j++;
 				}
 			}
-			/*
-			//Schleife welche die Farbe grau entfernt
-			for(int i =0;i<deck.size();i++){
-				
-				if(deck.get(i).getFarbe().equals("grau")){
-					deck.remove(i);
-					i--;
-				}
-			}
-			*/
+			
 			//Schleife welche einen Buben entfernt
 			for(int i =0;i<deck.size();i++){
 				if(deck.get(i).getName().equals("bube")){
@@ -509,6 +495,10 @@ public class Deck {
 				}
 				
 			}
+			
+
+			haende.add(handKarten1);
+			haende.add(handKarten2);
 
 		}
 		
@@ -536,6 +526,10 @@ public class Deck {
 		return this.handKarten2;
 	}
 	
+	public ArrayList<Card> getHand(int i){
+		return this.haende.get(i);
+	}
+	
 	//Testmethode um zu schauen ob zwei Kartenhaende erstellt wurde und ihre Kartenname werde ausgegeben
 	public void aufzeigen(){
 		System.out.println("Spieler1 :");
@@ -547,6 +541,8 @@ public class Deck {
 		for(int i = 0;i<17;i++){
 			System.out.println(this.handKarten2.get(i).getName());
 		}
+		System.out.println("---------------------------------------------------------------------------------");
+		System.out.println(haende.size());
 	}
 	
 	
