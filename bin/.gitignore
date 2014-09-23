@@ -3,6 +3,9 @@
 /Client$clickHandler.class
 /Client.class
 /Deck.class
+<<<<<<< HEAD
+/.~lock.Client.java#
+=======
 /LoginGUI.class
 /Server.class
 /GameLoop.class
@@ -10,5 +13,9 @@
 /Spieltisch$buttonHandler.class
 /Spieltisch$clickHandler.class
 /Spieltisch.class
+<<<<<<< HEAD
 /Gameobjekt.class
 /Cardbutton.class
+=======
+>>>>>>> a4ca466c2b0604d6a751bb1ef1eee8013ef817ee
+>>>>>>> origin
