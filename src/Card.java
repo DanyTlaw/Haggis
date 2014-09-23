@@ -1,7 +1,9 @@
+import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
-//Diese Klasse enthält die Logik einer Karte
-public class Card implements Comparable<Card> {
+//Diese Klasse enthï¿½lt die Logik einer Karte
+public class Card implements Comparable<Card>, Serializable {
 	
 	//Die Nummer welche auf der Karte darauf ist
 	int wert;
