@@ -33,12 +33,16 @@ public class Spieltisch extends JFrame{
 
 	private Image image;
 	private ImageIcon icon;
+	 
+	//Diese Variable ist von Anfang and true wenn ein neuer Client geöffnet wird
+	private boolean neuGestartet = true;
 	
-	int bubeAnzahl = 1;
-	int dameAnzahl = 1;
-	int königAnzahl = 1;
-	int handkarten = 14;
-	int haggisAnzahl = 8;
+	int bubeAnzahl;
+	int dameAnzahl;
+	int königAnzahl;
+	int handkarten;
+	int haggisAnzahl;
+	
 	public Color background = new Color(255,255,255);
 	String[] spielKarten = new String[14];
 	
@@ -51,6 +55,7 @@ public class Spieltisch extends JFrame{
 	public Boolean[] gedrucktJoker = new Boolean[3];
 	public Boolean[] gedrucktHand = new Boolean[14];
 	
+	//Buttons welche zum Spielen des Spiels gebraucht werden
 	public JButton jbtSpielen;
 	public JButton jbtPassen;
 	public JButton jbtBeenden;
@@ -84,6 +89,10 @@ public class Spieltisch extends JFrame{
 	ArrayList<Card> test = new ArrayList<Card>();
 	//Border erstellen
 	public Border gedrucktBorder = new LineBorder(Color.BLUE, 2);
+	private JLabel lblHandkarten;
+	private JLabel lblKönig;
+	private JLabel lblDame;
+	private JLabel lblBube;
 	
 	public Spieltisch(ObjectOutputStream out, ObjectInputStream in){
 		
@@ -93,6 +102,8 @@ public class Spieltisch extends JFrame{
 		
 		clickHandler cHandler = new clickHandler();
 		buttonHandler bHandler = new buttonHandler();
+		
+
 		
 		//Gibt dem Client ein BorderLayout
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -105,7 +116,7 @@ public class Spieltisch extends JFrame{
 		NORTH TEIL DES FRAMES
 		****************************************************************************************/
 		
-		//JPanel welche alle informationen �ber den Gegner beinhaltet
+		//JPanel welche alle informationen ueber den Gegner beinhaltet
 		JPanel enemy = new JPanel();
 		JPanel enemyKarten = new JPanel();
 		
@@ -119,10 +130,10 @@ public class Spieltisch extends JFrame{
 		lblImage.setIcon(icon);
 		
 		//JLabels welche die Karten des Gegner anzeigen
-		JLabel lblBube = new JLabel("Bube: " + bubeAnzahl);
-		JLabel lblDame = new JLabel("Dame: " + dameAnzahl);
-		JLabel lblKönig = new JLabel("K�nig: " + königAnzahl);
-		JLabel lblHandkarten = new JLabel("HandKarten: " + handkarten);
+		lblBube = new JLabel("Bube: " + bubeAnzahl);
+		lblDame = new JLabel("Dame: " + dameAnzahl);
+		lblKönig = new JLabel("Koenig: " + königAnzahl);
+		lblHandkarten = new JLabel("HandKarten: " + handkarten);
 		JLabel lblHolder = new JLabel();
 		
 		
@@ -275,14 +286,13 @@ public class Spieltisch extends JFrame{
 		jbtSpielen.addActionListener(bHandler);
 		jbtPassen = new JButton("Passen");
 		jbtBeenden = new JButton("Beenden");
-		/*
-		jbtSpielen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				karteAuspielen();
-			
-			}
-		});
-		*/
+		
+		//Disabled die Buttons des Spieltisch
+		this.jbtSpielen.setEnabled(false);
+		this.jbtPassen.setEnabled(false);
+		this.jbtBeenden.setEnabled(false);
+		
+		
 		jbtSpielen.addActionListener(cHandler);
 		buttons.add(jbtSpielen);
 		buttons.setBorder(new EmptyBorder(0,0,0,10));
@@ -391,7 +401,10 @@ public class Spieltisch extends JFrame{
 	
 
 	
-	//Getters und Setters
+	/***************************************************************************************
+	Getters und Setters
+	****************************************************************************************/
+
 	public void setHand(ArrayList<Card> hand){
 		this.hand = hand;
 	}
@@ -400,9 +413,52 @@ public class Spieltisch extends JFrame{
 		return this.hand;
 	}
 	
+	public void setNeuGestartet(boolean neuGestartet){
+		this.neuGestartet = neuGestartet;
+	}
 	
-	//Methode um eine Karte auszuspielen
-	public void karteAuspielen(){
+	public boolean getNeuGestartet(){
+		return this.neuGestartet;
+	}
+	
+	public int getBubeAnzahl(){
+		return this.bubeAnzahl;
+	}
+	
+	public void setBubeAnzahl(int bubeAnzahl){
+		this.bubeAnzahl = bubeAnzahl;
+		this.lblBube.setText("Bube :" +this.bubeAnzahl);
+	}
+	
+	public int getDameAnzahl(){
+		return this.dameAnzahl;
+		
+	}
+	
+	public void setDameAnzahl(int dameAnzahl){
+		this.dameAnzahl = dameAnzahl;
+		this.lblDame.setText("Dame :" +this.dameAnzahl);
+	}
+	
+	public int getKoenigAnzahl(){
+		return this.königAnzahl;
+	}
+	
+	public void setKönigAnzahl(int königAnzahl){
+		this.königAnzahl = königAnzahl;
+		this.lblKönig.setText("Koenig :" +this.königAnzahl);
+	}
+	
+	public void setAnzahlKarten(int handKarten){
+		this.handkarten = handKarten;
+		this.lblHandkarten.setText("Spielkaten :" + this.handkarten);
+	}
+	
+	
+	/***************************************************************************************
+	Methode um Karten auszuspielen
+	****************************************************************************************/
+ 	public void karteAuspielen(){
 	int jokerWert = 1;
 	String jokerFarbe = "";
 		
@@ -997,7 +1053,7 @@ public class Spieltisch extends JFrame{
 		
 	}
 	
-	//Methode welche überprüft ob es das gleiche Set ist (Paar, Drilling etc)
+	//Methode welche ueberprueft ob es das gleiche Set ist (Paar, Drilling etc)
 	public boolean istSet(ArrayList<Card> karten, int set){
 		
 
@@ -1049,6 +1105,7 @@ public class Spieltisch extends JFrame{
 		}
 	}
 	
+	//Methode welche ueberprueft ob es den Charakter einer Strasse aufweist
 	public boolean istStrasse(ArrayList<Card> karten, int set){
 		
 		int bedingungWert = 0;
@@ -1082,6 +1139,22 @@ public class Spieltisch extends JFrame{
 		}
 		System.out.println("bedingungWert :" + bedingungWert);
 		return false;
+	}
+	
+	//Methode welche die Spiel Buttons disabled oder Enabled je nach dem wer am Zug ist
+	public void amZugButtons(){
+		this.jbtBeenden.setEnabled(true);
+		this.jbtPassen.setEnabled(true);
+		this.jbtSpielen.setEnabled(true);
+	}
+	
+	//Methode welche die Informationen des Gegners in den Spieltisch ladet
+	public void setGegnerInfos(int hatBube, int hatDame, int hatKoenig){
+		
+		this.setBubeAnzahl(hatBube);
+		this.setDameAnzahl(hatDame);
+		this.setKönigAnzahl(hatKoenig);
+		
 	}
 	
 	/***************************************************************************************

@@ -50,7 +50,38 @@ public class Spieler implements Serializable {
 		this.amZug = amZug;
 	}
 	
+	//Gibt ein boolean zurück welcher sagt ob der Spieler noch ein Bube hat
+	public int hatBube(){
+		
+		for(int i = 0; i<handKarten.size();i++){
+			if(handKarten.get(i).getWert()==11){
+				return 1;
+			}
+		}
+		return 0;
+		
+	}
+	//Gibt ein boolean zurück welcher sagt ob der Spieler noch ein Dame hat
+	public int hatDame(){
+		
+		for(int i = 0; i<handKarten.size();i++){
+			if(handKarten.get(i).getWert()==12){
+				return 1;
+			}
+		}
+		return 0;
+		
+	}
 	
-	
-	
+	//Gibt ein boolean zurück welcher sagt ob der Spieler noch ein Koenig hat
+	public int hatKoenig(){
+		
+		for(int i = 0; i<handKarten.size();i++){
+			if(handKarten.get(i).getWert()==13){
+				return 1;
+			}
+		}
+		return 0;
+		
+	}
 }
