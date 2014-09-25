@@ -110,7 +110,7 @@ public class Spieltisch extends JFrame{
 		//Gibt dem Client ein BorderLayout
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		
-		//JPanel f�r das ganze Frame wird erstellt f�r die HIntergrundfarbe
+		//JPanel fuer das ganze Frame wird erstellt fuer die HIntergrundfarbe
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		setContentPane(mainPanel);
@@ -125,7 +125,7 @@ public class Spieltisch extends JFrame{
 		enemy.setLayout(new BoxLayout(enemy, BoxLayout.X_AXIS));
 		enemyKarten.setLayout(new GridLayout(2,3));
 		
-		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugef�gt wird
+		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
 		image = new ImageIcon(pfad +"icon.jpg").getImage();
 		icon = new ImageIcon(image.getScaledInstance(150, 150, Image.SCALE_DEFAULT));	
 		JLabel lblImage = new JLabel();
@@ -169,7 +169,7 @@ public class Spieltisch extends JFrame{
 		//Erstellt das JLabel mit der Anzahl Haggis Karten
 		JLabel haggisKarten = new JLabel("Haggis: " + haggisAnzahl);
 		
-		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugef�gt wird
+		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
 		imageRueckseite = new ImageIcon(pfad +"rueckseite.jpg").getImage();
 		rueckseite = new ImageIcon(imageRueckseite.getScaledInstance(150, 200, Image.SCALE_DEFAULT));	
 		JLabel lblHaggis = new JLabel();
@@ -307,7 +307,7 @@ public class Spieltisch extends JFrame{
 
 		
 		
-		//Alle Container und Buttons f�r den Rechtssteuerung teil
+		//Alle Container und Buttons fuer den Rechtssteuerung teil
 		
 		
 		JLabel lbljokerkarten = new JLabel("Jokerkarten");
@@ -573,7 +573,7 @@ public class Spieltisch extends JFrame{
 					kartenFeldKopieren(gespielteKarten);
 				}
 				
-				//Wenn die Karten eine fuenfer Strasse sind und sie hoecher sind wie die bereits gespielte f�nfer Strasse, stich erfolgreich
+				//Wenn die Karten eine fuenfer Strasse sind und sie hoecher sind wie die bereits gespielte fuenfer Strasse, stich erfolgreich
 				else if(istStrasseFuenf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
 					karteAnzeigen();
 					kartenFeldKopieren(gespielteKarten);
@@ -615,7 +615,7 @@ public class Spieltisch extends JFrame{
 					kartenFeldKopieren(gespielteKarten);
 				}
 				
-				//Wenn die Karten eine zwoelfer Strasse sind und sie hoecher sind wie die bereits gespielte zw�lfer Strasse, stich erfolgreich
+				//Wenn die Karten eine zwoelfer Strasse sind und sie hoecher sind wie die bereits gespielte zwoelfer Strasse, stich erfolgreich
 				else if(istStrasseZwoelf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
 					karteAnzeigen();
 					kartenFeldKopieren(gespielteKarten);
@@ -639,15 +639,15 @@ public class Spieltisch extends JFrame{
 					kartenFeldKopieren(gespielteKarten);
 				}
 				
-				//Wenn die Karten eine Fuenfling Strasse ist und sie hoecher ist wie die bereits gespielte F�nflng Strasse, Stich erfolgreich
+				//Wenn die Karten eine Fuenfling Strasse ist und sie hoecher ist wie die bereits gespielte Fuenflng Strasse, Stich erfolgreich
 				else if(istFuenflingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
 					karteAnzeigen();
 					kartenFeldKopieren(gespielteKarten);
 				}
 				
-				//Wenn es keine gueltige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ung�ltig ist
+				//Wenn es keine gueltige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ungueltig ist
 				else{
-					JOptionPane.showMessageDialog (this, "Bitte Ueberpruefen Sie die Karten nochmals","Ung�ltige Zug",1);
+					JOptionPane.showMessageDialog (this, "Bitte Ueberpruefen Sie die Karten nochmals","Ungueltige Zug",1);
 					gespielteKarten.removeAll(gespielteKarten);
 				}
 					
@@ -660,7 +660,7 @@ public class Spieltisch extends JFrame{
 				if(istEinzel(gespielteKarten)){
 					karteAnzeigen();
 					kartenFeldKopieren(gespielteKarten);
-					Client.game.setFeldkarten(gespielteKarten);
+					
 				}
 				
 				//Wenn die Karten ein Paar sind dann Spiel sie aus
@@ -791,7 +791,7 @@ public class Spieltisch extends JFrame{
 				
 				//Wenn es keine gueltige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ung�ltig ist
 				else{
-					JOptionPane.showMessageDialog (this, "Bitte ueberpruefen Sie die Karten nochmals","Ung�ltige Zug",1);
+					JOptionPane.showMessageDialog (this, "Bitte ueberpruefen Sie die Karten nochmals","Ungueltiger Zug",1);
 					gespielteKarten.removeAll(gespielteKarten);
 				}
 				
@@ -833,14 +833,14 @@ public class Spieltisch extends JFrame{
 		}
 	}
 	
-	//Methode welche den Spieler auffordert einen Wert f�r den Joker einzugeben und diese zur�ck gibt
+	//Methode welche den Spieler auffordert einen Wert fuer den Joker einzugeben und diese zur�ck gibt
 	public int jokerWert(int i){
 		
 
 		String str = JOptionPane.showInputDialog (null, "Wert fuer die Jokerkarte:");
 		int karteWert = Integer.parseInt(str);
 		
-		//�berpr�ft um welche Jokerkarte es sich handelt und gibt falls n�tig die anweisung einen Richtigen Wert enzugeben = return 0
+		//�berpr�ft um welche Jokerkarte es sich handelt und gibt falls noetig die anweisung einen Richtigen Wert enzugeben = return 0
 		if(i==0){
 			if(karteWert > 11 || karteWert <2){
 				JOptionPane.showMessageDialog (this, "Ein Bube kann nur den Wert zwischen 2 - 11 annehmen","Ung�ltiger Wert",1);
@@ -870,7 +870,7 @@ public class Spieltisch extends JFrame{
 		if(farbe.equals("rot") || farbe.equals("gruen") || farbe.equals("gelb") || farbe.equals("grau") || farbe.equals("orange")){
 			return farbe;
 		}
-		JOptionPane.showMessageDialog (this, "Gueltige Farben sind: rot, gelb, grau, gruen, orange","Ung�ltige Farbe",1);
+		JOptionPane.showMessageDialog (this, "Gueltige Farben sind: rot, gelb, grau, gruen, orange","Ungueltige Farbe",1);
 		return "0";
 	}
 	
@@ -1175,14 +1175,12 @@ public class Spieltisch extends JFrame{
 		
 		for(int i = 0; i<gespielteKarten.size();i++){
 			
-			feldKarten.add(new Card(gespielteKarten.get(i).getWert(),gespielteKarten.get(i).getName(),gespielteKarten.get(i).getBild(),gespielteKarten.get(i).getPunkte(), gespielteKarten.get(i).getFarbe(),gespielteKarten.get(i).getJoker(),gespielteKarten.get(i).getJokerWert(),gespielteKarten.get(i).getJokerFarbe()));
-			
-		
+			feldKarten.add(new Card(gespielteKarten.get(i).getWert(),gespielteKarten.get(i).getName(),gespielteKarten.get(i).getBild(),gespielteKarten.get(i).getPunkte(), gespielteKarten.get(i).getFarbe(),gespielteKarten.get(i).getJoker(),gespielteKarten.get(i).getJokerWert(),gespielteKarten.get(i).getJokerFarbe()));	
 			
 		}
 		
-		Client.game.setFeldkarten(gespielteKarten);
-		
+		Client.game.setFeldkarten(feldKarten);
+		gespielteKarten.removeAll(gespielteKarten);
 	}
 	
 	/***************************************************************************************
