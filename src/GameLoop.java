@@ -60,6 +60,29 @@ public class GameLoop extends Thread{
 							}
 						}
 					}
+					
+					else if(inputObject instanceof Gameobjekt){
+						Gameobjekt game = (Gameobjekt) inputObject;
+						if(userlist.get(0).getAmZug()){
+							game.getSpieler(0).setAmZug(false);
+						}else{
+							game.getSpieler(0).setAmZug(true);
+						}
+						if(userlist.get(1).getAmZug()){
+							game.getSpieler(1).setAmZug(false);
+						}else{
+							game.getSpieler(1).setAmZug(true);
+						}
+						
+						Iterator<ObjectOutputStream> i = outlist.iterator();
+						while (i.hasNext()) {
+							i.next().writeObject(game);
+							System.out.println("gesendet game");
+						}
+					}
+					
+					
+					
 				}
 			}catch (ClassNotFoundException cnfException) {
 					cnfException.printStackTrace();

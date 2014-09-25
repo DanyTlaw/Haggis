@@ -55,13 +55,27 @@ public class Client {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
+					if(!login.getTisch().getNeuGestartet()){
+						
+						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
+						if(game.getSpieler(client_ID).getAmZug()){
+							login.getTisch().amZugButtons(true);
+						}else{
+							login.getTisch().amZugButtons(false);
+						}
+						
+						login.getTisch().karteAnzeigen(game.getFeldkarten());
+						
+					}
+					
 					
 					//Wenn die Spieler noch keine Handkarten haben werden neue Handkarten in ihre Handgeladen
 					if(login.getTisch().getNeuGestartet()){
 						
 						//Ladet alle Karten Bilder
 						login.getTisch().ladetBilder(game.getSpieler(client_ID).getHandKarten());
-						
+						login.getTisch().setHand(game.getSpieler(client_ID).getHandKarten());
 						
 						ladetGegnerInfo();
 						
@@ -69,7 +83,7 @@ public class Client {
 						login.getTisch().setNeuGestartet(false);
 						
 						//Spieler eins darf anfangen die ist amZug variable wird true oder flase gesetzt
-						if(this.client_ID==1){
+						if(this.client_ID==0){
 							game.getSpieler(client_ID).setAmZug(true);
 						}else{
 							game.getSpieler(client_ID).setAmZug(false);
@@ -77,13 +91,10 @@ public class Client {
 						
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
-							login.getTisch().amZugButtons();
+							login.getTisch().amZugButtons(true);
 						}						
 					}
-					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
-					if(!login.getTisch().getNeuGestartet()){
-						
-					}
+					
 					
 				} 
 				// set Client_ID
