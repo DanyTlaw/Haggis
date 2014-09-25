@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
@@ -26,6 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
 
 import java.lang.*;
 
@@ -658,6 +660,7 @@ public class Spieltisch extends JFrame{
 				if(istEinzel(gespielteKarten)){
 					karteAnzeigen();
 					kartenFeldKopieren(gespielteKarten);
+					Client.game.setFeldkarten(gespielteKarten);
 				}
 				
 				//Wenn die Karten ein Paar sind dann Spiel sie aus
@@ -791,7 +794,8 @@ public class Spieltisch extends JFrame{
 					JOptionPane.showMessageDialog (this, "Bitte überprüfen Sie die Karten nochmals","Ung�ltige Zug",1);
 					gespielteKarten.removeAll(gespielteKarten);
 				}
-					
+				
+				
 			}
 			
 			
@@ -1154,6 +1158,30 @@ public class Spieltisch extends JFrame{
 		this.setBubeAnzahl(hatBube);
 		this.setDameAnzahl(hatDame);
 		this.setKönigAnzahl(hatKoenig);
+		
+	}
+	
+	//Methode zum senden des Spielobjektes
+	public void sendeObjekt(){
+		try{
+			Spieltisch.out.writeObject(Client.game);
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
+
+	//Methode welche die feldkarten am game objekt übergibt
+	public void setzeFeldkarten(){
+		
+		for(int i = 0; i<gespielteKarten.size();i++){
+			
+			feldKarten.add(new Card(gespielteKarten.get(i).getWert(),gespielteKarten.get(i).getName(),gespielteKarten.get(i).getBild(),gespielteKarten.get(i).getPunkte(), gespielteKarten.get(i).getFarbe(),gespielteKarten.get(i).getJoker(),gespielteKarten.get(i).getJokerWert(),gespielteKarten.get(i).getJokerFarbe()));
+			
+		
+			
+		}
+		
+		Client.game.setFeldkarten(gespielteKarten);
 		
 	}
 	

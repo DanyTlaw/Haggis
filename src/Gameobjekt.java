@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Gameobjekt implements Serializable {
 
 	public ArrayList<Spieler> spieler;
-	
+	public ArrayList<Card> feldkarten;
 	
 	
 	
@@ -29,6 +29,14 @@ public class Gameobjekt implements Serializable {
 	
 	public Spieler getSpieler(int i){
 		return this.spieler.get(i);
+	}
+	
+	public ArrayList<Card> getFeldkarten(){
+		return this.feldkarten;
+	}
+	
+	public void setFeldkarten(ArrayList<Card> feldkarten){
+		this.feldkarten = feldkarten;
 	}
 	
 }

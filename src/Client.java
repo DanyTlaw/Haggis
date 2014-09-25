@@ -28,7 +28,7 @@ public class Client {
 	public Client(String hostName, int portNummer){
 		init(hostName, portNummer);
 		login = new LoginGUI(this.out, this.in);
-		erhalteKartenVonServer();
+		erhalteGameobjekt();
 	}
 	
 	public void init(String hostName, int portNummer){
@@ -43,8 +43,8 @@ public class Client {
 				}
 		}
 	
-	public void erhalteKartenVonServer(){
-		// receive the UserObject and do whatever the client has to do...
+	public void erhalteGameobjekt(){
+		// Erhalte
 		try {
 			while ((inputObject = in.readObject()) != null) {
 				if (inputObject instanceof Gameobjekt) {
@@ -55,8 +55,13 @@ public class Client {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					
 					//Wenn die Spieler noch keine Handkarten haben werden neue Handkarten in ihre Handgeladen
 					if(login.getTisch().getNeuGestartet()){
+						
+						//Ladet alle Karten Bilder
+						login.getTisch().ladetBilder(game.getSpieler(client_ID).getHandKarten());
+						
 						
 						ladetGegnerInfo();
 						
@@ -73,11 +78,12 @@ public class Client {
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
 							login.getTisch().amZugButtons();
-						}
-						
+						}						
+					}
+					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
+					if(!login.getTisch().getNeuGestartet()){
 						
 					}
-					
 					
 				} 
 				// set Client_ID
@@ -95,8 +101,6 @@ public class Client {
 	//Methode welche die Informationen des Gegners ladet
 	public void ladetGegnerInfo(){
 		
-		//Ladet alle Karten Bilder
-		login.getTisch().ladetBilder(game.getSpieler(client_ID).getHandKarten());
 		
 		//Ladet alle Gegner Informationen
 		if(client_ID == 0){
