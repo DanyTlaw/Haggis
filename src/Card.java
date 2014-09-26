@@ -27,6 +27,10 @@ public class Card implements Comparable<Card>, Serializable {
 		
 	}
 	
+	public Card(int punkte ){
+		this.punkte = punkte;
+	}
+	
 	public Card(int wert, String name, ImageIcon bild, int punkte, String farbe){
 		
 		this.wert = wert;

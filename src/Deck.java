@@ -73,6 +73,8 @@ public class Deck {
 	
 	public ArrayList<Card> deck = new ArrayList<Card>();
 	
+	public ArrayList<Card> haeggis = new ArrayList<Card>();
+	
 	public ArrayList<ArrayList<Card>> haende = new ArrayList<ArrayList<Card>>(3);
 	public ArrayList<Card> handKarten1 = new ArrayList<Card>();
 	public ArrayList<Card> handKarten2 = new ArrayList<Card>();
@@ -496,7 +498,12 @@ public class Deck {
 				
 			}
 			
-
+			for(Card hKarte : deck){
+				haeggis.add(hKarte);
+			}
+			deck.removeAll(deck);
+			System.out.println(haeggis.size());
+			
 			haende.add(handKarten1);
 			haende.add(handKarten2);
 
@@ -530,20 +537,8 @@ public class Deck {
 		return this.haende.get(i);
 	}
 	
-	//Testmethode um zu schauen ob zwei Kartenhaende erstellt wurde und ihre Kartenname werde ausgegeben
-	public void aufzeigen(){
-		System.out.println("Spieler1 :");
-		for(int i = 0;i<17;i++){
-			System.out.println(this.handKarten1.get(i).getName());
-		}
-		System.out.println(" ");
-		System.out.println("Spieler2 :");
-		for(int i = 0;i<17;i++){
-			System.out.println(this.handKarten2.get(i).getName());
-		}
-		System.out.println("---------------------------------------------------------------------------------");
-		System.out.println(haende.size());
+	public ArrayList<Card> getHaeggis(){
+		return this.haeggis;
 	}
-	
 	
 }

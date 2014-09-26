@@ -60,7 +60,7 @@ public class Spieltisch extends JFrame{
 	//Buttons welche zum Spielen des Spiels gebraucht werden
 	public JButton jbtSpielen;
 	public JButton jbtPassen;
-	public JButton jbtBeenden;
+
 	
 	public ArrayList<Card> hand; 
 	
@@ -287,20 +287,20 @@ public class Spieltisch extends JFrame{
 		jbtSpielen = new JButton("Spielen");
 		jbtSpielen.addActionListener(bHandler);
 		jbtPassen = new JButton("Passen");
-		jbtBeenden = new JButton("Beenden");
+		jbtPassen.addActionListener(bHandler);
+
 		
 		//Disabled die Buttons des Spieltisch
 		this.jbtSpielen.setEnabled(false);
 		this.jbtPassen.setEnabled(false);
-		this.jbtBeenden.setEnabled(false);
+
 		
 		
 		jbtSpielen.addActionListener(cHandler);
 		buttons.add(jbtSpielen);
 		buttons.setBorder(new EmptyBorder(0,0,0,10));
 		buttons.add(jbtPassen);
-		buttons.setBorder(new EmptyBorder(0,0,0,10));
-		buttons.add(jbtBeenden);
+
 		
 		
 
@@ -456,9 +456,11 @@ public class Spieltisch extends JFrame{
 		this.lblHandkarten.setText("Spielkaten :" + this.handkarten);
 	}
 	
+
+	
 	
 	/***************************************************************************************
-	Methode um Karten auszuspielen
+	Methode für die Buttons
 	****************************************************************************************/
  	public void karteAuspielen(){
 	int jokerWert = 1;
@@ -505,13 +507,12 @@ public class Spieltisch extends JFrame{
 			
 			
 			//Wenn bereits Karten ausgespielt wurden, muss Stechlogik ueberprueft werden
-			if(feldKarten.size()>0){
+			if(Client.game.getFeldkarten().size()>0){
 				
-				System.out.println("feldkarten>0");
+
 				
 				//Wenn eine Einzelkarte gespielt wurde und sie hoecher ist wie die bereits gespielte Karte, stich erfolgreich
-				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
-					System.out.println("ist gestochen");
+				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){	
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
@@ -519,100 +520,99 @@ public class Spieltisch extends JFrame{
 				}
 								
 				//Wenn die Karten ein Paar sind und sie hoecher sind wie das bereits gespielte Paar, Stich erfolgreich
-				else if(istPaar(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
-					System.out.println("gespielte Karte :" + gespielteKarten.get(0).getWert());
-					System.out.println("feld Karte :" + feldKarten.get(0).getWert());
+				else if(istPaar(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){
+			
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten Drillinge sind und sie hoecher sind wie die bereits gespielten Drillinge, stich erfolgreich
-				else if(istDrilling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+				else if(istDrilling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten Vierlinge sind und sie hoecher sind wie die bereits gespielten Vierling, Stich erfolgriech
-				else if(istVierling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+				else if(istVierling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten Fuenflinge sind und sie hoecher sind wie die bereits gespielten F�nflinge Stich erfolgreich
-				else if(istFuenfling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+				else if(istFuenfling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten Sechslinge sind und sie hoecher sind wie die bereits gespielten Sechslinge, Stich erfolgreich
-				else if(istSechsling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+				else if(istSechsling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}		
 				
 				//Wenn die Karten Sieblinge sind und sie hoecher sind wie die bereits gespielten Sieblinge, Stich erfolgreich
-				else if(istSiebling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+				else if(istSiebling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten Achtlinge sind und sie hoecher sind wie die bereits gespielten Achtlinge, Stich erfolgreich
-				else if(istAchtling(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert()){
+				else if(istAchtling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten eine dreier Strasse sind und sie hoecher sind wie die bereits gespielte dreier Strasse, stich erfolgreich
-				else if(istStrasseDrei(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+				else if(istStrasseDrei(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten eine vierer Strasse sind und sie hoecher sind wie die bereits gespielte vierer Strasse, stich erfolgreich
-				else if(istStrasseVier(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+				else if(istStrasseVier(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten eine fuenfer Strasse sind und sie hoecher sind wie die bereits gespielte fuenfer Strasse, stich erfolgreich
-				else if(istStrasseFuenf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+				else if(istStrasseFuenf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten eine sechser Strasse sind und sie hoecher sind wie die bereits gespielte sechser Strasse, stich erfolgreich
-				else if(istStrasseSechs(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+				else if(istStrasseSechs(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten eine siebner Strasse sind und sie hoecher sind wie die bereits gespielte siebner Strasse, stich erfolgreich
-				else if(istStrasseSieben(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+				else if(istStrasseSieben(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten eine achter Strasse sind und sie hoecher sind wie die bereits gespielte achter Strasse, stich erfolgriech
-				else if(istStrasseAcht(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+				else if(istStrasseAcht(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
 				}
 				
 				//Wenn die Karten eine neuner Strasse sind und sie hoecher sind wie die bereits gespielte neuner Strasse, stich erfolgreich
-				else if(istStrasseNeun(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == feldKarten.size()){
+				else if(istStrasseNeun(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
 					sendeObjekt();
@@ -836,6 +836,7 @@ public class Spieltisch extends JFrame{
 				//Wenn es keine gueltige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ung�ltig ist
 				else{
 					JOptionPane.showMessageDialog (this, "Bitte ueberpruefen Sie die Karten nochmals","Ungueltiger Zug",1);
+					
 					gespielteKarten.removeAll(gespielteKarten);
 				}
 				
@@ -844,34 +845,126 @@ public class Spieltisch extends JFrame{
 			
 			
 		}
+		//Macht alle Border weg
+		keinBorder();
 	}
 	
-	
+	public void passen(){
+		
+		if(Client.game.getSpieler(0).getAmZug()){
+			Client.game.getSpieler(0).setPassen(true);
+		}
+		else if(Client.game.getSpieler(1).getAmZug()){
+			Client.game.getSpieler(1).setPassen(true);
+		}
+		
+		sendeObjekt();
+		
+	}
 	
 	
 	/***************************************************************************************
 	Methoden welche zur Hilfe benutzt werden und oft aufgerufen werden
 	****************************************************************************************/
+	//Macht alle Buttons sichtbar
+	public void buttonsSichtbar(){
+		for(int i = 0; i<jokerKarten.length;i++){
+			jokerKarten[i].setVisible(true);
+		}
+		for(int i = 0;i<btnKarte.length;i++){
+			btnKarte[i].setVisible(true);
+		} 
+	}
 	
+	//Methode welche alle Karten in der mitte visuel loescht
+	public void kartenFeldLoeschen(){
+		
+		for(int i = 0; i < anzeigeKarten.length; i++){
+			
+			anzeigeKarten[i].setIcon(null);
+		}
+		
+	}
+	
+	
+	//Methode welche alle Borders der buttons zurücksetzt
+ 	public void keinBorder(){
+ 		for(int i = 0;i<3;i++){
+			if(jokerKarten[i].getBorder() == gedrucktBorder){
+				gedruckt(gedrucktJoker[i]);
+				jokerKarten[i].setBorder(UIManager.getBorder("Button.border"));
+			}
+		}
+		//Ist eine Karte angewaehlt wird sie der ArrayList gespielteKarte hinzugefuegt (Hand Karten)
+		for(int i = 3;i<17;i++){
+			if(btnKarte[i-3].getBorder() == gedrucktBorder){
+				gedruckt(gedrucktHand[i-3]);
+				btnKarte[i-3].setBorder(UIManager.getBorder("Button.border"));
+
+			}
+		}
+ 	}
+ 	
+ 	public void karteLoeschen(){
+
+ 		for(int i = 0;i<3;i++){
+			if(jokerKarten[i].getBorder() == gedrucktBorder){
+				jokerKarten[i].setVisible(false);
+				//Die ausgespielte Karte wird auf null gesetzt, weil wir mit diesem Wert überprüfen ob die Handkarten leer sind
+				if(Client.game.getSpieler(0).getAmZug()){
+					Client.game.getSpieler(0).getHandKarten().get(i).setWert(0);
+					Client.game.getSpieler(0).getHandKarten().get(i).setPunkte(0);
+				}else{
+					Client.game.getSpieler(1).getHandKarten().get(i).setWert(0);
+					Client.game.getSpieler(1).getHandKarten().get(i).setPunkte(0);
+				}
+			}
+		}
+		//Ist eine Karte angewaehlt wird sie der ArrayList gespielteKarte hinzugefuegt (Hand Karten)
+		for(int i = 3;i<17;i++){
+			if(btnKarte[i-3].getBorder() == gedrucktBorder){
+				btnKarte[i-3].setVisible(false);
+				
+				if(Client.game.getSpieler(0).getAmZug()){
+					Client.game.getSpieler(0).getHandKarten().get(i).setWert(0);
+					Client.game.getSpieler(0).getHandKarten().get(i).setPunkte(0);
+				}else{
+					Client.game.getSpieler(1).getHandKarten().get(i).setWert(0);
+					Client.game.getSpieler(1).getHandKarten().get(i).setPunkte(0);
+				}
+			}
+		}
+ 	
+ 	}
+ 	
 	//Methode welche die gespielten Karten in die Feldkarten kopiert
 	public void kartenFeldKopieren(ArrayList<Card> karten){
 			
 		for(int i = 0;i<karten.size();i++){
 			
-			if(feldKarten.size()<karten.size()){
-				feldKarten.add(new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
-			}else if(feldKarten.size()==karten.size()){
-				feldKarten.set(i,new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+			if(Client.game.getFeldkarten().size()<karten.size()){
+				Client.game.getFeldkarten().add(new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+			}else if(Client.game.getFeldkarten().size()==karten.size()){
+				Client.game.getFeldkarten().set(i,new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
 			}
-		
+			
+
+			
 		}
+		//Nimmt die ausgespielte Karten und fügt sie der ArrayList der zu gewinnenden Karten hinzu
+		Client.game.addAusgespielteKarten(Client.game.getFeldkarten());
 		
 		gespielteKarten.removeAll(gespielteKarten);
 		
 	}
 	
-	//Methode welche die Karten in der Mitte anzeigt
+	//Methode welche die Karten in der Mitte anzeigt und die entsprechenden Handkarten nicht mehr sichtbar macht
 	public void karteAnzeigen(ArrayList<Card> karten){
+		
+		//Macht alle Buttons welche Die karte die gepsielt wurden unsichtbar
+		karteLoeschen();
+		
+	
 		for(int i =0;i<karten.size();i++){
 			anzeigeKarten[i].setIcon(karten.get(i).getBild());
 		}
@@ -1191,7 +1284,7 @@ public class Spieltisch extends JFrame{
 	
 	//Methode welche die Spiel Buttons disabled oder Enabled je nach dem wer am Zug ist
 	public void amZugButtons(boolean amZug){
-		this.jbtBeenden.setEnabled(amZug);
+
 		this.jbtPassen.setEnabled(amZug);
 		this.jbtSpielen.setEnabled(amZug);
 	}
@@ -1209,25 +1302,14 @@ public class Spieltisch extends JFrame{
 	//Methode zum senden des Spielobjektes
 	public void sendeObjekt(){
 		try{
+
 			Spieltisch.out.writeObject(Client.game);
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
 	}
 
-	//Methode welche die feldkarten am game objekt uebergibt
-	public void setzeFeldkarten(){
-		
-		for(int i = 0; i<gespielteKarten.size();i++){
-			
-			feldKarten.add(new Card(gespielteKarten.get(i).getWert(),gespielteKarten.get(i).getName(),gespielteKarten.get(i).getBild(),gespielteKarten.get(i).getPunkte(), gespielteKarten.get(i).getFarbe(),gespielteKarten.get(i).getJoker(),gespielteKarten.get(i).getJokerWert(),gespielteKarten.get(i).getJokerFarbe()));	
-			
-		}
-		
-		Client.game.setFeldkarten(feldKarten);
-		System.out.println(Client.game.getFeldkarten().size());
-		gespielteKarten.removeAll(gespielteKarten);
-	}
+
 	
 	/***************************************************************************************
 	Methoden welche kontrolliert ob die bei einem neuen Hand auszuspielenden Karten legitim 
@@ -1904,6 +1986,9 @@ public class Spieltisch extends JFrame{
 			// TODO Auto-generated method stub
 			if(e.getSource()== jbtSpielen){
 				karteAuspielen();
+			}
+			else if(e.getSource()==jbtPassen){
+				passen();
 			}
 		}
 		

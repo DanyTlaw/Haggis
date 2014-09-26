@@ -10,8 +10,9 @@ public class Spieler implements Serializable {
 	private ArrayList<Card> handKarten;
 	private int punkte;
 	private boolean amZug;
+	private boolean passen = false;
 	
-	
+	public ArrayList<Card> gewonneneKarten = new ArrayList<Card>();
 	
 	public Spieler(String name) {
 		this.spielerName = name;
@@ -50,6 +51,20 @@ public class Spieler implements Serializable {
 		this.amZug = amZug;
 	}
 	
+	//Methode welche den gewonnen Karten immer neue hinzufügt
+	public void addGewonneneKarten(ArrayList<Card> karten){
+		
+		for(int i= 0; i<karten.size();i++){	
+			gewonneneKarten.add(new Card(karten.get(i).getPunkte()));
+			System.out.println("-----------------------------------------");
+			System.out.println("Soviele Karten sind momentan gewonnen:");
+			System.out.println(gewonneneKarten.size());
+			System.out.println("Soviel Wert Haben sie:");
+			System.out.println(berechnePunkte());
+			System.out.println("-----------------------------------------");
+		}
+	}
+	
 	//Gibt ein boolean zurück welcher sagt ob der Spieler noch ein Bube hat
 	public int hatBube(){
 		
@@ -84,4 +99,34 @@ public class Spieler implements Serializable {
 		return 0;
 		
 	}
+	
+	public boolean getPassen(){
+		return this.passen;
+	}
+	
+	public void setPassen(boolean passen){
+		this.passen = passen;
+	}
+	
+	//Rechnet alle Werte zusammen der Karten welche bei einer nicht vorhandenen Karte schon 0 gestzt worden ist beim auspielen
+	public boolean leereHand(){
+		int alleKarten= 0;
+		for(int i = 0; i<17;i++){
+			alleKarten+= handKarten.get(i).getWert();
+		}
+		if(alleKarten==0){
+			return true;
+		}
+		return false;			
+	}
+	
+	//Methode welche alle Punkte in den gewonnen Karten zusammenrechnet
+	public int berechnePunkte(){
+		int punkte = 0;
+		for(int i = 0; i<gewonneneKarten.size();i++){
+			punkte+=gewonneneKarten.get(i).getPunkte();
+		}
+		return punkte;
+	}
+	
 }
