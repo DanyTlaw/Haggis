@@ -60,7 +60,80 @@ public class GameLoop extends Thread{
 							}
 						}
 					}
+					
+					else if(inputObject instanceof Gameobjekt){
+
+						Gameobjekt game = (Gameobjekt) inputObject;
+						System.out.println("-------------------LEERE HAND---------------------");
+						System.out.println(game.getSpieler(0).leereHand());
+						System.out.println(game.getSpieler(1).leereHand());
+						System.out.println("--------------------------------------------------");
+						
+						//Wenn einer von beiden Spielern eine leeere Hand hat ist die Runde vorbei und die Logik wird angewandt
+						if(game.getSpieler(0).leereHand()){
+							System.out.println("leereHand Spieler 0");
+							game.getSpieler(0).addGewonneneKarten(game.getSpieler(1).getHandKarten());
+							game.getSpieler(0).addGewonneneKarten(game.getHaeggis());
+							game.setNeueRunde(true);
+							System.out.println(game.getSpieler(0).berechnePunkte());
+							game.erstelleDeck();
+						}
+						else if(game.getSpieler(1).leereHand()){
+							System.out.println("leereHand Spieler 1");
+							game.getSpieler(1).addGewonneneKarten(game.getSpieler(0).getHandKarten());
+							game.getSpieler(1).addGewonneneKarten(game.getHaeggis());
+							game.setNeueRunde(true);
+							System.out.println(game.getSpieler(1).berechnePunkte());
+							game.erstelleDeck();
+						}
+					
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					//Setzt die am zugvaribale für zwei spieler
+					if(game.getSpielerList().size()==2){
+						if(game.getSpieler(0).getAmZug()){
+							game.getSpieler(0).setAmZug(false);		
+							game.getSpieler(1).setAmZug(true);
+						}else if(game.getSpieler(1).getAmZug()){
+							game.getSpieler(0).setAmZug(true);
+							game.getSpieler(1).setAmZug(false);
+						}
+					}
+
+
+					//Uebergiebt dem nich passenden Spieler alle Karten da er der höchste Stich hatte
+					if(game.getSpieler(0).getPassen()){
+						
+						game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+						game.getSpieler(0).setPassen(false);
+						game.getAusgespielteKarten().removeAll(game.getAusgespielteKarten());
+						game.getFeldkarten().removeAll(game.getFeldkarten());
+					}
+					else if(game.getSpieler(1).getPassen()){
+						
+						game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+						game.getSpieler(1).setPassen(false);
+						game.getAusgespielteKarten().removeAll(game.getAusgespielteKarten());
+						game.getFeldkarten().removeAll(game.getFeldkarten());
+					}
+					
+					
+					
+					Iterator<ObjectOutputStream> i = outlist.iterator();
+					while (i.hasNext()) {
+						i.next().writeObject(game);
+						System.out.println("gesendet game");
+					}
 				}
+			}
+					
+					
+					
+				
 			}catch (ClassNotFoundException cnfException) {
 					cnfException.printStackTrace();
 					} 

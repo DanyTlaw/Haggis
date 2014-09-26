@@ -16,7 +16,7 @@ public class Client {
 	Object inputObject;
 	
 	static int client_ID;
-	static Gameobjekt game;
+	public static Gameobjekt game;
 	
 
 	public static void main(String[] args){
@@ -55,35 +55,63 @@ public class Client {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
+					if(!game.getNeueRunde()){
+						System.out.println(client_ID);
+						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
+						if(game.getSpieler(client_ID).getAmZug()){
+							login.getTisch().amZugButtons(true);
+																					
+						}else{
+							login.getTisch().amZugButtons(false);
+						}
+						if(game.getFeldkarten().size()>0){
+							 login.getTisch().karteAnzeigen(game.getFeldkarten());							
+						}else{
+							login.getTisch().kartenFeldLoeschen();
+						}
+
+						
+					}
+					
 					
 					//Wenn die Spieler noch keine Handkarten haben werden neue Handkarten in ihre Handgeladen
-					if(login.getTisch().getNeuGestartet()){
+					if(game.getNeueRunde()){
+						
+						System.out.println("Neues Spiel wird gestartet");
 						
 						//Ladet alle Karten Bilder
 						login.getTisch().ladetBilder(game.getSpieler(client_ID).getHandKarten());
+						login.getTisch().setHand(game.getSpieler(client_ID).getHandKarten());
 						
+						//setzt alle buttons auf visible
+						login.getTisch().buttonsSichtbar();
+						
+						//Loescht alle Karten in der Mitte
+						login.getTisch().kartenFeldLoeschen();
 						
 						ladetGegnerInfo();
 						
 						//Setzt die Variable neugestartet auf false
-						login.getTisch().setNeuGestartet(false);
+						game.setNeueRunde(false);
 						
 						//Spieler eins darf anfangen die ist amZug variable wird true oder flase gesetzt
-						if(this.client_ID==1){
+						if(this.client_ID==0){
 							game.getSpieler(client_ID).setAmZug(true);
 						}else{
 							game.getSpieler(client_ID).setAmZug(false);
 						}
+						System.out.println("Spieler"+ client_ID +" :"+ game.getSpieler(client_ID).getAmZug());
+						
+						System.out.println("---------------------------------------------");
+						
 						
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
-							login.getTisch().amZugButtons();
+							login.getTisch().amZugButtons(true);
 						}						
 					}
-					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
-					if(!login.getTisch().getNeuGestartet()){
-						
-					}
+					
 					
 				} 
 				// set Client_ID
