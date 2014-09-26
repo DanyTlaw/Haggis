@@ -63,8 +63,7 @@ public class Client {
 							login.getTisch().amZugButtons(true);
 																					
 						}else{
-							login.getTisch().amZugButtons(false);
-						}
+							login.getTisch().amZugButtons(false);						}
 						if(game.getFeldkarten().size()>0){
 							 login.getTisch().karteAnzeigen(game.getFeldkarten());							
 						}else{
