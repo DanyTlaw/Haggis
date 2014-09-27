@@ -11,6 +11,8 @@ public class Spieler implements Serializable {
 	private int punkte;
 	private boolean amZug;
 	private boolean passen = false;
+	private int siegesPunkte;
+	
 	
 	public ArrayList<Card> gewonneneKarten = new ArrayList<Card>();
 	
@@ -49,6 +51,14 @@ public class Spieler implements Serializable {
 	}
 	public void setAmZug(boolean amZug) {
 		this.amZug = amZug;
+	}
+	
+	public void setSiegesPunkte(int sPunkte){
+		this.siegesPunkte = sPunkte;
+	}
+	
+	public int getSiegesPunkte(){
+		return this.siegesPunkte;
 	}
 	
 	//Methode welche den gewonnen Karten immer neue hinzufügt
