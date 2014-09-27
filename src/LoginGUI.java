@@ -1,12 +1,18 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -19,27 +25,84 @@ public class LoginGUI extends JFrame implements ActionListener{
 	
 	private JButton jbtStart;
 	private JTextField txtName;
+	private JTextField txtPunkte;
 	
+	private JLabel background;
+	private JLabel lblName;
+	private JLabel lblPunkte;
+	private JLabel lblHolder1;
+	private JLabel lblHolder2;
+	private JLabel lblHolder3;
+	private JLabel lblHolder4;
+	
+	public String pfad = System.getProperty("user.dir") + "//images//";
 	public static Spieltisch tisch;
 	
+	
+	//Konstruktor welche das LoginGUI erstellt
 	public LoginGUI(ObjectOutputStream out, ObjectInputStream in){
 		this.out = out;
 		this.in = in;
 		
+		//setzt das Fenser auf eine 800 800 grösse
+		this.setSize(500, 400);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);	
+		this.setTitle("Das Haggis Kartenspiel");
+
+		getContentPane().setLayout(new BorderLayout());
+		
+		JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new GridLayout(3,3));
+		inputPanel.setOpaque(false);
+
+		
+
+		
+		Image bg = new ImageIcon("//home//dany//workspace//Haggis//images//haggisBack.jpg").getImage();
+		ImageIcon iBg = new ImageIcon(bg.getScaledInstance(500, 400, Image.SCALE_DEFAULT)); 
+			
+		((JPanel)getContentPane()).setOpaque(false);
+		background = new JLabel(iBg);
+		background.setSize(500,400);
+		getLayeredPane().add(background, new Integer(Integer.MIN_VALUE));
+		background.setBounds(0, 0, iBg.getIconWidth(), iBg.getIconHeight());
+		
+		
+		
 		txtName = new JTextField();
-		txtName.setSize(30, 10);
+		txtName.setSize(30, 5);
+		txtPunkte = new JTextField();
+		txtPunkte.setSize(10, 5);
 		jbtStart = new JButton("Start");
-		
 		jbtStart.addActionListener(this);
-		this.setSize(200, 100);
+		lblName = new JLabel("Spielername");
+		lblName.setForeground(Color.WHITE);
+		lblPunkte = new JLabel("Abgemachte Punkte");
+		lblPunkte.setForeground(Color.WHITE);
+		lblHolder1 = new JLabel(" ");
+		lblHolder2 = new JLabel(" ");
+		lblHolder3 = new JLabel(" ");
+		lblHolder4 = new JLabel(" ");
+		inputPanel.add(lblName);
+		inputPanel.add(lblPunkte);
+		inputPanel.add(lblHolder1);
+		inputPanel.add(txtName);
+		inputPanel.add(txtPunkte);
+		inputPanel.add(jbtStart);
+		inputPanel.add(lblHolder2);
+		inputPanel.add(lblHolder3);
+		inputPanel.add(lblHolder4);
 		
-		JPanel halter = new JPanel();
-		halter.setLayout(new GridLayout(1,2));
 		
 		
-		halter.add(txtName);
-		halter.add(jbtStart);
-		this.add(halter);
+
+		
+	
+
+		getContentPane().add(inputPanel, BorderLayout.SOUTH);
+		
 		this.setVisible(true);
 	}
 
@@ -50,6 +113,7 @@ public class LoginGUI extends JFrame implements ActionListener{
 			try{
 				if(txtName.getText().length()> 0){
 				Spieler spieler = new Spieler(txtName.getText());
+				spieler.setSiegesPunkte(Integer.parseInt(txtPunkte.getText()));
 				this.out.writeObject(spieler);
 				
 				setVisible(false);
