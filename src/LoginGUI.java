@@ -26,6 +26,8 @@ public class LoginGUI extends JFrame implements ActionListener{
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	
+	private String name;
+	
 	private JButton jbtStart;
 	private JTextField txtName;
 	private JTextField txtPunkte;
@@ -119,11 +121,12 @@ public class LoginGUI extends JFrame implements ActionListener{
 			try{
 				if(txtName.getText().length()> 0){
 				Spieler spieler = new Spieler(txtName.getText());
+				name = txtName.getText();
 				spieler.setSiegesPunkte(Integer.parseInt(txtPunkte.getText()));
 				this.out.writeObject(spieler);
 				
 				setVisible(false);
-				tisch = new Spieltisch(this.out, this.in);
+				tisch = new Spieltisch(this.out, this.in, this.name);
 				System.out.println(tisch);
 				}
 			}catch (java.io.IOException IOException){
@@ -137,6 +140,10 @@ public class LoginGUI extends JFrame implements ActionListener{
 
 	public Spieltisch getTisch(){
 		return this.tisch;
+	}
+	
+	public String getName(){
+		return this.name;
 	}
 	
 	/*public void keyPressed(KeyEvent e){

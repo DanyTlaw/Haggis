@@ -17,7 +17,7 @@ public class Client {
 	
 	static int client_ID;
 	public static Gameobjekt game;
-	
+	public static Chat chat;
 
 	public static void main(String[] args){
 		String hostName = "localhost";
@@ -118,7 +118,18 @@ public class Client {
 				} 
 				
 				else if(inputObject instanceof Chat){
+					chat = (Chat) inputObject;
 					
+					if(login.getTisch().getTxtAChat().getText().equals("")){
+						login.getTisch().getTxtAChat().setText(chat.getSpieler() +" : " +chat.getMessage());
+					}else{
+						login.getTisch().getTxtAChat().setText(login.getTisch().getTxtAChat().getText() + "\n" + chat.getSpieler() +" : " +chat.getMessage() + "\n");
+					}
+					
+					
+					
+					
+				
 				}
 				
 				// set Client_ID
