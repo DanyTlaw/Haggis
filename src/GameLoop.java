@@ -130,7 +130,10 @@ public class GameLoop extends Thread{
 					}
 				}
 					else if(inputObject instanceof Chat){
-						Chat chat = new Chat();
+						Chat chat = (Chat) inputObject;
+											
+						
+						System.out.println(chat.getMessage());
 						Iterator<ObjectOutputStream> i = outlist.iterator();
 						while (i.hasNext()) {
 							i.next().writeObject(chat);

@@ -73,7 +73,7 @@ public class Spieltisch extends JFrame{
 	//Buttons welche zum Spielen des Spiels gebraucht werden
 	public JButton jbtSpielen;
 	public JButton jbtPassen;
-
+	public JButton jbtEingabe;
 	
 	public ArrayList<Card> hand; 
 	
@@ -109,8 +109,16 @@ public class Spieltisch extends JFrame{
 	private JLabel lblDame;
 	private JLabel lblBube;
 	
-	public Spieltisch(ObjectOutputStream out, ObjectInputStream in){
+	//Chat
+	private JTextArea txtAEingabe;
+	private JTextArea txtAChat;
+	public Chat chat;
+	
+	public String name;
+	
+	public Spieltisch(ObjectOutputStream out, ObjectInputStream in, String name){
 		
+		this.name = name;
 		this.out = out;
 		this.in= in;
 		
@@ -404,27 +412,28 @@ public class Spieltisch extends JFrame{
 		//Chat stuff		
 		JPanel chatPanel = new JPanel();
 		chatPanel.setLayout(new GridBagLayout());
-		JButton jbtEingabe = new JButton("Eingabe");
+		jbtEingabe = new JButton("Eingabe");
+		jbtEingabe.addActionListener(bHandler);
 		
-		JTextArea chat = new JTextArea("Hier Steht Chat Text",20,1);
-		chat.setLineWrap(true);
+		txtAChat = new JTextArea(20,1);
+		txtAChat.setLineWrap(true);
 	    //chat.setEditable(false);
-	    chat.setVisible(true);
+		txtAChat.setVisible(true);
 
-	    JScrollPane scroll = new JScrollPane (chat);
+	    JScrollPane scroll = new JScrollPane (txtAChat);
 	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-	    scroll.add(chat);
+	    scroll.add(txtAChat);
 		
-		JTextArea eingabe = new JTextArea("Chat Eingabe",3,10);
-		eingabe.setLineWrap(true);
+		txtAEingabe = new JTextArea(3,10);
+		txtAEingabe.setLineWrap(true);
 		
 		cons.weightx = 0.0;
 		cons.gridy = 0;
 		cons.gridx = 0;
 		cons.gridwidth = 2;
 		cons.fill = GridBagConstraints.HORIZONTAL;
-		chatPanel.add(chat, cons);
+		chatPanel.add(txtAChat, cons);
 		
 		
 		cons.fill = 0;
@@ -432,7 +441,7 @@ public class Spieltisch extends JFrame{
 		cons.gridwidth = 1;
 		cons.gridy = 1;
 		cons.gridx = 0;
-		chatPanel.add(eingabe, cons);
+		chatPanel.add(txtAEingabe, cons);
 		
 		cons.gridy = 1;
 		cons.gridx = 1;
@@ -534,7 +543,13 @@ public class Spieltisch extends JFrame{
 	}
 	
 
+	public JTextArea getTxtAEingabe(){
+		return this.txtAEingabe;
+	}
 	
+	public JTextArea getTxtAChat(){
+		return this.txtAChat;
+	}
 	
 	/***************************************************************************************
 	Methode fÃ¼r die Buttons
@@ -592,7 +607,7 @@ public class Spieltisch extends JFrame{
 				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){	
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 					
 				}
 								
@@ -601,147 +616,147 @@ public class Spieltisch extends JFrame{
 			
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Drillinge sind und sie hoecher sind wie die bereits gespielten Drillinge, stich erfolgreich
 				else if(istDrilling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Vierlinge sind und sie hoecher sind wie die bereits gespielten Vierling, Stich erfolgriech
 				else if(istVierling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Fuenflinge sind und sie hoecher sind wie die bereits gespielten Fï¿½nflinge Stich erfolgreich
 				else if(istFuenfling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Sechslinge sind und sie hoecher sind wie die bereits gespielten Sechslinge, Stich erfolgreich
 				else if(istSechsling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}		
 				
 				//Wenn die Karten Sieblinge sind und sie hoecher sind wie die bereits gespielten Sieblinge, Stich erfolgreich
 				else if(istSiebling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Achtlinge sind und sie hoecher sind wie die bereits gespielten Achtlinge, Stich erfolgreich
 				else if(istAchtling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine dreier Strasse sind und sie hoecher sind wie die bereits gespielte dreier Strasse, stich erfolgreich
 				else if(istStrasseDrei(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine vierer Strasse sind und sie hoecher sind wie die bereits gespielte vierer Strasse, stich erfolgreich
 				else if(istStrasseVier(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine fuenfer Strasse sind und sie hoecher sind wie die bereits gespielte fuenfer Strasse, stich erfolgreich
 				else if(istStrasseFuenf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine sechser Strasse sind und sie hoecher sind wie die bereits gespielte sechser Strasse, stich erfolgreich
 				else if(istStrasseSechs(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine siebner Strasse sind und sie hoecher sind wie die bereits gespielte siebner Strasse, stich erfolgreich
 				else if(istStrasseSieben(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine achter Strasse sind und sie hoecher sind wie die bereits gespielte achter Strasse, stich erfolgriech
 				else if(istStrasseAcht(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine neuner Strasse sind und sie hoecher sind wie die bereits gespielte neuner Strasse, stich erfolgreich
 				else if(istStrasseNeun(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zehner Strasse sind und sie hoecher sind wie die bereits gespielte zehner Strasse, stich erfolgriech
 				else if(istStrasseZehn(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine elfer Strasse sind und sie hoecher sind wie die bereits gespielte elfer Strasse, stich erfolgriech
 				else if(istStrasseElf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zwoelfer Strasse sind und sie hoecher sind wie die bereits gespielte zwoelfer Strasse, stich erfolgreich
 				else if(istStrasseZwoelf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Paar Strasse ist spiele und sie hoecher ist wie die bereits gespielte Paar Strasse, stich erfolgreich
 				else if(istPaarStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Drilling Strasse ist und sie hoecher ist wie die bereits gespielte Drilling Strasse, stich erfolgreich
 				else if(istDrillingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Vierling Strasse ist und sie hoecher ist wie die bereits gespielte Vierling Strasse, stich erfolgreich
 				else if(istVierlingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Fuenfling Strasse ist und sie hoecher ist wie die bereits gespielte Fuenflng Strasse, Stich erfolgreich
 				else if(istFuenflingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn es keine gueltige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ungueltig ist
@@ -759,7 +774,7 @@ public class Spieltisch extends JFrame{
 				if(istEinzel(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 					
 				}
 				
@@ -767,147 +782,147 @@ public class Spieltisch extends JFrame{
 				else if(istPaar(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Drillinge sind dann Spiele sie aus
 				else if(istDrilling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Vierlinge sind dann Spiele sie aus
 				else if(istVierling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Fuenflinge sind dann Spiele sie aus
 				else if(istFuenfling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Sechslinge sind dann Spiele sie aus
 				else if(istSechsling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}		
 				
 				//Wenn die Karten Sieblinge sind dann Spiele sie aus
 				else if(istSiebling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Achtlinge sind dann Spiele sie aus
 				else if(istAchtling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine dreier Strasse sind spiele sie aus
 				else if(istStrasseDrei(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine vierer Strasse sind spiele sie aus
 				else if(istStrasseVier(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine fuenfer Strasse sind spiele sie aus
 				else if(istStrasseFuenf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine sechser Strasse sind spiele sie aus
 				else if(istStrasseSechs(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine siebner Strasse sind spiele sie aus
 				else if(istStrasseSieben(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine achter Strasse sind spiele sie aus
 				else if(istStrasseAcht(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine neuner Strasse sind spiele sie aus
 				else if(istStrasseNeun(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zehner Strasse sind spiele sie aus
 				else if(istStrasseZehn(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine elfer Strasse sind spiele sie aus
 				else if(istStrasseElf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zwoelfer Strasse sind spiele sie aus
 				else if(istStrasseZwoelf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Paar Strasse ist spiele sie aus
 				else if(istPaarStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Drilling Strasse ist spiele sie aus
 				else if(istDrillingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Vierling Strasse ist spiele sie aus
 				else if(istVierlingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Fuenfling Strasse ist spiele sie aus
 				else if(istFuenflingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
 					kartenFeldKopieren(gespielteKarten);
-					sendeObjekt();
+					sendeGameObjekt();
 				}
 				
 				//Wenn es keine gueltige Kombination ist, wird dem Spieler eine Nachricht gesendet das der Zug ungï¿½ltig ist
@@ -935,7 +950,7 @@ public class Spieltisch extends JFrame{
 			Client.game.getSpieler(1).setPassen(true);
 		}
 		
-		sendeObjekt();
+		sendeGameObjekt();
 		
 	}
 	
@@ -1378,8 +1393,17 @@ public class Spieltisch extends JFrame{
 		
 	}
 	
+	//Methode welche die Nachricht in das ChatFenster schreibt und anschliessend das objekt sendet
+	public void schreiben(){
+		
+		chat = new Chat();
+		chat.setMessage(this.getTxtAEingabe().getText());
+		chat.setSpieler(this.name);
+	}
+	
+	
 	//Methode zum senden des Spielobjektes
-	public void sendeObjekt(){
+	public void sendeGameObjekt(){
 		try{
 
 			Spieltisch.out.writeObject(Client.game);
@@ -1388,6 +1412,15 @@ public class Spieltisch extends JFrame{
 			}
 	}
 
+	//Methode zum senden des Chatobjektes
+	public void sendeChatObjekt(){
+		try{
+
+			Spieltisch.out.writeObject(chat);
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
 
 	
 	/***************************************************************************************
@@ -2068,6 +2101,13 @@ public class Spieltisch extends JFrame{
 			}
 			else if(e.getSource()==jbtPassen){
 				passen();
+			}
+			else if(e.getSource()==jbtEingabe){
+				System.out.println("möchte Chat senden");
+				schreiben();
+				sendeChatObjekt();
+				System.out.println("chat gesendent mit inhalt:");
+				System.out.println(chat.getMessage());
 			}
 		}
 		
