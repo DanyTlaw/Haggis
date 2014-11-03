@@ -1,7 +1,10 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -22,11 +25,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.OverlayLayout;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+
+
+
+
+
+
 
 
 import java.lang.*;
@@ -45,7 +58,7 @@ public class Spieltisch extends JFrame{
 	int handkarten;
 	int haggisAnzahl;
 	
-	public Color background = new Color(255,255,255);
+	//public Color background = new Color(255,255,255);
 	String[] spielKarten = new String[14];
 	
     int kartenBound = 0;
@@ -105,15 +118,16 @@ public class Spieltisch extends JFrame{
 		clickHandler cHandler = new clickHandler();
 		buttonHandler bHandler = new buttonHandler();
 		
-
-		
-		//Gibt dem Client ein BorderLayout
-		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+					
+		JFrame Tisch = new JFrame("Haggis");
 		
 		//JPanel fuer das ganze Frame wird erstellt fuer die HIntergrundfarbe
 		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		setContentPane(mainPanel);
+		mainPanel.setLayout(new GridBagLayout());
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.weightx = 0.5;
+		cons.weighty = 0.5;
+				
 		/***************************************************************************************
 		NORTH TEIL DES FRAMES
 		****************************************************************************************/
@@ -122,8 +136,9 @@ public class Spieltisch extends JFrame{
 		JPanel enemy = new JPanel();
 		JPanel enemyKarten = new JPanel();
 		
-		enemy.setLayout(new BoxLayout(enemy, BoxLayout.X_AXIS));
-		enemyKarten.setLayout(new GridLayout(2,3));
+		enemy.setLayout(new GridBagLayout());
+		
+		enemyKarten.setLayout(new GridBagLayout());
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
 		image = new ImageIcon(pfad +"icon.jpg").getImage();
@@ -140,18 +155,44 @@ public class Spieltisch extends JFrame{
 		
 		
 		//Added alle Informationen dem JPanel enemyKarten
-		enemyKarten.add(lblBube);
-		enemyKarten.add(lblDame);
-		enemyKarten.add(lblKoenig);
-		enemyKarten.add(lblHandkarten);
-		enemyKarten.add(lblHolder);
-		enemyKarten.add(lblHolder);		
+		
+		cons.ipadx = 15;
+		cons.ipady = 15;
+		
+		cons.gridy = 0;
+		cons.gridx = 0;
+		enemyKarten.add(lblBube, cons);
+		
+		cons.gridy = 0;
+		cons.gridx = 1;
+		enemyKarten.add(lblDame, cons);
+		
+		cons.gridy = 0;
+		cons.gridx = 2;
+		enemyKarten.add(lblKoenig, cons);
+		
+		cons.weightx = 0.0;
+		cons.gridy = 1;
+		cons.gridx = 0;
+		cons.gridwidth = 2;
+		enemyKarten.add(lblHandkarten, cons);
 		
 		//Added alle Componente dem JPanel enemy
-		enemy.setBorder(new EmptyBorder(0,425,10,0));
-		enemy.add(lblImage);
-		enemy.add(Box.createHorizontalStrut(20));
-		enemy.add(enemyKarten);
+		
+		cons.gridwidth = 1;
+		cons.weightx = 0.5;
+		
+		
+		cons.gridy = 0;
+		cons.gridx = 0;
+		enemy.add(lblImage, cons);
+		
+		cons.gridy = 0;
+		cons.gridx = 1;
+		enemy.add(enemyKarten, cons);
+		
+		cons.ipady = 0;
+		cons.ipadx = 0;		
 		
 		/***************************************************************************************
 		CENTER TEIL DES FRAMES
@@ -161,7 +202,7 @@ public class Spieltisch extends JFrame{
 		JPanel spielfeld = new JPanel();
 		
 		
-		spiel.setLayout(new BoxLayout(spiel, BoxLayout.X_AXIS));
+		spiel.setLayout(new FlowLayout());
 		haggis.setLayout(new BoxLayout(haggis, BoxLayout.Y_AXIS));
 		spielfeld.setLayout(new BoxLayout(spielfeld, BoxLayout.Y_AXIS));
 
@@ -201,18 +242,18 @@ public class Spieltisch extends JFrame{
 		}
 		
 		//JPanel fuer den unteren Teil des Spielfelds
-		JPanel spielfelunten = new JPanel();
-		spielfelunten.setPreferredSize(new Dimension(800, 170));
-		spielfelunten.setMaximumSize(new Dimension(800, 170));
-		spielfelunten.setMinimumSize(new Dimension(800, 170));
-		spielfelunten.setLayout(new BoxLayout(spielfelunten, BoxLayout.X_AXIS));
+		JPanel spielfeldunten = new JPanel();
+		spielfeldunten.setPreferredSize(new Dimension(800, 170));
+		spielfeldunten.setMaximumSize(new Dimension(800, 170));
+		spielfeldunten.setMinimumSize(new Dimension(800, 170));
+		spielfeldunten.setLayout(new BoxLayout(spielfeldunten, BoxLayout.X_AXIS));
 					
 
-		spielfelunten.setOpaque(true);
-		spielfelunten.setBackground(bg);
+		spielfeldunten.setOpaque(true);
+		spielfeldunten.setBackground(bg);
 				
 		//Schleife welches 7 Labels im unteren Teil des Spielfelds erstellt
-		spielfelunten.add(Box.createHorizontalStrut(30));
+		spielfeldunten.add(Box.createHorizontalStrut(30));
 		for(int i = 7;i<14;i++){
 			JLabel anzeigeKarte = new JLabel();
 			anzeigeKarte.setPreferredSize(new Dimension(100, 150));
@@ -221,8 +262,8 @@ public class Spieltisch extends JFrame{
 			anzeigeKarte.setOpaque(true);
 			anzeigeKarte.setBackground(Color.black);
 			anzeigeKarten[i] = anzeigeKarte;
-			spielfelunten.add(anzeigeKarten[i]);
-			spielfelunten.add(Box.createHorizontalStrut(5));
+			spielfeldunten.add(anzeigeKarten[i]);
+			spielfeldunten.add(Box.createHorizontalStrut(5));
 		}
 		
 		
@@ -231,11 +272,12 @@ public class Spieltisch extends JFrame{
 		haggis.setBorder(new EmptyBorder(0,0,0,50));
 		
 		spielfeld.add(spielfeldoben);
-		spielfeld.add(spielfelunten);
+		spielfeld.add(spielfeldunten);
 		
 		spiel.add(haggis);
 		
 		spiel.add(spielfeld);
+		
 		
 		
 		
@@ -273,7 +315,7 @@ public class Spieltisch extends JFrame{
 		JPanel rechtsSteuerung = new JPanel();
 		rechtsSteuerung.setLayout(new BoxLayout(rechtsSteuerung, BoxLayout.Y_AXIS));
 		rechtsSteuerung.setPreferredSize(new Dimension(500,200));
-		rechtsSteuerung.setMaximumSize(new Dimension(500,200));
+		rechtsSteuerung.setMaximumSize(new Dimension(2000,200));
 		rechtsSteuerung.setMinimumSize(new Dimension(500,200));
 		
 		//Alle Container f�r das  Panel jokerkarten werden gemacht		
@@ -300,12 +342,6 @@ public class Spieltisch extends JFrame{
 		buttons.add(jbtSpielen);
 		buttons.setBorder(new EmptyBorder(0,0,0,10));
 		buttons.add(jbtPassen);
-
-		
-		
-
-
-		
 		
 		//Alle Container und Buttons fuer den Rechtssteuerung teil
 		
@@ -322,8 +358,8 @@ public class Spieltisch extends JFrame{
 		JPanel eigeneKartenButtons = new JPanel();
 		eigeneKartenButtons.setLayout(null);
 		
-		//Generiert 14 Buttons und f�gt sie dem Array hinzu	
-		for(int i = 0;i<14;i++){
+		//Generiert 7 Buttons und f�gt sie dem Array hinzu	
+		for(int i = 0;i<7;i++){
 			JButton jbtKarte = new JButton();
 			jbtKarte.setPreferredSize(new Dimension(100,150));
 			jbtKarte.setMaximumSize(new Dimension(100,150));
@@ -333,7 +369,21 @@ public class Spieltisch extends JFrame{
 			btnKarte[i].addActionListener(cHandler);
 			gedrucktHand[i] = false;
 			eigeneKartenButtons.add(btnKarte[i]);
-			kartenBound+=30;
+			kartenBound+=100;
+		}
+		
+		//Generiert 7 Buttons und f�gt sie dem Array hinzu	
+		for(int i = 7;i<14;i++){
+			JButton jbtKarte = new JButton();
+			jbtKarte.setPreferredSize(new Dimension(100,150));
+			jbtKarte.setMaximumSize(new Dimension(100,150));
+			jbtKarte.setMinimumSize(new Dimension(100,150));
+			jbtKarte.setBounds(kartenBound, 5, 100, 150);
+			btnKarte[i] = jbtKarte;
+			btnKarte[i].addActionListener(cHandler);
+			gedrucktHand[i] = false;
+			eigeneKartenButtons.add(btnKarte[i]);
+			kartenBound+=100;
 		}
 
 		
@@ -353,7 +403,7 @@ public class Spieltisch extends JFrame{
 		
 		
 		//Setzt den Hintergrund aller Componenten auf weiss
-		enemyKarten.setBackground(background);
+		/*enemyKarten.setBackground(background);
 		haggis.setBackground(background);
 		buttons.setBackground(background);
 		jokerkarten.setBackground(background);
@@ -366,7 +416,7 @@ public class Spieltisch extends JFrame{
 		enemy.setBackground(background);
 		spiel.setBackground(background);
 		spielSteuerung.setBackground(background);
-		titelSteuerung.setBackground(background);
+		titelSteuerung.setBackground(background);*/
 		
 		
 		linksTitel.add(lbljokerkarten);
@@ -385,19 +435,80 @@ public class Spieltisch extends JFrame{
 		spielSteuerung.add(kartenSteuerung);
 		
 		
+		//Chat stuff		
+		JPanel chatPanel = new JPanel();
+		chatPanel.setLayout(new GridBagLayout());
+		JButton jbtEingabe = new JButton("Eingabe");
+		
+		JTextArea chat = new JTextArea("Hier Steht Chat Text",20,1);
+		chat.setLineWrap(true);
+	    //chat.setEditable(false);
+	    chat.setVisible(true);
 
+	    JScrollPane scroll = new JScrollPane (chat);
+	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	    scroll.add(chat);
 		
-		this.add(enemy);
-		this.add(spiel);
-		this.add(spielSteuerung);
+		JTextArea eingabe = new JTextArea("Chat Eingabe",3,10);
+		eingabe.setLineWrap(true);
 		
-		this.setTitle("Haggis");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		mainPanel.setBackground(background);
+		cons.weightx = 0.0;
+		cons.gridy = 0;
+		cons.gridx = 0;
+		cons.gridwidth = 2;
+		cons.fill = GridBagConstraints.HORIZONTAL;
+		chatPanel.add(chat, cons);
+		
+		
+		cons.fill = 0;
+		cons.weightx = 0.5;
+		cons.gridwidth = 1;
+		cons.gridy = 1;
+		cons.gridx = 0;
+		chatPanel.add(eingabe, cons);
+		
+		cons.gridy = 1;
+		cons.gridx = 1;
+		chatPanel.add(jbtEingabe,cons);
+		
+		//Alles dem MainPanel adden
+		
+		cons.gridx = 0;
+		cons.gridy = 0;
+		mainPanel.add(enemy, cons);
+		
+		cons.gridx = 0;
+		cons.gridy = 1;
+		mainPanel.add(spiel, cons);
+		
+		cons.weightx = 0.0;
+		cons.gridx = 0;
+		cons.gridy = 2;
+		cons.gridwidth = 2;
+		cons.fill = GridBagConstraints.HORIZONTAL;
+		mainPanel.add(spielSteuerung,cons);
+		
+		cons.weightx = 0.5;
+		cons.gridwidth = 0;
+		cons.fill = 0;
+		cons.gridx = 1;
+		cons.gridy = 0;
+		cons.gridheight = 2;
+		mainPanel.add(chatPanel, cons);
+		
+		
+		
 	
-
-		this.setSize(1100, 1000);
-		this.setVisible(true);
+		
+		Tisch.setTitle("Haggis");
+		//mainPanel.setBackground(background);
+		
+		Tisch.add(mainPanel);
+		Tisch.setExtendedState(Tisch.MAXIMIZED_BOTH);
+		Tisch.setVisible(true);
+		Tisch.setResizable(false);
+		Tisch.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 	}
 	
