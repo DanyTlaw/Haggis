@@ -125,8 +125,8 @@ public class Spieltisch extends JFrame{
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridBagLayout());
 		GridBagConstraints cons = new GridBagConstraints();
-		cons.weightx = 0.5;
-		cons.weighty = 0.5;
+		cons.weightx = 0;
+		cons.weighty = 0;
 				
 		/***************************************************************************************
 		NORTH TEIL DES FRAMES
@@ -136,7 +136,7 @@ public class Spieltisch extends JFrame{
 		JPanel enemy = new JPanel();
 		JPanel enemyKarten = new JPanel();
 		
-		enemy.setLayout(new GridBagLayout());
+		enemy.setLayout(new BoxLayout(enemy, BoxLayout.X_AXIS));
 		
 		enemyKarten.setLayout(new GridBagLayout());
 		
@@ -179,17 +179,9 @@ public class Spieltisch extends JFrame{
 		
 		//Added alle Componente dem JPanel enemy
 		
-		cons.gridwidth = 1;
-		cons.weightx = 0.5;
 		
-		
-		cons.gridy = 0;
-		cons.gridx = 0;
-		enemy.add(lblImage, cons);
-		
-		cons.gridy = 0;
-		cons.gridx = 1;
-		enemy.add(enemyKarten, cons);
+		enemy.add(lblImage);
+		enemy.add(enemyKarten);
 		
 		cons.ipady = 0;
 		cons.ipadx = 0;		
@@ -291,21 +283,6 @@ public class Spieltisch extends JFrame{
 		JPanel kartenSteuerung = new JPanel();
 		kartenSteuerung.setLayout(new BoxLayout(kartenSteuerung, BoxLayout.X_AXIS));
 		
-		JPanel titelSteuerung = new JPanel();
-		titelSteuerung.setLayout(new BoxLayout(titelSteuerung, BoxLayout.X_AXIS));
-		
-		JPanel linksTitel = new JPanel();
-		linksTitel.setLayout(new BoxLayout(linksTitel, BoxLayout.Y_AXIS));	
-		linksTitel.setPreferredSize(new Dimension(350,15));
-		linksTitel.setMaximumSize(new Dimension(350,15));
-		linksTitel.setMinimumSize(new Dimension(350,15));
-		
-		JPanel rechtsTitel = new JPanel();
-		rechtsTitel.setLayout(new BoxLayout(rechtsTitel, BoxLayout.Y_AXIS));	
-		rechtsTitel.setPreferredSize(new Dimension(500,15));
-		rechtsTitel.setMaximumSize(new Dimension(500,15));
-		rechtsTitel.setMinimumSize(new Dimension(500,15));
-		
 		JPanel linksSteuerung = new JPanel();
 		linksSteuerung.setLayout(new BoxLayout(linksSteuerung, BoxLayout.Y_AXIS));	
 		linksSteuerung.setPreferredSize(new Dimension(350,200));
@@ -314,9 +291,9 @@ public class Spieltisch extends JFrame{
 		
 		JPanel rechtsSteuerung = new JPanel();
 		rechtsSteuerung.setLayout(new BoxLayout(rechtsSteuerung, BoxLayout.Y_AXIS));
-		rechtsSteuerung.setPreferredSize(new Dimension(500,200));
-		rechtsSteuerung.setMaximumSize(new Dimension(2000,200));
-		rechtsSteuerung.setMinimumSize(new Dimension(500,200));
+		rechtsSteuerung.setPreferredSize(new Dimension(800,360));
+		rechtsSteuerung.setMaximumSize(new Dimension(800,360));
+		rechtsSteuerung.setMinimumSize(new Dimension(800,360));
 		
 		//Alle Container f�r das  Panel jokerkarten werden gemacht		
 		JPanel buttons = new JPanel();
@@ -345,18 +322,20 @@ public class Spieltisch extends JFrame{
 		
 		//Alle Container und Buttons fuer den Rechtssteuerung teil
 		
-		
 		JLabel lbljokerkarten = new JLabel("Jokerkarten");
-		lbljokerkarten.setBounds(jokerKartenBound, -50, 100, 150);
-	
 		JLabel lbleigeneKarten = new JLabel("Handkarten");
-		lbleigeneKarten.setBounds(kartenBound, -50 ,100,150);
-	
-		JPanel jokerkarten = new JPanel();
-		jokerkarten.setLayout(null);
 		
-		JPanel eigeneKartenButtons = new JPanel();
-		eigeneKartenButtons.setLayout(null);
+		JPanel lblHalter = new JPanel();
+		lblHalter.setLayout(new FlowLayout(FlowLayout.LEFT));
+		lblHalter.add(lbleigeneKarten);
+		
+		
+		
+		JPanel eigeneKartenButtonsOben = new JPanel();
+		eigeneKartenButtonsOben.setPreferredSize(new Dimension(800, 170));
+		eigeneKartenButtonsOben.setMaximumSize(new Dimension(800, 170));
+		eigeneKartenButtonsOben.setMinimumSize(new Dimension(800, 170));
+		eigeneKartenButtonsOben.setLayout(new BoxLayout(eigeneKartenButtonsOben, BoxLayout.X_AXIS));
 		
 		//Generiert 7 Buttons und f�gt sie dem Array hinzu	
 		for(int i = 0;i<7;i++){
@@ -368,12 +347,19 @@ public class Spieltisch extends JFrame{
 			btnKarte[i] = jbtKarte;
 			btnKarte[i].addActionListener(cHandler);
 			gedrucktHand[i] = false;
-			eigeneKartenButtons.add(btnKarte[i]);
+			eigeneKartenButtonsOben.add(btnKarte[i]);
 			kartenBound+=100;
 		}
 		
+		JPanel eigeneKartenButtonsUnten = new JPanel();
+		eigeneKartenButtonsUnten.setPreferredSize(new Dimension(800, 170));
+		eigeneKartenButtonsUnten.setMaximumSize(new Dimension(800, 170));
+		eigeneKartenButtonsUnten.setMinimumSize(new Dimension(800, 170));
+		eigeneKartenButtonsUnten.setLayout(new BoxLayout(eigeneKartenButtonsUnten, BoxLayout.X_AXIS));
+		
 		//Generiert 7 Buttons und f�gt sie dem Array hinzu	
 		for(int i = 7;i<14;i++){
+			kartenBound = 0;
 			JButton jbtKarte = new JButton();
 			jbtKarte.setPreferredSize(new Dimension(100,150));
 			jbtKarte.setMaximumSize(new Dimension(100,150));
@@ -382,10 +368,12 @@ public class Spieltisch extends JFrame{
 			btnKarte[i] = jbtKarte;
 			btnKarte[i].addActionListener(cHandler);
 			gedrucktHand[i] = false;
-			eigeneKartenButtons.add(btnKarte[i]);
+			eigeneKartenButtonsUnten.add(btnKarte[i]);
 			kartenBound+=100;
 		}
 
+		JPanel jokerkarten = new JPanel();
+		jokerkarten.setLayout(null);
 		
 		for(int i = 0; i<3;i++){
 			JButton jokerKarte = new JButton();
@@ -401,37 +389,15 @@ public class Spieltisch extends JFrame{
 			
 		}
 		
-		
-		//Setzt den Hintergrund aller Componenten auf weiss
-		/*enemyKarten.setBackground(background);
-		haggis.setBackground(background);
-		buttons.setBackground(background);
-		jokerkarten.setBackground(background);
-		eigeneKartenButtons.setBackground(background);
-		linksTitel.setBackground(background);
-		rechtsTitel.setBackground(background);
-		kartenSteuerung.setBackground(background);
-		linksSteuerung.setBackground(background);
-		rechtsSteuerung.setBackground(background);
-		enemy.setBackground(background);
-		spiel.setBackground(background);
-		spielSteuerung.setBackground(background);
-		titelSteuerung.setBackground(background);*/
-		
-		
-		linksTitel.add(lbljokerkarten);
-		rechtsTitel.add(lbleigeneKarten);
-		titelSteuerung.add(linksTitel);
-		titelSteuerung.add(rechtsTitel);
-		titelSteuerung.setBorder(new EmptyBorder(10,0,0,0));
-		
-		rechtsSteuerung.add(eigeneKartenButtons);
+		rechtsSteuerung.add(lblHalter);
+		rechtsSteuerung.add(eigeneKartenButtonsOben);
+		rechtsSteuerung.add(eigeneKartenButtonsUnten);
+		linksSteuerung.add(lbljokerkarten);
 		linksSteuerung.add(jokerkarten);
 		linksSteuerung.add(buttons);
 		kartenSteuerung.add(linksSteuerung);
 		kartenSteuerung.add(rechtsSteuerung);
 		
-		spielSteuerung.add(titelSteuerung);
 		spielSteuerung.add(kartenSteuerung);
 		
 		
@@ -462,7 +428,7 @@ public class Spieltisch extends JFrame{
 		
 		
 		cons.fill = 0;
-		cons.weightx = 0.5;
+		cons.weightx = 0;
 		cons.gridwidth = 1;
 		cons.gridy = 1;
 		cons.gridx = 0;
@@ -482,18 +448,18 @@ public class Spieltisch extends JFrame{
 		cons.gridy = 1;
 		mainPanel.add(spiel, cons);
 		
-		cons.weightx = 0.0;
+		cons.weightx = 0;
+		cons.weighty = 0;
 		cons.gridx = 0;
 		cons.gridy = 2;
-		cons.gridwidth = 2;
-		cons.fill = GridBagConstraints.HORIZONTAL;
+		cons.gridwidth = 1;
 		mainPanel.add(spielSteuerung,cons);
 		
-		cons.weightx = 0.5;
-		cons.gridwidth = 0;
-		cons.fill = 0;
+		cons.weightx = 0;
+		cons.weighty = 0;
+		cons.gridwidth = 1;
 		cons.gridx = 1;
-		cons.gridy = 0;
+		cons.gridy = 2;
 		cons.gridheight = 2;
 		mainPanel.add(chatPanel, cons);
 		
