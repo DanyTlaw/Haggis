@@ -28,7 +28,7 @@ public class Client {
 	public Client(String hostName, int portNummer){
 		init(hostName, portNummer);
 		login = new LoginGUI(this.out, this.in);
-		erhalteGameobjekt();
+		erhalteObjekt();
 	}
 	
 	public void init(String hostName, int portNummer){
@@ -43,7 +43,7 @@ public class Client {
 				}
 		}
 	
-	public void erhalteGameobjekt(){
+	public void erhalteObjekt(){
 		// Erhalte
 		try {
 			while ((inputObject = in.readObject()) != null) {
@@ -57,6 +57,7 @@ public class Client {
 					}
 					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
 					if(!game.getNeueRunde()){
+						ladetGegnerInfo();
 						System.out.println(client_ID);
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
@@ -113,6 +114,11 @@ public class Client {
 					
 					
 				} 
+				
+				else if(inputObject instanceof Chat){
+					
+				}
+				
 				// set Client_ID
 				else if (inputObject instanceof Integer) {
 					client_ID = (int) inputObject;
