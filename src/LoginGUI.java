@@ -5,6 +5,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -39,6 +42,7 @@ public class LoginGUI extends JFrame implements ActionListener{
 	public static Spieltisch tisch;
 	
 	
+	
 	//Konstruktor welche das LoginGUI erstellt
 	public LoginGUI(ObjectOutputStream out, ObjectInputStream in){
 		this.out = out;
@@ -60,7 +64,7 @@ public class LoginGUI extends JFrame implements ActionListener{
 		
 
 		
-		Image bg = new ImageIcon("//home//dany//workspace//Haggis//images//haggisBack.jpg").getImage();
+		Image bg = new ImageIcon(pfad + "haggisBack.jpg").getImage();
 		ImageIcon iBg = new ImageIcon(bg.getScaledInstance(500, 400, Image.SCALE_DEFAULT)); 
 			
 		((JPanel)getContentPane()).setOpaque(false);
@@ -77,6 +81,7 @@ public class LoginGUI extends JFrame implements ActionListener{
 		txtPunkte.setSize(10, 5);
 		jbtStart = new JButton("Start");
 		jbtStart.addActionListener(this);
+		getRootPane().setDefaultButton(jbtStart);
 		lblName = new JLabel("Spielername");
 		lblName.setForeground(Color.WHITE);
 		lblPunkte = new JLabel("Abgemachte Punkte");
@@ -104,6 +109,7 @@ public class LoginGUI extends JFrame implements ActionListener{
 		getContentPane().add(inputPanel, BorderLayout.SOUTH);
 		
 		this.setVisible(true);
+		
 	}
 
 	@Override
@@ -128,9 +134,41 @@ public class LoginGUI extends JFrame implements ActionListener{
 		}
 		
 	}
-	
+
 	public Spieltisch getTisch(){
 		return this.tisch;
 	}
+	
+	/*public void keyPressed(KeyEvent e){
+		int key = e.getKeyCode();
+		
+		if(key == KeyEvent.VK_ENTER){
+			try{
+				if(txtName.getText().length()> 0){
+				Spieler spieler = new Spieler(txtName.getText());
+				spieler.setSiegesPunkte(Integer.parseInt(txtPunkte.getText()));
+				this.out.writeObject(spieler);
+				
+				setVisible(false);
+				tisch = new Spieltisch(this.out, this.in);
+				System.out.println(tisch);
+				}
+			}catch (java.io.IOException IOException){
+				IOException.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}*/
 	
 }

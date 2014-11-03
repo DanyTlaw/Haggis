@@ -59,12 +59,14 @@ public class Client {
 					if(!game.getNeueRunde()){
 						ladetGegnerInfo();
 						System.out.println(client_ID);
+						
+						ladetGegnerInfo();
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
-							login.getTisch().amZugButtons(true);
-																					
+							login.getTisch().amZugButtons(true);																					
 						}else{
-							login.getTisch().amZugButtons(false);						}
+							login.getTisch().amZugButtons(false);						
+						}						
 						if(game.getFeldkarten().size()>0){
 							 login.getTisch().karteAnzeigen(game.getFeldkarten());							
 						}else{
