@@ -129,6 +129,15 @@ public class GameLoop extends Thread{
 						System.out.println("gesendet game");
 					}
 				}
+					else if(inputObject instanceof Chat){
+						Chat chat = new Chat();
+						Iterator<ObjectOutputStream> i = outlist.iterator();
+						while (i.hasNext()) {
+							i.next().writeObject(chat);
+							System.out.println("gesendet chat");
+						}
+						
+					}
 			}
 					
 					
