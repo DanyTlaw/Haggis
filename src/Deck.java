@@ -497,12 +497,13 @@ public class Deck {
 				}
 				
 			}
-			
+			System.out.println("-----------------------------HAGGIS-------------------------------");
 			for(Card hKarte : deck){
 				haeggis.add(hKarte);
+				System.out.println(hKarte.getPunkte());
 			}
 			deck.removeAll(deck);
-			System.out.println(haeggis.size());
+			
 			
 			haende.add(handKarten1);
 			haende.add(handKarten2);

@@ -10,6 +10,7 @@ public class Gameobjekt implements Serializable {
 	public ArrayList<Card> haeggis = new ArrayList<Card>();
 	
 	public boolean neueRunde;
+	public boolean spielBeendet;
 	
 	public Gameobjekt(ArrayList<Spieler> spieler){
 		this.neueRunde = true;
@@ -56,6 +57,14 @@ public class Gameobjekt implements Serializable {
 	
 	public void setNeueRunde(boolean neueRunde){
 		this.neueRunde = neueRunde;
+	}
+	
+	public void setSpielBeendet(boolean spielBeendet){
+		this.spielBeendet = spielBeendet;
+	}
+	
+	public boolean getSpielBeendet(){
+		return this.spielBeendet;
 	}
 	
 	public void erstelleDeck(){

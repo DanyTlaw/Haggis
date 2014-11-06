@@ -115,6 +115,7 @@ public class Spieltisch extends JFrame{
 	public Chat chat;
 	
 	public String name;
+	public JLabel lblPunkte;
 	
 	public Spieltisch(ObjectOutputStream out, ObjectInputStream in, String name){
 		
@@ -159,10 +160,13 @@ public class Spieltisch extends JFrame{
 		lblDame = new JLabel("Dame: " + dameAnzahl);
 		lblKoenig = new JLabel("Koenig: " + koenigAnzahl);
 		lblHandkarten = new JLabel("HandKarten: " + handkarten);
+		lblPunkte = new JLabel("Punkte: ");
 		JLabel lblHolder = new JLabel();
 		
 		
 		//Added alle Informationen dem JPanel enemyKarten
+		
+		enemy.add(lblPunkte);
 		
 		cons.ipadx = 15;
 		cons.ipady = 15;

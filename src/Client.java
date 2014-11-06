@@ -55,6 +55,18 @@ public class Client {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					
+					if(game.getSpielBeendet()){
+						String resultat= "verloren";
+
+						if(game.getSpieler(client_ID).getSieger()){
+							resultat = "gewonnen";
+						}
+						
+						
+						JOptionPane.showMessageDialog (login.getTisch(),"Sie haben " + resultat ,"Ungueltige Farbe",JOptionPane.INFORMATION_MESSAGE);
+					}
+					
 					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
 					if(!game.getNeueRunde()){
 						ladetGegnerInfo();
@@ -152,10 +164,12 @@ public class Client {
 		if(client_ID == 0){
 			login.getTisch().setGegnerInfos(game.getSpieler(1).hatBube(), game.getSpieler(1).hatDame(), game.getSpieler(1).hatKoenig());
 			login.getTisch().setAnzahlKarten(game.getSpieler(1).getHandKarten().size()-3);
+			login.getTisch().lblPunkte.setText("Punkte : " +game.getSpieler(1).getPunkte());
 		}
 		else if(client_ID == 1){
 			login.getTisch().setGegnerInfos(game.getSpieler(0).hatBube(), game.getSpieler(0).hatDame(), game.getSpieler(0).hatKoenig());
 			login.getTisch().setAnzahlKarten(game.getSpieler(0).getHandKarten().size()-3);
+			login.getTisch().lblPunkte.setText("Punkte : " +game.getSpieler(0).getPunkte());
 		}
 		
 	}

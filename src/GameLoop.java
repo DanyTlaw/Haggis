@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
+
 
 public class GameLoop extends Thread{
 
@@ -56,35 +58,82 @@ public class GameLoop extends Thread{
 							Iterator<ObjectOutputStream> i = outlist.iterator();
 							while (i.hasNext()) {
 								i.next().writeObject(game);
-								System.out.println("gesendet game");
+
 							}
 						}
 					}
+
+					
 					
 					else if(inputObject instanceof Gameobjekt){
 
 						Gameobjekt game = (Gameobjekt) inputObject;
-						System.out.println("-------------------LEERE HAND---------------------");
-						System.out.println(game.getSpieler(0).leereHand());
-						System.out.println(game.getSpieler(1).leereHand());
-						System.out.println("--------------------------------------------------");
+
 						
 						//Wenn einer von beiden Spielern eine leeere Hand hat ist die Runde vorbei und die Logik wird angewandt
 						if(game.getSpieler(0).leereHand()){
 							System.out.println("leereHand Spieler 0");
-							game.getSpieler(0).addGewonneneKarten(game.getSpieler(1).getHandKarten());
+							
+							
+							
+							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
+							for(int i = 0; i< game.getSpieler(1).getHandKarten().size(); i++){
+								if(game.getSpieler(1).getHandKarten().get(i).getWert()!=0){
+									game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte()+5);
+									System.out.println(game.getSpieler(0).getPunkte());
+								}
+							}
+							
+							//Added dem Sieger der Runde den Haggis hinzu
 							game.getSpieler(0).addGewonneneKarten(game.getHaeggis());
-							game.setNeueRunde(true);
-							System.out.println(game.getSpieler(0).berechnePunkte());
-							game.erstelleDeck();
+							
+							//Berchnet die Punkte der gewonenen Karten für beide Spieler
+							game.getSpieler(0).setPunkte(game.getSpieler(0).berechnePunkte());
+							game.getSpieler(1).setPunkte(game.getSpieler(1).berechnePunkte());
+							
+							System.out.println(game.getSpieler(0).getPunkte());
+							
+							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
+							if(game.getSpieler(0).getPunkte() >= game.getSpieler(0).getSiegesPunkte() && game.getSpieler(0).getPunkte() > game.getSpieler(1).getPunkte()){
+								game.getSpieler(0).setSieger(true);
+								game.setSpielBeendet(true);
+							}else{
+								game.setNeueRunde(true);
+								System.out.println(game.getSpieler(0).berechnePunkte());
+								game.erstelleDeck();
+							}
+
 						}
 						else if(game.getSpieler(1).leereHand()){
 							System.out.println("leereHand Spieler 1");
-							game.getSpieler(1).addGewonneneKarten(game.getSpieler(0).getHandKarten());
+							
+							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
+							for(int i = 0; i< game.getSpieler(0).getHandKarten().size(); i++){
+								if(game.getSpieler(0).getHandKarten().get(i).getWert()!=0){
+									game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte()+5);
+									System.out.println(game.getSpieler(1).getPunkte());
+								}
+							}
+							
+							//Added dem Sieger der Runde den Haggis hinzu
 							game.getSpieler(1).addGewonneneKarten(game.getHaeggis());
-							game.setNeueRunde(true);
-							System.out.println(game.getSpieler(1).berechnePunkte());
-							game.erstelleDeck();
+							
+							//Berchnet die Punkte der gewonenen Karten für beide Spieler
+							game.getSpieler(1).setPunkte(game.getSpieler(1).berechnePunkte());
+							game.getSpieler(0).setPunkte(game.getSpieler(0).berechnePunkte());
+							
+							System.out.println(game.getSpieler(1).getPunkte());
+							
+							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
+							if(game.getSpieler(1).getPunkte() >= game.getSpieler(1).getSiegesPunkte() && game.getSpieler(1).getPunkte() > game.getSpieler(0).getPunkte()){
+								game.getSpieler(1).setSieger(true);
+								game.setSpielBeendet(true);
+							}else{
+								game.setNeueRunde(true);
+								System.out.println(game.getSpieler(1).berechnePunkte());
+								game.erstelleDeck();
+							}
+
 						}
 					
 					try {
@@ -126,7 +175,7 @@ public class GameLoop extends Thread{
 					Iterator<ObjectOutputStream> i = outlist.iterator();
 					while (i.hasNext()) {
 						i.next().writeObject(game);
-						System.out.println("gesendet game");
+						
 					}
 				}
 					else if(inputObject instanceof Chat){
@@ -137,7 +186,7 @@ public class GameLoop extends Thread{
 						Iterator<ObjectOutputStream> i = outlist.iterator();
 						while (i.hasNext()) {
 							i.next().writeObject(chat);
-							System.out.println("gesendet chat");
+							
 						}
 						
 					}

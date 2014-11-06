@@ -12,7 +12,7 @@ public class Spieler implements Serializable {
 	private boolean amZug;
 	private boolean passen = false;
 	private int siegesPunkte;
-	
+	private boolean sieger = false;
 	
 	public ArrayList<Card> gewonneneKarten = new ArrayList<Card>();
 	
@@ -61,17 +61,21 @@ public class Spieler implements Serializable {
 		return this.siegesPunkte;
 	}
 	
+	public void setSieger(boolean sieger){
+		this.sieger = sieger;
+	}
+	
+	public boolean getSieger(){
+		return this.sieger;
+	}
+	
+	
 	//Methode welche den gewonnen Karten immer neue hinzufügt
 	public void addGewonneneKarten(ArrayList<Card> karten){
 		
 		for(int i= 0; i<karten.size();i++){	
 			gewonneneKarten.add(new Card(karten.get(i).getPunkte()));
-			System.out.println("-----------------------------------------");
-			System.out.println("Soviele Karten sind momentan gewonnen:");
-			System.out.println(gewonneneKarten.size());
-			System.out.println("Soviel Wert Haben sie:");
-			System.out.println(berechnePunkte());
-			System.out.println("-----------------------------------------");
+
 		}
 	}
 	
@@ -132,9 +136,12 @@ public class Spieler implements Serializable {
 	
 	//Methode welche alle Punkte in den gewonnen Karten zusammenrechnet
 	public int berechnePunkte(){
-		int punkte = 0;
+		
 		for(int i = 0; i<gewonneneKarten.size();i++){
 			punkte+=gewonneneKarten.get(i).getPunkte();
+			System.out.println("-------------------------------------------------------------------");
+			System.out.println(punkte);
+			System.out.println("-------------------------------------------------------------------");
 		}
 		return punkte;
 	}
