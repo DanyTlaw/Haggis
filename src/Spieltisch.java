@@ -42,9 +42,10 @@ import javax.swing.border.LineBorder;
 
 
 
+
 import java.lang.*;
 
-public class Spieltisch extends JFrame{
+public class Spieltisch extends JFrame implements ActionListener{
 
 	private Image image;
 	private ImageIcon icon;
@@ -95,6 +96,8 @@ public class Spieltisch extends JFrame{
 	private ImageIcon jDameIcon;
 	private Image jKoenig;
 	private ImageIcon jKoenigIcon;
+	private Image hintergrund;
+	
 	
 	static ObjectOutputStream out;
 	static ObjectInputStream in;
@@ -104,7 +107,7 @@ public class Spieltisch extends JFrame{
 	ArrayList<Card> test = new ArrayList<Card>();
 	//Border erstellen
 	public Border gedrucktBorder = new LineBorder(Color.BLUE, 2);
-	private JLabel lblHandkarten;
+	
 	private JLabel lblKoenig;
 	private JLabel lblDame;
 	private JLabel lblBube;
@@ -115,7 +118,9 @@ public class Spieltisch extends JFrame{
 	public Chat chat;
 	
 	public String name;
-	public JLabel lblPunkte;
+	public JLabel lblPunkteEigen;
+	public JLabel lblPunkteGegner;
+	public JLabel lblHandkarten;
 	
 	public Spieltisch(ObjectOutputStream out, ObjectInputStream in, String name){
 		
@@ -159,14 +164,15 @@ public class Spieltisch extends JFrame{
 		lblBube = new JLabel("Bube: " + bubeAnzahl);
 		lblDame = new JLabel("Dame: " + dameAnzahl);
 		lblKoenig = new JLabel("Koenig: " + koenigAnzahl);
-		lblHandkarten = new JLabel("HandKarten: " + handkarten);
-		lblPunkte = new JLabel("Punkte: ");
+		lblHandkarten = new JLabel("HandKarten: ");
+		JPanel PunkteInfo = new JPanel();
+		PunkteInfo.setLayout(new GridBagLayout());
+		lblPunkteEigen = new JLabel("Punkte: ");
+		lblPunkteGegner = new JLabel("Gegnerische Punkte: ");
 		JLabel lblHolder = new JLabel();
 		
 		
 		//Added alle Informationen dem JPanel enemyKarten
-		
-		enemy.add(lblPunkte);
 		
 		cons.ipadx = 15;
 		cons.ipady = 15;
@@ -186,14 +192,24 @@ public class Spieltisch extends JFrame{
 		cons.weightx = 0.0;
 		cons.gridy = 1;
 		cons.gridx = 0;
-		cons.gridwidth = 2;
+		cons.gridwidth = 3;
 		enemyKarten.add(lblHandkarten, cons);
+		
+		//Added alle Info der Componente Punkte Info
+		cons.gridy = 0;
+		cons.gridx = 0;
+		PunkteInfo.add(lblPunkteEigen, cons);
+		
+		cons.gridy = 1;
+		cons.gridx = 0;
+		PunkteInfo.add(lblPunkteGegner, cons);
 		
 		//Added alle Componente dem JPanel enemy
 		
 		
 		enemy.add(lblImage);
 		enemy.add(enemyKarten);
+		enemy.add(PunkteInfo);
 		
 		cons.ipady = 0;
 		cons.ipadx = 0;		
@@ -316,7 +332,7 @@ public class Spieltisch extends JFrame{
 
 	
 		jbtSpielen = new JButton("Spielen");
-		jbtSpielen.addActionListener(bHandler);
+		jbtSpielen.addActionListener(this);
 		jbtPassen = new JButton("Passen");
 		jbtPassen.addActionListener(bHandler);
 
@@ -542,11 +558,9 @@ public class Spieltisch extends JFrame{
 	}
 	
 	public void setAnzahlKarten(int handKarten){
-		this.handkarten = handKarten;
-		this.lblHandkarten.setText("Spielkaten :" + this.handkarten);
+		this.lblHandkarten.setText("Spielkarten :" + this.handkarten);
 	}
 	
-
 	public JTextArea getTxtAEingabe(){
 		return this.txtAEingabe;
 	}
@@ -554,7 +568,8 @@ public class Spieltisch extends JFrame{
 	public JTextArea getTxtAChat(){
 		return this.txtAChat;
 	}
-	
+
+
 	/***************************************************************************************
 	Methode fÃ¼r die Buttons
 	****************************************************************************************/
@@ -570,8 +585,7 @@ public class Spieltisch extends JFrame{
 				
 				//Nur im dreispielermodus gebraucht
 				jokerFarbe = jokerFarbe();
-				
-				
+								
 				
 				//Diese zeile erstellt eine Copy der Karte in die kartenKontrolle		
 				gespielteKarten.add(new Card(hand.get(i).getWert(),hand.get(i).getName(),hand.get(i).getBild(),hand.get(i).getPunkte(),hand.get(i).getFarbe(),hand.get(i).getJoker(),jokerWert,jokerFarbe));
@@ -583,9 +597,8 @@ public class Spieltisch extends JFrame{
 		//Ist eine Karte angewaehlt wird sie der ArrayList gespielteKarte hinzugefuegt (Hand Karten)
 		for(int i = 3;i<17;i++){
 			if(btnKarte[i-3].getBorder() == gedrucktBorder){
+				
 				//Diese zeile erstellt eine Copy der Karte in die kartenKontrolle
-
-
 				gespielteKarten.add(new Card(hand.get(i).getWert(),hand.get(i).getName(),hand.get(i).getBild(),hand.get(i).getPunkte(),hand.get(i).getFarbe()));
 	
 			}
@@ -610,6 +623,7 @@ public class Spieltisch extends JFrame{
 				//Wenn eine Einzelkarte gespielt wurde und sie hoecher ist wie die bereits gespielte Karte, stich erfolgreich
 				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){	
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 					
@@ -619,6 +633,7 @@ public class Spieltisch extends JFrame{
 				else if(istPaar(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 			
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -626,6 +641,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Drillinge sind und sie hoecher sind wie die bereits gespielten Drillinge, stich erfolgreich
 				else if(istDrilling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -633,6 +649,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Vierlinge sind und sie hoecher sind wie die bereits gespielten Vierling, Stich erfolgriech
 				else if(istVierling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -640,6 +657,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Fuenflinge sind und sie hoecher sind wie die bereits gespielten Fï¿½nflinge Stich erfolgreich
 				else if(istFuenfling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -647,6 +665,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Sechslinge sind und sie hoecher sind wie die bereits gespielten Sechslinge, Stich erfolgreich
 				else if(istSechsling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}		
@@ -654,6 +673,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Sieblinge sind und sie hoecher sind wie die bereits gespielten Sieblinge, Stich erfolgreich
 				else if(istSiebling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -661,6 +681,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Achtlinge sind und sie hoecher sind wie die bereits gespielten Achtlinge, Stich erfolgreich
 				else if(istAchtling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -668,6 +689,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine dreier Strasse sind und sie hoecher sind wie die bereits gespielte dreier Strasse, stich erfolgreich
 				else if(istStrasseDrei(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -675,6 +697,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine vierer Strasse sind und sie hoecher sind wie die bereits gespielte vierer Strasse, stich erfolgreich
 				else if(istStrasseVier(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -682,6 +705,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine fuenfer Strasse sind und sie hoecher sind wie die bereits gespielte fuenfer Strasse, stich erfolgreich
 				else if(istStrasseFuenf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -689,6 +713,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine sechser Strasse sind und sie hoecher sind wie die bereits gespielte sechser Strasse, stich erfolgreich
 				else if(istStrasseSechs(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -696,6 +721,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine siebner Strasse sind und sie hoecher sind wie die bereits gespielte siebner Strasse, stich erfolgreich
 				else if(istStrasseSieben(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -703,6 +729,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine achter Strasse sind und sie hoecher sind wie die bereits gespielte achter Strasse, stich erfolgriech
 				else if(istStrasseAcht(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -710,6 +737,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine neuner Strasse sind und sie hoecher sind wie die bereits gespielte neuner Strasse, stich erfolgreich
 				else if(istStrasseNeun(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -717,6 +745,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine zehner Strasse sind und sie hoecher sind wie die bereits gespielte zehner Strasse, stich erfolgriech
 				else if(istStrasseZehn(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -724,6 +753,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine elfer Strasse sind und sie hoecher sind wie die bereits gespielte elfer Strasse, stich erfolgriech
 				else if(istStrasseElf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -731,6 +761,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine zwoelfer Strasse sind und sie hoecher sind wie die bereits gespielte zwoelfer Strasse, stich erfolgreich
 				else if(istStrasseZwoelf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -738,6 +769,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Paar Strasse ist spiele und sie hoecher ist wie die bereits gespielte Paar Strasse, stich erfolgreich
 				else if(istPaarStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -745,6 +777,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Drilling Strasse ist und sie hoecher ist wie die bereits gespielte Drilling Strasse, stich erfolgreich
 				else if(istDrillingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -752,6 +785,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Vierling Strasse ist und sie hoecher ist wie die bereits gespielte Vierling Strasse, stich erfolgreich
 				else if(istVierlingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -759,6 +793,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Fuenfling Strasse ist und sie hoecher ist wie die bereits gespielte Fuenflng Strasse, Stich erfolgreich
 				else if(istFuenflingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -777,6 +812,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karte eine einzelkarte ist dann Spiel sie aus
 				if(istEinzel(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 					
@@ -785,6 +821,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten ein Paar sind dann Spiel sie aus
 				else if(istPaar(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -792,6 +829,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Drillinge sind dann Spiele sie aus
 				else if(istDrilling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -799,6 +837,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Vierlinge sind dann Spiele sie aus
 				else if(istVierling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -806,6 +845,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Fuenflinge sind dann Spiele sie aus
 				else if(istFuenfling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -813,6 +853,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Sechslinge sind dann Spiele sie aus
 				else if(istSechsling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}		
@@ -820,6 +861,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Sieblinge sind dann Spiele sie aus
 				else if(istSiebling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -827,6 +869,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten Achtlinge sind dann Spiele sie aus
 				else if(istAchtling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -834,6 +877,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine dreier Strasse sind spiele sie aus
 				else if(istStrasseDrei(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -841,6 +885,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine vierer Strasse sind spiele sie aus
 				else if(istStrasseVier(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -848,6 +893,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine fuenfer Strasse sind spiele sie aus
 				else if(istStrasseFuenf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -855,6 +901,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine sechser Strasse sind spiele sie aus
 				else if(istStrasseSechs(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -862,6 +909,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine siebner Strasse sind spiele sie aus
 				else if(istStrasseSieben(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -869,6 +917,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine achter Strasse sind spiele sie aus
 				else if(istStrasseAcht(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -876,6 +925,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine neuner Strasse sind spiele sie aus
 				else if(istStrasseNeun(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -883,6 +933,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine zehner Strasse sind spiele sie aus
 				else if(istStrasseZehn(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -890,6 +941,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine elfer Strasse sind spiele sie aus
 				else if(istStrasseElf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -897,6 +949,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine zwoelfer Strasse sind spiele sie aus
 				else if(istStrasseZwoelf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -904,6 +957,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Paar Strasse ist spiele sie aus
 				else if(istPaarStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -911,6 +965,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Drilling Strasse ist spiele sie aus
 				else if(istDrillingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -918,6 +973,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Vierling Strasse ist spiele sie aus
 				else if(istVierlingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -925,6 +981,7 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Fuenfling Strasse ist spiele sie aus
 				else if(istFuenflingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
 					sendeGameObjekt();
 				}
@@ -958,6 +1015,13 @@ public class Spieltisch extends JFrame{
 		
 	}
 	
+	//Methode welche die Nachricht in das ChatFenster schreibt und anschliessend das objekt sendet
+	public void schreiben(){
+			
+			chat = new Chat();
+			chat.setMessage(this.getTxtAEingabe().getText());
+			chat.setSpieler(this.name);
+		}
 	
 	/***************************************************************************************
 	Methoden welche zur Hilfe benutzt werden und oft aufgerufen werden
@@ -982,7 +1046,6 @@ public class Spieltisch extends JFrame{
 		
 	}
 	
-	
 	//Methode welche alle Borders der buttons zurÃ¼cksetzt
  	public void keinBorder(){
  		for(int i = 0;i<3;i++){
@@ -1003,18 +1066,30 @@ public class Spieltisch extends JFrame{
 		}
  	}
  	
- 	public void karteLoeschen(){
+ 	private void karteLoeschen(){
+ 		
+ 		System.out.println("Jokerkartenwert " + Client.game.getSpieler(Client.client_ID).getSpielerName() + " anfang karte löschen");
+ 		for(int i = 0; i< 3; i++){
+			System.out.println(Client.game.getSpieler(0).getHandKarten().get(i).getPunkte());
+		}
 
  		for(int i = 0;i<3;i++){
+ 			System.out.println(Client.game.getSpieler(0).getHandKarten().get(i));
 			if(jokerKarten[i].getBorder() == gedrucktBorder){
 				jokerKarten[i].setVisible(false);
 				//Die ausgespielte Karte wird auf null gesetzt, weil wir mit diesem Wert Ã¼berprÃ¼fen ob die Handkarten leer sind
 				if(Client.game.getSpieler(0).getAmZug()){
 					Client.game.getSpieler(0).getHandKarten().get(i).setWert(0);
 					Client.game.getSpieler(0).getHandKarten().get(i).setPunkte(0);
+					System.out.println("---------------------Fucking Jokerkarte Spieler 0 umgsetzt---------------------------");
 				}else{
 					Client.game.getSpieler(1).getHandKarten().get(i).setWert(0);
 					Client.game.getSpieler(1).getHandKarten().get(i).setPunkte(0);
+					System.out.println("---------------------Fucking Jokerkarte Spieler 1 umgsetzt---------------------------");
+				}
+				System.out.println("ende For Schlaufe Jokerkarten Wert Spieler " + Client.game.getSpieler(Client.client_ID).getSpielerName());
+				for(int j = 0; j< 3; j++){
+					System.out.println(Client.game.getSpieler(0).getHandKarten().get(j).getPunkte());
 				}
 			}
 		}
@@ -1059,9 +1134,7 @@ public class Spieltisch extends JFrame{
 	//Methode welche die Karten in der Mitte anzeigt und die entsprechenden Handkarten nicht mehr sichtbar macht
 	public void karteAnzeigen(ArrayList<Card> karten){
 		
-		//Macht alle Buttons welche Die karte die gepsielt wurden unsichtbar
-		karteLoeschen();
-		
+		System.out.println("Karten anzeigen......................");	
 	
 		for(int i =0;i<karten.size();i++){
 			anzeigeKarten[i].setIcon(karten.get(i).getBild());
@@ -1386,8 +1459,7 @@ public class Spieltisch extends JFrame{
 		this.jbtPassen.setEnabled(amZug);
 		this.jbtSpielen.setEnabled(amZug);
 	}
-	
-	
+		
 	//Methode welche die Informationen des Gegners in den Spieltisch ladet
 	public void setGegnerInfos(int hatBube, int hatDame, int hatKoenig){
 		
@@ -1396,19 +1468,12 @@ public class Spieltisch extends JFrame{
 		this.setKoenigAnzahl(hatKoenig);
 		
 	}
-	
-	//Methode welche die Nachricht in das ChatFenster schreibt und anschliessend das objekt sendet
-	public void schreiben(){
 		
-		chat = new Chat();
-		chat.setMessage(this.getTxtAEingabe().getText());
-		chat.setSpieler(this.name);
-	}
-	
-	
 	//Methode zum senden des Spielobjektes
 	public void sendeGameObjekt(){
 		try{
+			
+			System.out.println("gesendet");
 
 			Spieltisch.out.writeObject(Client.game);
 			}catch (IOException e) {
@@ -1877,7 +1942,6 @@ public class Spieltisch extends JFrame{
 		return false;
 	}
 	
-
 	//Methode zum ueberpruefen ob es eine Drilling Strasse ist
 	public boolean istDrillingStrasse(ArrayList<Card> karten){
 		
@@ -2110,12 +2174,24 @@ public class Spieltisch extends JFrame{
 				System.out.println("möchte Chat senden");
 				schreiben();
 				sendeChatObjekt();
+				txtAEingabe.setText("");
 				System.out.println("chat gesendent mit inhalt:");
 				System.out.println(chat.getMessage());
 			}
 		}
 		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()== jbtSpielen){
+			this.karteAuspielen();
+			System.out.println("Button gedrückt");
+		}
+	}
+	
+	
 	
 }	
 
