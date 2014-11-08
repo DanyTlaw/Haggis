@@ -72,7 +72,6 @@ public class Client {
 						ladetGegnerInfo();
 						System.out.println(client_ID);
 						
-						ladetGegnerInfo();
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
 							login.getTisch().amZugButtons(true);																					
@@ -135,7 +134,7 @@ public class Client {
 					if(login.getTisch().getTxtAChat().getText().equals("")){
 						login.getTisch().getTxtAChat().setText(chat.getSpieler() +" : " +chat.getMessage());
 					}else{
-						login.getTisch().getTxtAChat().setText(login.getTisch().getTxtAChat().getText() + "\n" + chat.getSpieler() +" : " +chat.getMessage() + "\n");
+						login.getTisch().getTxtAChat().setText(login.getTisch().getTxtAChat().getText() + "\n" + chat.getSpieler() +" : " +chat.getMessage());
 					}
 					
 					
@@ -158,18 +157,38 @@ public class Client {
 	
 	//Methode welche die Informationen des Gegners ladet
 	public void ladetGegnerInfo(){
-		
+		int anzahlKarten = 0;
 		
 		//Ladet alle Gegner Informationen
 		if(client_ID == 0){
 			login.getTisch().setGegnerInfos(game.getSpieler(1).hatBube(), game.getSpieler(1).hatDame(), game.getSpieler(1).hatKoenig());
 			login.getTisch().setAnzahlKarten(game.getSpieler(1).getHandKarten().size()-3);
-			login.getTisch().lblPunkte.setText("Punkte : " +game.getSpieler(1).getPunkte());
+			login.getTisch().lblPunkteGegner.setText("Gegnerische Punktzahl : " +game.getSpieler(1).getPunkte());
+			login.getTisch().lblPunkteEigen.setText("Punktzahl : " +game.getSpieler(0).getPunkte());
+			
+			for (int i = 3; i < game.getSpieler(1).getHandKarten().size(); i++){
+				if(game.getSpieler(1).getHandKarten().get(i).getWert() != 0){
+					anzahlKarten += 1;
+					System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
+				}
+			}
+			
+			login.getTisch().lblHandkarten.setText("Handkarten : " +anzahlKarten);
+			anzahlKarten = 0;
 		}
 		else if(client_ID == 1){
 			login.getTisch().setGegnerInfos(game.getSpieler(0).hatBube(), game.getSpieler(0).hatDame(), game.getSpieler(0).hatKoenig());
 			login.getTisch().setAnzahlKarten(game.getSpieler(0).getHandKarten().size()-3);
-			login.getTisch().lblPunkte.setText("Punkte : " +game.getSpieler(0).getPunkte());
+			login.getTisch().lblPunkteGegner.setText("Gegnerische Punktzahl : " +game.getSpieler(0).getPunkte());
+			login.getTisch().lblPunkteEigen.setText("Punktzahl : " +game.getSpieler(1).getPunkte());
+			
+			for (int i = 3; i < game.getSpieler(0).getHandKarten().size(); i++){
+				if(game.getSpieler(0).getHandKarten().get(i).getWert() != 0){
+					anzahlKarten += 1;
+				}
+			}
+		
+			login.getTisch().lblHandkarten.setText("Handkarten : " +anzahlKarten);
 		}
 		
 	}

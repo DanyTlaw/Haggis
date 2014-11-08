@@ -65,9 +65,17 @@ public class Deck {
 	public Card gruen10;
 	
 	//JokerKarten	
-	public Card bube;	
-	public Card dame;
-	public Card koenig;
+	public Card bube1;	
+	public Card dame1;
+	public Card koenig1;
+	
+	private Card bube2;
+	private Card dame2;
+	private Card koenig2;
+	
+	private Card bube3;
+	private Card dame3;
+	private Card koenig3;
 
 	public boolean spieler1 = true;
 	
@@ -78,6 +86,7 @@ public class Deck {
 	public ArrayList<ArrayList<Card>> haende = new ArrayList<ArrayList<Card>>(3);
 	public ArrayList<Card> handKarten1 = new ArrayList<Card>();
 	public ArrayList<Card> handKarten2 = new ArrayList<Card>();
+	
 	
 	//Konstruktor welche ein Deck mit allen 54 Karten vom Typ Card erstellt
 	public Deck(){
@@ -291,9 +300,17 @@ public class Deck {
 		
 		//JokerKarten
 		
-		bube = new Card(11, "bube", iconBube,2,"",true);	
-		dame = new Card(12, "dame", iconDame,3,"",true);	
-		koenig = new Card(13, "koenig", iconKoenig,5,"",true);
+		bube1 = new Card(11, "bube", iconBube,2,"",true);	
+		dame1 = new Card(12, "dame", iconDame,3,"",true);	
+		koenig1 = new Card(13, "koenig", iconKoenig,5,"",true);
+		
+		bube2 = new Card(11, "bube", iconBube,2,"",true);	
+		dame2 = new Card(12, "dame", iconDame,3,"",true);	
+		koenig2 = new Card(13, "koenig", iconKoenig,5,"",true);
+		
+		bube3 = new Card(11, "bube", iconBube,2,"",true);	
+		dame3 = new Card(12, "dame", iconDame,3,"",true);	
+		koenig3 = new Card(13, "koenig", iconKoenig,5,"",true);
 
 
 		//F�gt alle Karten der ArrayList hinzu
@@ -347,17 +364,17 @@ public class Deck {
 		deck.add(rot9);
 		deck.add(rot10);
 		
-		deck.add(bube); //46
-		deck.add(bube);
-		deck.add(bube);
+		deck.add(bube1); //46
+		deck.add(bube2);
+		deck.add(bube3);
 		
-		deck.add(dame); //49
-		deck.add(dame);
-		deck.add(dame);
+		deck.add(dame1); //49
+		deck.add(dame2);
+		deck.add(dame3);
 		
-		deck.add(koenig); //52
-		deck.add(koenig);
-		deck.add(koenig);
+		deck.add(koenig1); //52
+		deck.add(koenig2);
+		deck.add(koenig3);
 		
 	}
 	
@@ -504,9 +521,19 @@ public class Deck {
 			}
 			deck.removeAll(deck);
 			
-			
 			haende.add(handKarten1);
 			haende.add(handKarten2);
+			
+			
+			System.out.println("------------------------------JokerKartenWert handkarten 1------------------------------");
+			for (int i = 0; i < 3; i++){
+				System.out.println(handKarten1.get(i).getWert());
+			}
+			
+			System.out.println("------------------------------JokerKartenWert handkarten 2------------------------------");
+			for (int i = 0; i < 3; i++){
+				System.out.println(handKarten2.get(i).getWert());
+			}
 
 		}
 		

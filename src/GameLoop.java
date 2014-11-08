@@ -68,13 +68,47 @@ public class GameLoop extends Thread{
 					else if(inputObject instanceof Gameobjekt){
 
 						Gameobjekt game = (Gameobjekt) inputObject;
+						
+						System.out.println("~~~~~~~~~~~~~~~~~JokerKarten Spieler 0 bevor zug ende~~~~~~~~~~~~~~~~~");
+						for(int i = 0; i< 3; i++){
+							System.out.println(game.getSpieler(0).getHandKarten().get(i).getPunkte());
+						}
+						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+						
+						System.out.println("~~~~~~~~~~~~~~~~~Handkarten Spieler 0 bevor zug ende~~~~~~~~~~~~~~~~~");
+						for(int i = 3; i< game.getSpieler(0).getHandKarten().size(); i++){
+							System.out.println(game.getSpieler(0).getHandKarten().get(i).getWert());
+						}
+						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+						
+						System.out.println("~~~~~~~~~~~~~~~~~JokerKarten Spieler 1 bevor zug ende~~~~~~~~~~~~~~~~~");
+						for(int i = 0; i< 3; i++){
+							System.out.println(game.getSpieler(1).getHandKarten().get(i).getPunkte());
+						}
+						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+						
+						System.out.println("~~~~~~~~~~~~~~~~~Handkarten Spieler 1 bevor zug ende~~~~~~~~~~~~~~~~~");
+						for(int i = 3; i< game.getSpieler(1).getHandKarten().size(); i++){
+							System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
+						}
+						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 						
 						//Wenn einer von beiden Spielern eine leeere Hand hat ist die Runde vorbei und die Logik wird angewandt
 						if(game.getSpieler(0).leereHand()){
 							System.out.println("leereHand Spieler 0");
 							
+							System.out.println("------------------JokerKarten Spieler 1------------------");
+							for(int i = 0; i< 3; i++){
+								System.out.println(game.getSpieler(1).getHandKarten().get(i).getPunkte());
+							}
+							System.out.println("---------------------------------------------------------");
 							
+							System.out.println("------------------Handkarten Spieler 1------------------");
+							for(int i = 3; i< game.getSpieler(1).getHandKarten().size(); i++){
+								System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
+							}
+							System.out.println("---------------------------------------------------------");
 							
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(1).getHandKarten().size(); i++){
@@ -99,7 +133,6 @@ public class GameLoop extends Thread{
 								game.setSpielBeendet(true);
 							}else{
 								game.setNeueRunde(true);
-								System.out.println(game.getSpieler(0).berechnePunkte());
 								game.erstelleDeck();
 							}
 
@@ -130,7 +163,6 @@ public class GameLoop extends Thread{
 								game.setSpielBeendet(true);
 							}else{
 								game.setNeueRunde(true);
-								System.out.println(game.getSpieler(1).berechnePunkte());
 								game.erstelleDeck();
 							}
 
