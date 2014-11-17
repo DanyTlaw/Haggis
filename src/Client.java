@@ -1,3 +1,5 @@
+import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -5,6 +7,8 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import javax.swing.JOptionPane;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 
 public class Client {
@@ -157,6 +161,13 @@ public class Client {
 	
 	//Methode welche die Informationen des Gegners ladet
 	public void ladetGegnerInfo(){
+				
+		
+		login.getTisch().haggis.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		login.getTisch().Haggisborder.setTitle("Haggis: " + game.getHaeggis().size());
+		login.getTisch().haggis.setBorder(login.getTisch().Haggisborder);
+		
+		
 		int anzahlKarten = 0;
 		
 		//Ladet alle Gegner Informationen
@@ -165,6 +176,7 @@ public class Client {
 			login.getTisch().setAnzahlKarten(game.getSpieler(1).getHandKarten().size()-3);
 			login.getTisch().lblPunkteGegner.setText("Gegnerische Punktzahl : " +game.getSpieler(1).getPunkte());
 			login.getTisch().lblPunkteEigen.setText("Punktzahl : " +game.getSpieler(0).getPunkte());
+			
 			
 			for (int i = 3; i < game.getSpieler(1).getHandKarten().size(); i++){
 				if(game.getSpieler(1).getHandKarten().get(i).getWert() != 0){
