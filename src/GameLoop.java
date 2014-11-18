@@ -127,6 +127,9 @@ public class GameLoop extends Thread{
 							
 							System.out.println(game.getSpieler(0).getPunkte());
 							
+							//Der Spieler der keine Karten mehr auf der Hand hat bekommt die Punkte der Wette
+							game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte() + game.getSpieler(0).getWette());
+							
 							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
 							if(game.getSpieler(0).getPunkte() >= game.getSpieler(0).getSiegesPunkte() && game.getSpieler(0).getPunkte() > game.getSpieler(1).getPunkte()){
 								game.getSpieler(0).setSieger(true);
@@ -156,6 +159,9 @@ public class GameLoop extends Thread{
 							game.getSpieler(0).setPunkte(game.getSpieler(0).berechnePunkte());
 							
 							System.out.println(game.getSpieler(1).getPunkte());
+							
+							//Der Spieler der keine Karten mehr auf der Hand hat bekommt die Punkte der Wette
+							game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte() + game.getSpieler(1).getWette());
 							
 							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
 							if(game.getSpieler(1).getPunkte() >= game.getSpieler(1).getSiegesPunkte() && game.getSpieler(1).getPunkte() > game.getSpieler(0).getPunkte()){

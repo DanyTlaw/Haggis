@@ -1240,6 +1240,36 @@ public class Spieltisch extends JFrame{
 		}
 	}
 	
+	//Methode welche die die Wetten eingiebt
+	public int wetten(){
+		int wette = 0;
+		
+		String[] choices = {"keine Wette", "kleine Wette", "Grosse Wette"};
+		int eingabe = JOptionPane.showOptionDialog(
+		                               null                     
+		                             , "Möchten Sie eine Wette abschliessen? kleine Wette = 15 Punkte, grosse Wette = 30 punkte"     
+		                             , "Wette abschliessen"             
+		                             , JOptionPane.YES_NO_OPTION  
+		                             , JOptionPane.PLAIN_MESSAGE 
+		                             , null                     
+		                             , choices                    
+		                             , "Wette wurde abgeschlossen"   
+		                           );
+		
+		if(eingabe == 0){
+			wette = 0;
+		}
+		else if(eingabe == 1){
+			wette = 15;
+		}
+		else if(eingabe == 2){
+			wette = 30;
+		}
+		
+		return wette;
+	}
+	
+	
 	//Methode welche den Spieler auffordert einen Wert fuer den Joker einzugeben und diese zurï¿½ck gibt
 	public int jokerWert(int i){
 		
