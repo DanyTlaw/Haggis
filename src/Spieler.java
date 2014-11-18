@@ -13,6 +13,7 @@ public class Spieler implements Serializable {
 	private boolean passen = false;
 	private int siegesPunkte;
 	private boolean sieger = false;
+	private int wette;
 	
 	public ArrayList<Card> gewonneneKarten = new ArrayList<Card>();
 	
@@ -31,6 +32,15 @@ public class Spieler implements Serializable {
 	public int getSpieler_ID() {
 		return spieler_ID;
 	}
+	
+	public int getWette(){
+		return this.wette;
+	}
+	
+	public void setWette(int wette){
+		this.wette = wette;
+	}
+	
 	public void setSpieler_ID(int spieler_ID) {
 		this.spieler_ID = spieler_ID;
 	}

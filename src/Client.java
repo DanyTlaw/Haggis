@@ -72,6 +72,11 @@ public class Client {
 						ladetGegnerInfo();
 						System.out.println(client_ID);
 						
+						//Wetten können abgeschlossen werden
+						System.out.println("Wette kann getan werden");
+						game.getSpieler(client_ID).setWette(login.getTisch().wetten());
+						System.out.println("Die Wette ist: " + game.getSpieler(client_ID).getWette());
+						
 						//Die Methode welche die Buttons disabled und enabled wird fÃ¼r beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
 							login.getTisch().amZugButtons(true);																					
@@ -118,6 +123,10 @@ public class Client {
 						
 						System.out.println("---------------------------------------------");
 						
+						//Wetten können abgeschlossen werden
+						System.out.println("Wette kann getan werden");
+						game.getSpieler(client_ID).setWette(login.getTisch().wetten());
+						System.out.println("Die Wette ist: " + game.getSpieler(client_ID).getWette());
 						
 						//Die Methode welche die Buttons disabled und enabled wird fÃ¼r beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){

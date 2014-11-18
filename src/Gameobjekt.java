@@ -12,6 +12,8 @@ public class Gameobjekt implements Serializable {
 	public boolean neueRunde;
 	public boolean spielBeendet;
 	
+	
+	
 	public Gameobjekt(ArrayList<Spieler> spieler){
 		this.neueRunde = true;
 		this.spieler = spieler;
