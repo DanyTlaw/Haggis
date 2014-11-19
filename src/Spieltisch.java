@@ -628,7 +628,25 @@ public class Spieltisch extends JFrame implements ActionListener{
 					sendeGameObjekt();
 					
 				}
-								
+				
+				//Wenn die Karten eine Bombe sind können sie alles stechen ausser eine höhere Bombe
+				
+				//Bombe sticht eine andere Bombe wenn sie höher ist wie die andere Bombe
+				else if(istBombe(gespielteKarten) > istBombe(Client.game.getFeldkarten())){
+					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
+					kartenFeldKopieren(gespielteKarten);
+					sendeGameObjekt();
+				}
+				
+				//Bombe sticht alle anderen Kombinationen
+				else if(istBombe(gespielteKarten) > 0){
+					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
+					kartenFeldKopieren(gespielteKarten);
+					sendeGameObjekt();
+				}
+				
 				//Wenn die Karten ein Paar sind und sie hoecher sind wie das bereits gespielte Paar, Stich erfolgreich
 				else if(istPaar(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 			
@@ -818,6 +836,13 @@ public class Spieltisch extends JFrame implements ActionListener{
 					
 				}
 				
+				//Wenn die Karten eine Bombe sind
+				else if(istBombe(gespielteKarten) > 0){
+					karteAnzeigen(gespielteKarten);
+					karteLoeschen();
+					kartenFeldKopieren(gespielteKarten);
+					sendeGameObjekt();
+				}
 				//Wenn die Karten ein Paar sind dann Spiel sie aus
 				else if(istPaar(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
@@ -2131,6 +2156,145 @@ public class Spieltisch extends JFrame implements ActionListener{
 		return false;
 	
 	} 
+	
+	//Ueberprueft ob es eine Bombe und welche im Ranking
+	public int istBombe(ArrayList<Card> karten){
+		/*
+		 * Bomben Ranking:
+		 * 1. 3 - 5 - 7 - 9 gleiche Farbe
+		 * 2. B - D - K 
+		 * 3. D - K
+		 * 4. B - K
+		 * 5. B - D
+		 * 6. 3 - 5 - 7 - 9 ungleiche Farbe
+		 */
+		
+		
+		
+		
+		int testBombe6 = 0;
+		int testBombe5 = 0;
+		int testBombe4 = 0;
+		int testBombe3 = 0;
+		int testBombe2 = 0;
+		int testBombe1 = 0;
+		
+		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
+		jokerWertWechsel(karten);
+
+		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
+		Collections.sort(karten);
+		
+		
+		//Bombe 6 3 - 5 - 7 - 9 ungleiche Farbe
+		
+		if(karten.size() == 4){
+
+			//Bei drei beginnt die Bombe
+			int zahl = 3;
+			for(int i = 0; i < karten.size(); i++){
+				
+				//Wenn die Karte die gesuchte Zahl hat, kein Joker ist 
+				if(karten.get(i).getWert()== zahl && karten.get(i).getJoker()== false){
+					testBombe1++;
+				}
+				zahl+=2;
+
+			}
+		}
+		
+		//Bombe 5 B - D
+		
+		//Es muessen 2 Karten sein
+		if(karten.size() == 2){
+			for(int i = 0; i <karten.size(); i++){
+				if(karten.get(i).getWert() == 11 || karten.get(i).getWert() == 12){
+					testBombe5++;
+				}
+			}
+		}
+		
+		//Bombe 4 B - K
+		
+		//Es muessen 2 Karten sein
+		if(karten.size() == 2){
+			for(int i = 0; i <karten.size(); i++){
+				if(karten.get(i).getWert() == 11 || karten.get(i).getWert() == 13){
+					testBombe4++;
+				}
+			}
+		}
+		
+		//Bombe 3 D - K
+		
+		//Es muessen 2 Karten sein
+		if(karten.size() == 2){
+			for(int i = 0; i<karten.size(); i++){
+				if(karten.get(i).getWert() == 12 || karten.get(i).getWert() == 13){
+					testBombe3++;
+				}
+			}
+		}
+		
+		//Bombe 2 B - D - K
+		
+		//Es muessen 3 Karten sein
+		if(karten.size() == 3){
+			for(int i = 0; i<karten.size(); i++){
+				if(karten.get(i).getWert() == 11 || karten.get(i).getWert() == 12 || karten.get(i).getWert() == 13){
+					testBombe2++;
+				}
+			}
+		}
+		
+		//Bombe 1 3 - 5 - 7 - 9
+		
+		//Es muessen 4 Karten sein
+		if(karten.size() == 4){
+			//Speichert die zu untersuchende Farbe ab
+			String farbe = karten.get(1).getFarbe();
+			//Bei drei beginnt die Bombe
+			int zahl = 3;
+			for(int i = 0; i < karten.size(); i++){
+				
+				//Wenn die Karte die gesuchte Zahl hat, kein Joker ist und die gleiche Farbe wie alle hat
+				if(karten.get(i).getWert()== zahl && karten.get(i).getJoker()== false && karten.get(i).getFarbe() == farbe){
+					testBombe1++;
+				}
+				zahl+=2;
+
+			}
+		}
+		
+		//Je nach Bombe wird gemaess der Rangliste eine anderen Wert zurueck gegeben
+		
+		if(testBombe6 == 4){
+			return 6;
+		}
+		else if(testBombe5 == 2){
+			return 5;
+		}
+		else if(testBombe4 == 2){
+			return 4;
+		}
+		else if(testBombe3 == 2){
+			return 3;
+		}
+		else if(testBombe2 == 3){
+			return 2;
+		}
+		else if(testBombe1 == 4){
+			return 1;
+		}else{
+			return 0;
+		}
+		
+		
+		
+		
+		
+	}
+	
 	
 	/***************************************************************************************
 	Methoden welche kontrolliert ob die bei einem neuen Hand auszuspielenden Karten legitim 
