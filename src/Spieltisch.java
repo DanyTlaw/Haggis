@@ -3,12 +3,16 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,12 +21,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,9 +51,15 @@ import javax.swing.border.LineBorder;
 
 
 
+
+
+
+
+import javax.swing.border.TitledBorder;
+
 import java.lang.*;
 
-public class Spieltisch extends JFrame implements ActionListener{
+public class Spieltisch extends JFrame{
 
 	private Image image;
 	private ImageIcon icon;
@@ -96,7 +110,10 @@ public class Spieltisch extends JFrame implements ActionListener{
 	private ImageIcon jDameIcon;
 	private Image jKoenig;
 	private ImageIcon jKoenigIcon;
-	private Image hintergrund;
+	 
+	
+	private ImageIcon hintergrund;
+	private Image imageHintergrund;
 	
 	
 	static ObjectOutputStream out;
@@ -121,6 +138,49 @@ public class Spieltisch extends JFrame implements ActionListener{
 	public JLabel lblPunkteEigen;
 	public JLabel lblPunkteGegner;
 	public JLabel lblHandkarten;
+	private Image imageHaggis;
+	private ImageIcon iconHaggis;
+	JPanel haggis = new JPanel();
+	public JLabel haggisKarten = new JLabel ("Haggis:");
+	public TitledBorder Haggisborder = new TitledBorder(null,haggisKarten.getText(),TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
+	public JLabel lblEigeneWetten;
+	public JLabel lblGegnerWetten;
+	
+	private int kartenBreite = 60;
+	private int kartenHoehe = 100;
+	private int spielfeldHoehe = 110;
+	private int spielfeldBreite = 545;
+	private int rueckseiteBreite = 80;
+	private int rueckseiteHoehe = 130;
+	private int haggisBreite = 200;
+	private int haggisHoehe = 100;
+	private int iconBreite = 60;
+	private int iconHoehe = 60;
+	private int linksStrBreite = 200;
+	private int linksStrHoehe = 200;
+	private int rechtsStrBreite = 500;
+	private int rechtsStrHoehe = 240;
+	private int eigeneKartenBreite = 500;
+	private int eigeneKartenHoehe = 110;
+	private int chatHoehe = 200;
+	private int chatPanelBreite = 200;
+	private int chatPanelHoehe = 300;
+	
+	private JButton jbtNichtWetten;
+	private JButton jbtKleineWette;
+	private JButton jbtGrosseWette;
+	
+	private JLayeredPane mainPanel;
+	private JPanel eroeffnungLayer;
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public Spieltisch(ObjectOutputStream out, ObjectInputStream in, String name){
 		
@@ -135,28 +195,79 @@ public class Spieltisch extends JFrame implements ActionListener{
 					
 		JFrame Tisch = new JFrame("Haggis");
 		
-		//JPanel fuer das ganze Frame wird erstellt fuer die HIntergrundfarbe
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridBagLayout());
+		//Main Panel
+		 mainPanel = new JLayeredPane();
+		
+		//Hauptlayer
+		JPanel hauptLayer = new EigenPanel(3);
+		
+		//Layer für Spielanfang
+		eroeffnungLayer = new EigenPanel(4);
+				
+		hauptLayer.setLayout(new GridBagLayout());
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.weightx = 0;
 		cons.weighty = 0;
+		
+		 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		 double width = screenSize.getWidth();
+		 double height = screenSize.getHeight();
+		 
+		 if(height > 1000 && width > 1300){
+			 kartenBreite = 100;
+			 kartenHoehe = 150;
+			 spielfeldBreite = 825;
+			 spielfeldHoehe = 170;
+			 haggisBreite = 400;
+			 haggisHoehe = 200;			 
+			 iconBreite = 150;
+			 iconHoehe = 150;			
+			 linksStrBreite = 310;
+			 linksStrHoehe = 200; 
+			 rechtsStrBreite = 800;
+			 rechtsStrHoehe = 360;
+			 eigeneKartenBreite = 800;	
+			 eigeneKartenHoehe = 170;
+			 rueckseiteBreite = 150;
+			 rueckseiteHoehe = 200;
+			 chatPanelBreite = 200;
+			 chatPanelHoehe = 400;
+			 chatHoehe = 300;
+							 
+		 }
+		 
+		//border
+		LineBorder borderinvis = new LineBorder(Color.BLACK, 0, true);
+		LineBorder border = new LineBorder(Color.BLACK, 3, true);
+		LineBorder borderWhite = new LineBorder(Color.WHITE, 3, true);
+		TitledBorder Chatborder = new TitledBorder(border,"Chat",TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
+		TitledBorder Handkartenborder = new TitledBorder(borderinvis,"Handkarten",TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
+		TitledBorder Jokerkartenborder = new TitledBorder(borderinvis,"Jokerkarten",TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
+		Haggisborder.setBorder(borderinvis);
+		
 				
 		/***************************************************************************************
-		NORTH TEIL DES FRAMES
+		NORTH TEIL DES hauptLayer
 		****************************************************************************************/
 		
 		//JPanel welche alle informationen ueber den Gegner beinhaltet
-		JPanel enemy = new JPanel();
-		JPanel enemyKarten = new JPanel();
+		JPanel enemy = new EigenPanel(3);
+		JPanel enemyKarten = new EigenPanel(3);
 		
 		enemy.setLayout(new BoxLayout(enemy, BoxLayout.X_AXIS));
 		
 		enemyKarten.setLayout(new GridBagLayout());
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
+		
+		imageHaggis = new ImageIcon(pfad +"haggis.jpg").getImage();
+		iconHaggis = new ImageIcon(imageHaggis.getScaledInstance(haggisBreite, haggisHoehe, Image.SCALE_DEFAULT));	
+		JLabel lblHaggisImage = new JLabel();
+		lblHaggisImage.setIcon(iconHaggis);
+		
+		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
 		image = new ImageIcon(pfad +"icon.jpg").getImage();
-		icon = new ImageIcon(image.getScaledInstance(150, 150, Image.SCALE_DEFAULT));	
+		icon = new ImageIcon(image.getScaledInstance(iconBreite, iconHoehe, Image.SCALE_DEFAULT));	
 		JLabel lblImage = new JLabel();
 		lblImage.setIcon(icon);
 		
@@ -165,7 +276,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 		lblDame = new JLabel("Dame: " + dameAnzahl);
 		lblKoenig = new JLabel("Koenig: " + koenigAnzahl);
 		lblHandkarten = new JLabel("HandKarten: ");
-		JPanel PunkteInfo = new JPanel();
+		JPanel PunkteInfo = new EigenPanel(3);
 		PunkteInfo.setLayout(new GridBagLayout());
 		lblPunkteEigen = new JLabel("Punkte: ");
 		lblPunkteGegner = new JLabel("Gegnerische Punkte: ");
@@ -204,43 +315,51 @@ public class Spieltisch extends JFrame implements ActionListener{
 		cons.gridx = 0;
 		PunkteInfo.add(lblPunkteGegner, cons);
 		
+		//Label schriftfarbe ändern
+		lblBube.setForeground(Color.black);
+		lblDame.setForeground(Color.black);
+		lblKoenig.setForeground(Color.black);
+		lblHandkarten.setForeground(Color.black);
+		lblPunkteEigen.setForeground(Color.black);
+		lblPunkteGegner.setForeground(Color.black);
+		
 		//Added alle Componente dem JPanel enemy
 		
 		
 		enemy.add(lblImage);
 		enemy.add(enemyKarten);
+		enemy.add(lblHaggisImage);
 		enemy.add(PunkteInfo);
 		
 		cons.ipady = 0;
 		cons.ipadx = 0;		
 		
 		/***************************************************************************************
-		CENTER TEIL DES FRAMES
+		CENTER TEIL DES hauptLayer
 		****************************************************************************************/
 		JPanel spiel = new JPanel();
-		JPanel haggis = new JPanel();
-		JPanel spielfeld = new JPanel();
+		
+		JPanel spielfeld = new EigenPanel(2);
 		
 		
 		spiel.setLayout(new FlowLayout());
 		haggis.setLayout(new BoxLayout(haggis, BoxLayout.Y_AXIS));
 		spielfeld.setLayout(new BoxLayout(spielfeld, BoxLayout.Y_AXIS));
 
-		
-		//Erstellt das JLabel mit der Anzahl Haggis Karten
-		JLabel haggisKarten = new JLabel("Haggis: " + haggisAnzahl);
+	
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
 		imageRueckseite = new ImageIcon(pfad +"rueckseite.jpg").getImage();
-		rueckseite = new ImageIcon(imageRueckseite.getScaledInstance(150, 200, Image.SCALE_DEFAULT));	
+		rueckseite = new ImageIcon(imageRueckseite.getScaledInstance(rueckseiteBreite, rueckseiteHoehe, Image.SCALE_DEFAULT));	
 		JLabel lblHaggis = new JLabel();
 		lblHaggis.setIcon(rueckseite);
 		
+		
 		//JPanel fuer den Oberen Teil des Spielfeld
 		JPanel spielfeldoben = new JPanel();
-		spielfeldoben.setPreferredSize(new Dimension(800, 170));
-		spielfeldoben.setMaximumSize(new Dimension(800, 170));
-		spielfeldoben.setMinimumSize(new Dimension(800, 170));
+		spielfeldoben.setPreferredSize(new Dimension(spielfeldBreite, spielfeldHoehe));
+		spielfeldoben.setMaximumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
+		spielfeldoben.setMinimumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setLayout(new BoxLayout(spielfeldoben, BoxLayout.X_AXIS));
 			
 		Color bg = new Color(135,210,229);
@@ -251,11 +370,10 @@ public class Spieltisch extends JFrame implements ActionListener{
 		spielfeldoben.add(Box.createHorizontalStrut(30));
 		for(int i = 0;i<7;i++){
 			JLabel anzeigeKarte = new JLabel();
-			anzeigeKarte.setPreferredSize(new Dimension(100, 150));
-			anzeigeKarte.setMaximumSize(new Dimension(100, 150));
-			anzeigeKarte.setMinimumSize(new Dimension(100, 150));
-			anzeigeKarte.setOpaque(true);
-			anzeigeKarte.setBackground(Color.black);
+			anzeigeKarte.setPreferredSize(new Dimension(kartenBreite+6, kartenHoehe+5));
+			anzeigeKarte.setMaximumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
+			anzeigeKarte.setMinimumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
+			anzeigeKarte.setBorder(border);
 			anzeigeKarten[i] = anzeigeKarte;
 			spielfeldoben.add(anzeigeKarten[i]);
 			spielfeldoben.add(Box.createHorizontalStrut(5));
@@ -263,9 +381,9 @@ public class Spieltisch extends JFrame implements ActionListener{
 		
 		//JPanel fuer den unteren Teil des Spielfelds
 		JPanel spielfeldunten = new JPanel();
-		spielfeldunten.setPreferredSize(new Dimension(800, 170));
-		spielfeldunten.setMaximumSize(new Dimension(800, 170));
-		spielfeldunten.setMinimumSize(new Dimension(800, 170));
+		spielfeldunten.setPreferredSize(new Dimension(spielfeldBreite, spielfeldHoehe));
+		spielfeldunten.setMaximumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
+		spielfeldunten.setMinimumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldunten.setLayout(new BoxLayout(spielfeldunten, BoxLayout.X_AXIS));
 					
 
@@ -276,33 +394,29 @@ public class Spieltisch extends JFrame implements ActionListener{
 		spielfeldunten.add(Box.createHorizontalStrut(30));
 		for(int i = 7;i<14;i++){
 			JLabel anzeigeKarte = new JLabel();
-			anzeigeKarte.setPreferredSize(new Dimension(100, 150));
-			anzeigeKarte.setMaximumSize(new Dimension(100, 150));
-			anzeigeKarte.setMinimumSize(new Dimension(100, 150));
-			anzeigeKarte.setOpaque(true);
-			anzeigeKarte.setBackground(Color.black);
+			anzeigeKarte.setPreferredSize(new Dimension(kartenBreite+6, kartenHoehe+5));
+			anzeigeKarte.setMaximumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
+			anzeigeKarte.setMinimumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
+			anzeigeKarte.setBorder(border);
 			anzeigeKarten[i] = anzeigeKarte;
 			spielfeldunten.add(anzeigeKarten[i]);
 			spielfeldunten.add(Box.createHorizontalStrut(5));
 		}
 		
-		
-		haggis.add(haggisKarten);
+				
 		haggis.add(lblHaggis);
-		haggis.setBorder(new EmptyBorder(0,0,0,50));
+		haggis.setBorder(Haggisborder);
 		
 		spielfeld.add(spielfeldoben);
 		spielfeld.add(spielfeldunten);
+		spielfeld.setBorder(border);
 		
 		spiel.add(haggis);
 		
 		spiel.add(spielfeld);
 		
-		
-		
-		
 		/***************************************************************************************
-		SOUTH TEIL DES FRAMES
+		SOUTH TEIL DES hauptLayer
 		****************************************************************************************/
 		
 		JPanel spielSteuerung = new JPanel();
@@ -313,26 +427,23 @@ public class Spieltisch extends JFrame implements ActionListener{
 		
 		JPanel linksSteuerung = new JPanel();
 		linksSteuerung.setLayout(new BoxLayout(linksSteuerung, BoxLayout.Y_AXIS));	
-		linksSteuerung.setPreferredSize(new Dimension(350,200));
-		linksSteuerung.setMaximumSize(new Dimension(350,200));
-		linksSteuerung.setMinimumSize(new Dimension(350,200));
+		linksSteuerung.setPreferredSize(new Dimension(linksStrBreite,linksStrHoehe));
+		linksSteuerung.setMaximumSize(new Dimension(linksStrBreite,linksStrHoehe));
+		linksSteuerung.setMinimumSize(new Dimension(linksStrBreite,linksStrHoehe));
 		
 		JPanel rechtsSteuerung = new JPanel();
 		rechtsSteuerung.setLayout(new BoxLayout(rechtsSteuerung, BoxLayout.Y_AXIS));
-		rechtsSteuerung.setPreferredSize(new Dimension(800,360));
-		rechtsSteuerung.setMaximumSize(new Dimension(800,360));
-		rechtsSteuerung.setMinimumSize(new Dimension(800,360));
+		rechtsSteuerung.setPreferredSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
+		rechtsSteuerung.setMaximumSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
+		rechtsSteuerung.setMinimumSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
 		
 		//Alle Container fï¿½r das  Panel jokerkarten werden gemacht		
 		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons, BoxLayout.X_AXIS));
-		buttons.setAlignmentX(LEFT_ALIGNMENT);
+		buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		
-
-	
 		jbtSpielen = new JButton("Spielen");
-		jbtSpielen.addActionListener(this);
+		jbtSpielen.addActionListener(bHandler);
 		jbtPassen = new JButton("Passen");
 		jbtPassen.addActionListener(bHandler);
 
@@ -342,103 +453,103 @@ public class Spieltisch extends JFrame implements ActionListener{
 		this.jbtPassen.setEnabled(false);
 
 		
-		
 		jbtSpielen.addActionListener(cHandler);
 		buttons.add(jbtSpielen);
 		buttons.setBorder(new EmptyBorder(0,0,0,10));
 		buttons.add(jbtPassen);
 		
 		//Alle Container und Buttons fuer den Rechtssteuerung teil
-		
-		JLabel lbljokerkarten = new JLabel("Jokerkarten");
-		JLabel lbleigeneKarten = new JLabel("Handkarten");
-		
-		JPanel lblHalter = new JPanel();
-		lblHalter.setLayout(new FlowLayout(FlowLayout.LEFT));
-		lblHalter.add(lbleigeneKarten);
-		
-		
-		
-		JPanel eigeneKartenButtonsOben = new JPanel();
-		eigeneKartenButtonsOben.setPreferredSize(new Dimension(800, 170));
-		eigeneKartenButtonsOben.setMaximumSize(new Dimension(800, 170));
-		eigeneKartenButtonsOben.setMinimumSize(new Dimension(800, 170));
+		JPanel eigeneKartenButtonsOben = new EigenPanel(3);
+		eigeneKartenButtonsOben.setPreferredSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
+		eigeneKartenButtonsOben.setMaximumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
+		eigeneKartenButtonsOben.setMinimumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsOben.setLayout(new BoxLayout(eigeneKartenButtonsOben, BoxLayout.X_AXIS));
 		
 		//Generiert 7 Buttons und fï¿½gt sie dem Array hinzu	
 		for(int i = 0;i<7;i++){
 			JButton jbtKarte = new JButton();
-			jbtKarte.setPreferredSize(new Dimension(100,150));
-			jbtKarte.setMaximumSize(new Dimension(100,150));
-			jbtKarte.setMinimumSize(new Dimension(100,150));
-			jbtKarte.setBounds(kartenBound, 5, 100, 150);
+			jbtKarte.setPreferredSize(new Dimension(kartenBreite,kartenHoehe));
+			jbtKarte.setMaximumSize(new Dimension(kartenBreite,kartenHoehe));
+			jbtKarte.setMinimumSize(new Dimension(kartenBreite,kartenHoehe));
+			jbtKarte.setBounds(kartenBound, 5, 60, 100);
 			btnKarte[i] = jbtKarte;
 			btnKarte[i].addActionListener(cHandler);
 			gedrucktHand[i] = false;
 			eigeneKartenButtonsOben.add(btnKarte[i]);
-			kartenBound+=100;
+			kartenBound+=kartenBreite;
 		}
 		
-		JPanel eigeneKartenButtonsUnten = new JPanel();
-		eigeneKartenButtonsUnten.setPreferredSize(new Dimension(800, 170));
-		eigeneKartenButtonsUnten.setMaximumSize(new Dimension(800, 170));
-		eigeneKartenButtonsUnten.setMinimumSize(new Dimension(800, 170));
+		JPanel eigeneKartenButtonsUnten = new EigenPanel(3);
+		eigeneKartenButtonsUnten.setPreferredSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
+		eigeneKartenButtonsUnten.setMaximumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
+		eigeneKartenButtonsUnten.setMinimumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsUnten.setLayout(new BoxLayout(eigeneKartenButtonsUnten, BoxLayout.X_AXIS));
 		
 		//Generiert 7 Buttons und fï¿½gt sie dem Array hinzu	
 		for(int i = 7;i<14;i++){
 			kartenBound = 0;
 			JButton jbtKarte = new JButton();
-			jbtKarte.setPreferredSize(new Dimension(100,150));
-			jbtKarte.setMaximumSize(new Dimension(100,150));
-			jbtKarte.setMinimumSize(new Dimension(100,150));
-			jbtKarte.setBounds(kartenBound, 5, 100, 150);
+			jbtKarte.setPreferredSize(new Dimension(kartenBreite,kartenHoehe));
+			jbtKarte.setMaximumSize(new Dimension(kartenBreite,kartenHoehe));
+			jbtKarte.setMinimumSize(new Dimension(kartenBreite,kartenHoehe));
+			jbtKarte.setBounds(kartenBound, 5, 60, 100);
 			btnKarte[i] = jbtKarte;
 			btnKarte[i].addActionListener(cHandler);
 			gedrucktHand[i] = false;
 			eigeneKartenButtonsUnten.add(btnKarte[i]);
-			kartenBound+=100;
+			kartenBound+=kartenBreite;
 		}
 
-		JPanel jokerkarten = new JPanel();
-		jokerkarten.setLayout(null);
+		JPanel jokerkarten = new EigenPanel(3);
+		jokerkarten.setLayout(new BoxLayout(jokerkarten, BoxLayout.X_AXIS));
 		
 		for(int i = 0; i<3;i++){
 			JButton jokerKarte = new JButton();
-			jokerKarte.setPreferredSize(new Dimension(100,150));
-			jokerKarte.setMaximumSize(new Dimension(100,150));
-			jokerKarte.setMinimumSize(new Dimension(100,150));
-			jokerKarte.setBounds(jokerKartenBound, 5 ,100,150);
+			jokerKarte.setPreferredSize(new Dimension(kartenBreite,kartenHoehe));
+			jokerKarte.setMaximumSize(new Dimension(kartenBreite,kartenHoehe));
+			jokerKarte.setMinimumSize(new Dimension(kartenBreite,kartenHoehe));
+			jokerKarte.setBounds(jokerKartenBound, 5 ,60,100);
 			jokerKarten[i] = jokerKarte;
 			jokerKarten[i].addActionListener(cHandler);
 			gedrucktJoker[i] = false;
 			jokerkarten.add(jokerKarten[i]);
-			jokerKartenBound+=100;
+			jokerKartenBound+=kartenBreite;
 			
 		}
 		
-		rechtsSteuerung.add(lblHalter);
 		rechtsSteuerung.add(eigeneKartenButtonsOben);
 		rechtsSteuerung.add(eigeneKartenButtonsUnten);
-		linksSteuerung.add(lbljokerkarten);
+		rechtsSteuerung.setBorder(Handkartenborder);
+		
 		linksSteuerung.add(jokerkarten);
 		linksSteuerung.add(buttons);
+		linksSteuerung.setBorder(Jokerkartenborder);
+		
 		kartenSteuerung.add(linksSteuerung);
+		kartenSteuerung.add(Box.createRigidArea(new Dimension(50,0)));
 		kartenSteuerung.add(rechtsSteuerung);
 		
 		spielSteuerung.add(kartenSteuerung);
 		
+		/***************************************************************************************
+		CHAT / WETTEN PANELS
+		****************************************************************************************/
 		
-		//Chat stuff		
-		JPanel chatPanel = new JPanel();
+		//Chat		
+		JPanel chatPanel = new EigenPanel(3);
+		chatPanel.setPreferredSize(new Dimension(chatPanelBreite, chatPanelHoehe));
+		chatPanel.setMaximumSize(new Dimension(chatPanelBreite, chatPanelHoehe));
+		chatPanel.setMinimumSize(new Dimension(chatPanelBreite, chatPanelHoehe));
 		chatPanel.setLayout(new GridBagLayout());
+		
 		jbtEingabe = new JButton("Eingabe");
 		jbtEingabe.addActionListener(bHandler);
-		
-		txtAChat = new JTextArea(20,1);
+				
+		txtAChat = new JTextArea(10,20);
 		txtAChat.setLineWrap(true);
-	    //chat.setEditable(false);
-		txtAChat.setVisible(true);
+	    txtAChat.setEditable(false);
+	  	txtAChat.setVisible(true);
+		txtAChat.setBorder(Chatborder);
 
 	    JScrollPane scroll = new JScrollPane (txtAChat);
 	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -447,67 +558,140 @@ public class Spieltisch extends JFrame implements ActionListener{
 		
 		txtAEingabe = new JTextArea(3,10);
 		txtAEingabe.setLineWrap(true);
-		
+				
 		cons.weightx = 0.0;
-		cons.gridy = 0;
+		cons.gridy = 1;
 		cons.gridx = 0;
 		cons.gridwidth = 2;
 		cons.fill = GridBagConstraints.HORIZONTAL;
+		cons.ipady = chatHoehe;
+		cons.ipadx = 1;
+		cons.insets = new Insets(10,0,0,0);
 		chatPanel.add(txtAChat, cons);
 		
-		
-		cons.fill = 0;
+		cons.ipady = 0;
+		cons.fill = GridBagConstraints.BOTH;
 		cons.weightx = 0;
+		cons.weighty = 0;
 		cons.gridwidth = 1;
-		cons.gridy = 1;
+		cons.gridy = 2;
 		cons.gridx = 0;
 		chatPanel.add(txtAEingabe, cons);
 		
-		cons.gridy = 1;
+		
+		cons.gridy = 2;
 		cons.gridx = 1;
 		chatPanel.add(jbtEingabe,cons);
 		
-		//Alles dem MainPanel adden
+		//Wetten
+		JPanel WettenPanel = new EigenPanel(3);
+		WettenPanel.setLayout(new BoxLayout(WettenPanel,BoxLayout.Y_AXIS));
+		lblEigeneWetten = new JLabel("Eigene Wette");
+		lblGegnerWetten = new JLabel("Gegner Wette");
+			
+		WettenPanel.add(lblEigeneWetten);
+		WettenPanel.add(lblGegnerWetten);
+		
+				
+		//Alles dem hauptLayer adden
+		cons.weightx=0;
+		cons.weighty=0;
 		
 		cons.gridx = 0;
 		cons.gridy = 0;
-		mainPanel.add(enemy, cons);
+		hauptLayer.add(enemy, cons);
 		
 		cons.gridx = 0;
 		cons.gridy = 1;
-		mainPanel.add(spiel, cons);
+		hauptLayer.add(spiel, cons);
 		
 		cons.weightx = 0;
 		cons.weighty = 0;
 		cons.gridx = 0;
 		cons.gridy = 2;
 		cons.gridwidth = 1;
-		mainPanel.add(spielSteuerung,cons);
+		hauptLayer.add(spielSteuerung,cons);
+		
+		cons.gridx = 1;
+		cons.gridy = 1;
+		hauptLayer.add(WettenPanel,cons);
 		
 		cons.weightx = 0;
 		cons.weighty = 0;
-		cons.gridwidth = 1;
 		cons.gridx = 1;
 		cons.gridy = 2;
-		cons.gridheight = 2;
-		mainPanel.add(chatPanel, cons);
+		hauptLayer.add(chatPanel, cons);
+		
+		
+		//Alle Panels transparent
+		PunkteInfo.setBackground(new Color(0,0,0,1));
+		enemy.setBackground(new Color(0,0,0,1));
+		enemyKarten.setBackground(new Color(0,0,0,1));
+		spiel.setBackground(new Color(0,0,0,1));
+		haggis.setBackground(new Color(0,0,0,1));
+		spielfeld.setBackground(new Color(0,0,0,1));
+		spielfeldoben.setBackground(new Color(0,0,0,1));
+		spielfeldunten.setBackground(new Color(0,0,0,1));
+		spielSteuerung.setBackground(new Color(0,0,0,1));
+		kartenSteuerung.setBackground(new Color(0,0,0,1));
+		linksSteuerung.setBackground(new Color(0,0,0,1));
+		rechtsSteuerung.setBackground(new Color(0,0,0,1));
+		buttons.setBackground(new Color(0,0,0,1));
+		eigeneKartenButtonsOben.setBackground(new Color(0,0,0,1));
+		eigeneKartenButtonsUnten.setBackground(new Color(0,0,0,1));
+		jokerkarten.setBackground(new Color(0,0,0,1));
+		chatPanel.setBackground(new Color(0,0,0,1));
+		
+		/***************************************************************************************
+		2 Layer für Wetten
+		****************************************************************************************/
+		/*eroeffnungLayer.setLayout(new BoxLayout(eroeffnungLayer,BoxLayout.Y_AXIS));
+		eroeffnungLayer.setBounds((int) (width/2)-250, 200, 500, 100);
+		eroeffnungLayer.setOpaque(true);
+		
+		hauptLayer.setBounds(0,0,(int) width, (int) height-50);
+		
+		
+		//Componenten für 2 Layer
+		JPanel labelHalter = new EigenPanel(4);
+		labelHalter.setLayout(new FlowLayout());
+		JLabel lblEroeffnungText = new JLabel("Sobald Sie Spielbereit sind platzieren Sie ihre Wette");
+		JPanel WettenButtonPanel = new EigenPanel(4);
+		WettenButtonPanel.setLayout(new FlowLayout());
+		
+		
+		//Buttons um Wetten abzuschliessen	
+		jbtNichtWetten = new JButton ("Nicht Wetten");
+		jbtKleineWette = new JButton ("Kleine Wette");
+		jbtGrosseWette = new JButton ("Grosse Wette");
+		
+		jbtNichtWetten.addActionListener(bHandler);
+		jbtKleineWette.addActionListener(bHandler);
+		jbtGrosseWette.addActionListener(bHandler);
+		
+		WettenButtonPanel.add(jbtNichtWetten);
+		WettenButtonPanel.add(jbtKleineWette);
+		WettenButtonPanel.add(jbtGrosseWette);
+		
+		//Alles dem 2 Layer adden
+		labelHalter.add(lblEroeffnungText);
+		eroeffnungLayer.add(labelHalter);
+		eroeffnungLayer.add(WettenButtonPanel);
+		
+		
+		//Layer organisieren
+		mainPanel.add(hauptLayer, new Integer(0), 0);
+		mainPanel.add(eroeffnungLayer, JLayeredPane.POPUP_LAYER);*/
 		
 		
 		
-	
-		
-		Tisch.setTitle("Haggis");
-		//mainPanel.setBackground(background);
-		
-		Tisch.add(mainPanel);
+		Tisch.add(hauptLayer);
 		Tisch.setExtendedState(Tisch.MAXIMIZED_BOTH);
 		Tisch.setVisible(true);
 		Tisch.setResizable(false);
 		Tisch.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
-	}
 	
-
+	}
 	
 	/***************************************************************************************
 	Getters und Setters
@@ -617,8 +801,15 @@ public class Spieltisch extends JFrame implements ActionListener{
 			
 			//Wenn bereits Karten ausgespielt wurden, muss Stechlogik ueberprueft werden
 			if(Client.game.getFeldkarten().size()>0){
-				
-
+				System.out.println("Sticklogik angewandt");
+				System.out.println("-----------------------Feldkarten---------------------");
+				for (int i = 0; i < Client.game.getFeldkarten().size(); i++){
+					System.out.println(Client.game.getFeldkarten().get(i).getWert());
+				}
+				System.out.println("-----------------------gespielteKarten---------------------");
+				for (int i = 0; i < gespielteKarten.size(); i++){
+					System.out.println(gespielteKarten.get(i).getWert());
+				}
 				
 				//Wenn eine Einzelkarte gespielt wurde und sie hoecher ist wie die bereits gespielte Karte, stich erfolgreich
 				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){	
@@ -761,7 +952,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 				}
 				
 				//Wenn die Karten eine zehner Strasse sind und sie hoecher sind wie die bereits gespielte zehner Strasse, stich erfolgriech
-				else if(istStrasseZehn(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
+				else if(istStrasseZehn(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -769,7 +960,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 				}
 				
 				//Wenn die Karten eine elfer Strasse sind und sie hoecher sind wie die bereits gespielte elfer Strasse, stich erfolgriech
-				else if(istStrasseElf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
+				else if(istStrasseElf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -777,7 +968,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 				}
 				
 				//Wenn die Karten eine zwoelfer Strasse sind und sie hoecher sind wie die bereits gespielte zwoelfer Strasse, stich erfolgreich
-				else if(istStrasseZwoelf(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
+				else if(istStrasseZwoelf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -785,7 +976,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 				}
 				
 				//Wenn die Karten eine Paar Strasse ist spiele und sie hoecher ist wie die bereits gespielte Paar Strasse, stich erfolgreich
-				else if(istPaarStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
+				else if(istPaarStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -793,7 +984,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 				}
 				
 				//Wenn die Karten eine Drilling Strasse ist und sie hoecher ist wie die bereits gespielte Drilling Strasse, stich erfolgreich
-				else if(istDrillingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
+				else if(istDrillingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -801,7 +992,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 				}
 				
 				//Wenn die Karten eine Vierling Strasse ist und sie hoecher ist wie die bereits gespielte Vierling Strasse, stich erfolgreich
-				else if(istVierlingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
+				else if(istVierlingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -809,7 +1000,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 				}
 				
 				//Wenn die Karten eine Fuenfling Strasse ist und sie hoecher ist wie die bereits gespielte Fuenflng Strasse, Stich erfolgreich
-				else if(istFuenflingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > feldKarten.get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
+				else if(istFuenflingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -1181,17 +1372,18 @@ public class Spieltisch extends JFrame implements ActionListener{
 		                             , choices                    
 		                             , "Wette wurde abgeschlossen"   
 		                           );
-		
-		if(eingabe == 0){
+	
+		if(eingabe == JOptionPane.YES_OPTION){
 			wette = 0;
 		}
-		else if(eingabe == 1){
+		else if(eingabe == JOptionPane.NO_OPTION){
 			wette = 15;
 		}
-		else if(eingabe == 2){
+		else if(eingabe == JOptionPane.CANCEL_OPTION){
 			wette = 30;
 		}
 		
+		System.out.println("Wette wert: " + wette);
 		return wette;
 	}
 	
@@ -1262,13 +1454,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 	public void ladetBilder(ArrayList<Card> hand){
 		
 		
-		//Diese ArrayList dient dazu die Karten an einen Spieler zu verteilen. 
-		ArrayList<Card> spielerHand = new ArrayList<Card>();
 		
-		for(Card str: hand){
-			Card copy = new Card(str.getWert(),str.getName(),str.getBild(),str.getPunkte(),str.getFarbe());
-			spielerHand.add(copy);
-		}
 		
 		//Diese for Schleife dient dazu dem Spieler die JokerKarten zu verteilen
 		
@@ -1276,24 +1462,24 @@ public class Spieltisch extends JFrame implements ActionListener{
 		
 		for(int i = 0; i<3; i++){
 			
-			if(spielerHand.get(i).getName().equals("bube")){
+			if(hand.get(i).getName().equals("bube")){
 				
-				jokerKarten[0].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				jokerKarten[0].setIcon(hand.get(i).getBild());
+				
 
 			}
 			
-			else if(spielerHand.get(i).getName().equals("dame")){
+			else if(hand.get(i).getName().equals("dame")){
 				
-				jokerKarten[1].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				jokerKarten[1].setIcon(hand.get(i).getBild());
+				
 
 			}
 			
-			else if(spielerHand.get(i).getName().equals("koenig")){
+			else if(hand.get(i).getName().equals("koenig")){
 				
-				jokerKarten[2].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				jokerKarten[2].setIcon(hand.get(i).getBild());
+				
 
 			}
 			
@@ -1302,68 +1488,68 @@ public class Spieltisch extends JFrame implements ActionListener{
 
 		for(int i = 3; i< 17; i++){
 			
-			if(spielerHand.get(i).getWert()==2){
+			if(hand.get(i).getWert()==2){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());			
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+							
 
 			}
 			
-			else if(spielerHand.get(i).getWert()==3){
+			else if(hand.get(i).getWert()==3){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
 			
-			else if(spielerHand.get(i).getWert()==4){
+			else if(hand.get(i).getWert()==4){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==5){
+			else if(hand.get(i).getWert()==5){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+			
 			}
-			else if(spielerHand.get(i).getWert()==6){
+			else if(hand.get(i).getWert()==6){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==7){
+			else if(hand.get(i).getWert()==7){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==8){
+			else if(hand.get(i).getWert()==8){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==9){
+			else if(hand.get(i).getWert()==9){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==10){
+			else if(hand.get(i).getWert()==10){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==11){
+			else if(hand.get(i).getWert()==11){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==12){
+			else if(hand.get(i).getWert()==12){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
-			else if(spielerHand.get(i).getWert()==13){
+			else if(hand.get(i).getWert()==13){
 				
-				btnKarte[i-3].setIcon(spielerHand.get(i).getBild());
-				spielerHand.set(i, new Card());
+				btnKarte[i-3].setIcon(hand.get(i).getBild());
+				
 			}
 			
 		}
@@ -2039,6 +2225,7 @@ public class Spieltisch extends JFrame implements ActionListener{
 							
 							//Wenn die letzte ueberpruefung stimmt ist es eine zuluessige Paarstrasse
 							if(ueberpruefen4){
+								System.out.println("zulässige Paarstrasse");
 								return true;
 							}
 							
@@ -2355,6 +2542,8 @@ public class Spieltisch extends JFrame implements ActionListener{
 	
 	public class buttonHandler implements ActionListener{
 
+	
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
@@ -2372,21 +2561,18 @@ public class Spieltisch extends JFrame implements ActionListener{
 				System.out.println("chat gesendent mit inhalt:");
 				System.out.println(chat.getMessage());
 			}
+			else if(e.getSource()==jbtNichtWetten){
+				
+				
+				}
+			}
 		}
 		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource()== jbtSpielen){
-			this.karteAuspielen();
-			System.out.println("Button gedrückt");
-		}
-	}
 	
 	
 	
-}	
+
 
 
