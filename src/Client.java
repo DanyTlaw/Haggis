@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -76,10 +77,7 @@ public class Client {
 						ladetGegnerInfo();
 						System.out.println(client_ID);
 						
-						//Wetten k�nnen abgeschlossen werden
-						System.out.println("Wette kann getan werden");
-						game.getSpieler(client_ID).setWette(login.getTisch().wetten());
-						System.out.println("Die Wette ist: " + game.getSpieler(client_ID).getWette());
+						
 						
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
@@ -112,8 +110,6 @@ public class Client {
 						//Loescht alle Karten in der Mitte
 						login.getTisch().kartenFeldLoeschen();
 						
-						ladetGegnerInfo();
-						
 						//Setzt die Variable neugestartet auf false
 						game.setNeueRunde(false);
 						
@@ -131,6 +127,12 @@ public class Client {
 						System.out.println("Wette kann getan werden");
 						game.getSpieler(client_ID).setWette(login.getTisch().wetten());
 						System.out.println("Die Wette ist: " + game.getSpieler(client_ID).getWette());
+						game.getSpieler(client_ID).setGewettet(true);
+						
+						if(game.getSpieler(0).getGewettet() & game.getSpieler(1).getGewettet()){
+							ladetGegnerInfo();
+						}
+						
 						
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
@@ -170,8 +172,7 @@ public class Client {
 	
 	//Methode welche die Informationen des Gegners ladet
 	public void ladetGegnerInfo(){
-				
-		
+	
 		login.getTisch().haggis.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 		login.getTisch().Haggisborder.setTitle("Haggis: " + game.getHaeggis().size());
 		login.getTisch().haggis.setBorder(login.getTisch().Haggisborder);
@@ -185,6 +186,8 @@ public class Client {
 			login.getTisch().setAnzahlKarten(game.getSpieler(1).getHandKarten().size()-3);
 			login.getTisch().lblPunkteGegner.setText("Gegnerische Punktzahl : " +game.getSpieler(1).getPunkte());
 			login.getTisch().lblPunkteEigen.setText("Punktzahl : " +game.getSpieler(0).getPunkte());
+			login.getTisch().lblEigeneWetten.setText("Eigene Wetten: " +game.getSpieler(0).getWette());
+			login.getTisch().lblGegnerWetten.setText("Gegner Wetten: " +game.getSpieler(1).getWette());
 			
 			
 			for (int i = 3; i < game.getSpieler(1).getHandKarten().size(); i++){
@@ -202,6 +205,8 @@ public class Client {
 			login.getTisch().setAnzahlKarten(game.getSpieler(0).getHandKarten().size()-3);
 			login.getTisch().lblPunkteGegner.setText("Gegnerische Punktzahl : " +game.getSpieler(0).getPunkte());
 			login.getTisch().lblPunkteEigen.setText("Punktzahl : " +game.getSpieler(1).getPunkte());
+			login.getTisch().lblEigeneWetten.setText("Eigene Wetten: " +game.getSpieler(1).getWette());
+			login.getTisch().lblGegnerWetten.setText("Gegner Wetten: " +game.getSpieler(0).getWette());
 			
 			for (int i = 3; i < game.getSpieler(0).getHandKarten().size(); i++){
 				if(game.getSpieler(0).getHandKarten().get(i).getWert() != 0){
