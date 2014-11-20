@@ -33,6 +33,9 @@ public class EigenPanel extends JPanel {
 		}
 		if(bild == 3){
 			imageHintergrund = new ImageIcon(pfad +"Hintergrund3.jpg").getImage();
+		}
+		if(bild == 4){
+			imageHintergrund = new ImageIcon(pfad +"Hintergrund4.jpg").getImage();
 		}		
 		
 	}

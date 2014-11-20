@@ -14,6 +14,7 @@ public class Spieler implements Serializable {
 	private int siegesPunkte;
 	private boolean sieger = false;
 	private int wette;
+	boolean gewettet = false;
 	
 	public ArrayList<Card> gewonneneKarten = new ArrayList<Card>();
 	
@@ -77,6 +78,12 @@ public class Spieler implements Serializable {
 	
 	public boolean getSieger(){
 		return this.sieger;
+	}
+	public boolean getGewettet(){
+			return this.gewettet;
+	}
+	public void setGewettet(boolean gewettet){
+		this.gewettet = gewettet;
 	}
 	
 	

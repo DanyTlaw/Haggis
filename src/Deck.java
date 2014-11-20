@@ -1,4 +1,6 @@
-﻿import java.awt.Image;
+﻿import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -87,161 +89,173 @@ public class Deck {
 	public ArrayList<Card> handKarten1 = new ArrayList<Card>();
 	public ArrayList<Card> handKarten2 = new ArrayList<Card>();
 	
+	private int kartenBreite = 60;
+	private int kartenHoehe = 100;
+	
 	
 	//Konstruktor welche ein Deck mit allen 54 Karten vom Typ Card erstellt
 	public Deck(){
 		
 		String pfad = System.getProperty("user.dir") + "//images//";
 		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		 double width = screenSize.getWidth();
+		 double height = screenSize.getHeight();
+		
+		if(height > 800){
+			 kartenBreite = 100;
+			 kartenHoehe = 150;
+		}
+		
 		//Graue Icons
 		Image imageGrau2 = new ImageIcon(pfad + "grau02.jpg").getImage();
-		ImageIcon iconGrau2 = new ImageIcon(imageGrau2.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau2 = new ImageIcon(imageGrau2.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 
 		Image imageGrau3 = new ImageIcon(pfad + "grau03.jpg").getImage();
-		ImageIcon iconGrau3 = new ImageIcon(imageGrau3.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau3 = new ImageIcon(imageGrau3.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGrau4 = new ImageIcon(pfad + "grau04.jpg").getImage();
-		ImageIcon iconGrau4 = new ImageIcon(imageGrau4.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau4 = new ImageIcon(imageGrau4.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGrau5 = new ImageIcon(pfad + "grau05.jpg").getImage();
-		ImageIcon iconGrau5 = new ImageIcon(imageGrau5.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau5 = new ImageIcon(imageGrau5.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGrau6 = new ImageIcon(pfad + "grau06.jpg").getImage();
-		ImageIcon iconGrau6 = new ImageIcon(imageGrau6.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau6 = new ImageIcon(imageGrau6.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGrau7 = new ImageIcon(pfad + "grau07.jpg").getImage();
-		ImageIcon iconGrau7 = new ImageIcon(imageGrau7.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau7 = new ImageIcon(imageGrau7.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGrau8 = new ImageIcon(pfad + "grau08.jpg").getImage();
-		ImageIcon iconGrau8 = new ImageIcon(imageGrau8.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau8 = new ImageIcon(imageGrau8.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGrau9 = new ImageIcon(pfad + "grau09.jpg").getImage();
-		ImageIcon iconGrau9 = new ImageIcon(imageGrau9.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau9 = new ImageIcon(imageGrau9.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGrau10 = new ImageIcon(pfad + "grau10.jpg").getImage();
-		ImageIcon iconGrau10 = new ImageIcon(imageGrau10.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGrau10 = new ImageIcon(imageGrau10.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		//Gelbe Icons
 		Image imageGelb2 = new ImageIcon(pfad + "gelb02.jpg").getImage();
-		ImageIcon iconGelb2 = new ImageIcon(imageGelb2.getScaledInstance(60, 100, Image.SCALE_DEFAULT));	
+		ImageIcon iconGelb2 = new ImageIcon(imageGelb2.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));	
 		
 		Image imageGelb3 = new ImageIcon(pfad + "gelb03.jpg").getImage();
-		ImageIcon iconGelb3 = new ImageIcon(imageGelb3.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb3 = new ImageIcon(imageGelb3.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGelb4 = new ImageIcon(pfad + "gelb04.jpg").getImage();
-		ImageIcon iconGelb4 = new ImageIcon(imageGelb4.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb4 = new ImageIcon(imageGelb4.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGelb5 = new ImageIcon(pfad + "gelb05.jpg").getImage();
-		ImageIcon iconGelb5 = new ImageIcon(imageGelb5.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb5 = new ImageIcon(imageGelb5.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGelb6 = new ImageIcon(pfad + "gelb06.jpg").getImage();
-		ImageIcon iconGelb6 = new ImageIcon(imageGelb6.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb6 = new ImageIcon(imageGelb6.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGelb7 = new ImageIcon(pfad + "gelb07.jpg").getImage();
-		ImageIcon iconGelb7 = new ImageIcon(imageGelb7.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb7 = new ImageIcon(imageGelb7.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGelb8 = new ImageIcon(pfad + "gelb08.jpg").getImage();
-		ImageIcon iconGelb8 = new ImageIcon(imageGelb8.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb8 = new ImageIcon(imageGelb8.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGelb9 = new ImageIcon(pfad + "gelb09.jpg").getImage();
-		ImageIcon iconGelb9 = new ImageIcon(imageGelb9.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb9 = new ImageIcon(imageGelb9.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGelb10 = new ImageIcon(pfad + "gelb10.jpg").getImage();
-		ImageIcon iconGelb10 = new ImageIcon(imageGelb10.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGelb10 = new ImageIcon(imageGelb10.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		//Gruene Icons
 		Image imageGruen2 = new ImageIcon(pfad + "gruen02.jpg").getImage();
-		ImageIcon iconGruen2 = new ImageIcon(imageGruen2.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen2 = new ImageIcon(imageGruen2.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen3 = new ImageIcon(pfad + "gruen03.jpg").getImage();
-		ImageIcon iconGruen3 = new ImageIcon(imageGruen3.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen3 = new ImageIcon(imageGruen3.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen4 = new ImageIcon(pfad + "gruen04.jpg").getImage();
-		ImageIcon iconGruen4 = new ImageIcon(imageGruen4.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen4 = new ImageIcon(imageGruen4.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen5 = new ImageIcon(pfad + "gruen05.jpg").getImage();
-		ImageIcon iconGruen5 = new ImageIcon(imageGruen5.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen5 = new ImageIcon(imageGruen5.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen6 = new ImageIcon(pfad + "gruen06.jpg").getImage();
-		ImageIcon iconGruen6 = new ImageIcon(imageGruen6.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen6 = new ImageIcon(imageGruen6.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen7 = new ImageIcon(pfad + "gruen07.jpg").getImage();
-		ImageIcon iconGruen7 = new ImageIcon(imageGruen7.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen7 = new ImageIcon(imageGruen7.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen8 = new ImageIcon(pfad + "gruen08.jpg").getImage();
-		ImageIcon iconGruen8 = new ImageIcon(imageGruen8.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen8 = new ImageIcon(imageGruen8.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen9 = new ImageIcon(pfad + "gruen09.jpg").getImage();
-		ImageIcon iconGruen9 = new ImageIcon(imageGruen9.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen9 = new ImageIcon(imageGruen9.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageGruen10 = new ImageIcon(pfad + "gruen10.jpg").getImage();
-		ImageIcon iconGruen10 = new ImageIcon(imageGruen10.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconGruen10 = new ImageIcon(imageGruen10.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		//Orange Icons
 		Image imageOrange2 = new ImageIcon(pfad + "orange02.jpg").getImage();
-		ImageIcon iconOrange2 = new ImageIcon(imageOrange2.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange2 = new ImageIcon(imageOrange2.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange3 = new ImageIcon(pfad + "orange03.jpg").getImage();
-		ImageIcon iconOrange3 = new ImageIcon(imageOrange3.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange3 = new ImageIcon(imageOrange3.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange4 = new ImageIcon(pfad + "orange04.jpg").getImage();
-		ImageIcon iconOrange4 = new ImageIcon(imageOrange4.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange4 = new ImageIcon(imageOrange4.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange5 = new ImageIcon(pfad + "orange05.jpg").getImage();
-		ImageIcon iconOrange5 = new ImageIcon(imageOrange5.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange5 = new ImageIcon(imageOrange5.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange6 = new ImageIcon(pfad + "orange06.jpg").getImage();
-		ImageIcon iconOrange6 = new ImageIcon(imageOrange6.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange6 = new ImageIcon(imageOrange6.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange7 = new ImageIcon(pfad + "orange07.jpg").getImage();
-		ImageIcon iconOrange7 = new ImageIcon(imageOrange7.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange7 = new ImageIcon(imageOrange7.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange8 = new ImageIcon(pfad + "orange08.jpg").getImage();
-		ImageIcon iconOrange8 = new ImageIcon(imageOrange8.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange8 = new ImageIcon(imageOrange8.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange9 = new ImageIcon(pfad + "orange09.jpg").getImage();
-		ImageIcon iconOrange9 = new ImageIcon(imageOrange9.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange9 = new ImageIcon(imageOrange9.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageOrange10 = new ImageIcon(pfad + "orange10.jpg").getImage();
-		ImageIcon iconOrange10 = new ImageIcon(imageOrange10.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconOrange10 = new ImageIcon(imageOrange10.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		//Rote Icons
 		Image imageRot2 = new ImageIcon(pfad + "rot02.jpg").getImage();
-		ImageIcon iconRot2 = new ImageIcon(imageRot2.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot2 = new ImageIcon(imageRot2.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot3 = new ImageIcon(pfad + "rot03.jpg").getImage();
-		ImageIcon iconRot3 = new ImageIcon(imageRot3.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot3 = new ImageIcon(imageRot3.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot4 = new ImageIcon(pfad + "rot04.jpg").getImage();
-		ImageIcon iconRot4 = new ImageIcon(imageRot4.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot4 = new ImageIcon(imageRot4.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot5 = new ImageIcon(pfad + "rot05.jpg").getImage();
-		ImageIcon iconRot5 = new ImageIcon(imageRot5.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot5 = new ImageIcon(imageRot5.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot6 = new ImageIcon(pfad + "rot06.jpg").getImage();
-		ImageIcon iconRot6 = new ImageIcon(imageRot6.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot6 = new ImageIcon(imageRot6.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot7 = new ImageIcon(pfad + "rot07.jpg").getImage();
-		ImageIcon iconRot7 = new ImageIcon(imageRot7.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot7 = new ImageIcon(imageRot7.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot8 = new ImageIcon(pfad + "rot08.jpg").getImage();
-		ImageIcon iconRot8 = new ImageIcon(imageRot8.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot8 = new ImageIcon(imageRot8.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot9 = new ImageIcon(pfad + "rot09.jpg").getImage();
-		ImageIcon iconRot9 = new ImageIcon(imageRot9.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot9 = new ImageIcon(imageRot9.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageRot10 = new ImageIcon(pfad + "rot10.jpg").getImage();
-		ImageIcon iconRot10 = new ImageIcon(imageRot10.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconRot10 = new ImageIcon(imageRot10.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		//Jokerkarten Icons
 		Image imageBube = new ImageIcon(pfad + "Bube.jpg").getImage();
-		ImageIcon iconBube = new ImageIcon(imageBube.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconBube = new ImageIcon(imageBube.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageDame = new ImageIcon(pfad + "Dame.jpg").getImage();
-		ImageIcon iconDame = new ImageIcon(imageDame.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconDame = new ImageIcon(imageDame.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		Image imageKoenig = new ImageIcon(pfad + "Koenig.jpg").getImage();
-		ImageIcon iconKoenig = new ImageIcon(imageKoenig.getScaledInstance(60, 100, Image.SCALE_DEFAULT));
+		ImageIcon iconKoenig = new ImageIcon(imageKoenig.getScaledInstance(kartenBreite, kartenHoehe, Image.SCALE_DEFAULT));
 		
 		//Variablen fuer Graue Karten
 		grau2 = new Card(2,"grau2",iconGrau2,0,"grau");
