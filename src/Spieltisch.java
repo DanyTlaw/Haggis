@@ -2383,9 +2383,9 @@ public class Spieltisch extends JFrame{
 				
 				//Wenn die Karte die gesuchte Zahl hat, kein Joker ist 
 				if(karten.get(i).getWert()== zahl && karten.get(i).getJoker()== false){
-					testBombe1++;
+					testBombe6++;
 				}
-				zahl+=2;
+				zahl= zahl + 2;
 
 			}
 		}
