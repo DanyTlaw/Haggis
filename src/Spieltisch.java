@@ -140,7 +140,7 @@ public class Spieltisch extends JFrame{
 	public JLabel lblHandkarten;
 	private Image imageHaggis;
 	private ImageIcon iconHaggis;
-	JPanel haggis = new JPanel();
+	JPanel haggis = new EigenPanel(4);
 	public JLabel haggisKarten = new JLabel ("Haggis:");
 	public TitledBorder Haggisborder = new TitledBorder(null,haggisKarten.getText(),TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
 	public JLabel lblEigeneWetten;
@@ -199,7 +199,7 @@ public class Spieltisch extends JFrame{
 		 mainPanel = new JLayeredPane();
 		
 		//Hauptlayer
-		JPanel hauptLayer = new EigenPanel(3);
+		JPanel hauptLayer = new EigenPanel(4);
 		
 		//Layer für Spielanfang
 		eroeffnungLayer = new EigenPanel(4);
@@ -251,8 +251,8 @@ public class Spieltisch extends JFrame{
 		****************************************************************************************/
 		
 		//JPanel welche alle informationen ueber den Gegner beinhaltet
-		JPanel enemy = new EigenPanel(3);
-		JPanel enemyKarten = new EigenPanel(3);
+		JPanel enemy = new EigenPanel(4);
+		JPanel enemyKarten = new EigenPanel(4);
 		
 		enemy.setLayout(new BoxLayout(enemy, BoxLayout.X_AXIS));
 		
@@ -276,7 +276,7 @@ public class Spieltisch extends JFrame{
 		lblDame = new JLabel("Dame: " + dameAnzahl);
 		lblKoenig = new JLabel("Koenig: " + koenigAnzahl);
 		lblHandkarten = new JLabel("HandKarten: ");
-		JPanel PunkteInfo = new EigenPanel(3);
+		JPanel PunkteInfo = new EigenPanel(4);
 		PunkteInfo.setLayout(new GridBagLayout());
 		lblPunkteEigen = new JLabel("Punkte: ");
 		lblPunkteGegner = new JLabel("Gegnerische Punkte: ");
@@ -337,9 +337,9 @@ public class Spieltisch extends JFrame{
 		/***************************************************************************************
 		CENTER TEIL DES hauptLayer
 		****************************************************************************************/
-		JPanel spiel = new JPanel();
+		JPanel spiel = new EigenPanel(4);
 		
-		JPanel spielfeld = new EigenPanel(2);
+		JPanel spielfeld = new EigenPanel(3);
 		
 		
 		spiel.setLayout(new FlowLayout());
@@ -356,7 +356,7 @@ public class Spieltisch extends JFrame{
 		
 		
 		//JPanel fuer den Oberen Teil des Spielfeld
-		JPanel spielfeldoben = new JPanel();
+		JPanel spielfeldoben = new EigenPanel(4);
 		spielfeldoben.setPreferredSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setMaximumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setMinimumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
@@ -380,7 +380,7 @@ public class Spieltisch extends JFrame{
 		}
 		
 		//JPanel fuer den unteren Teil des Spielfelds
-		JPanel spielfeldunten = new JPanel();
+		JPanel spielfeldunten = new EigenPanel(4);
 		spielfeldunten.setPreferredSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldunten.setMaximumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldunten.setMinimumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
@@ -419,26 +419,26 @@ public class Spieltisch extends JFrame{
 		SOUTH TEIL DES hauptLayer
 		****************************************************************************************/
 		
-		JPanel spielSteuerung = new JPanel();
+		JPanel spielSteuerung = new EigenPanel(4);
 		spielSteuerung.setLayout(new BoxLayout(spielSteuerung, BoxLayout.Y_AXIS));
 		
-		JPanel kartenSteuerung = new JPanel();
+		JPanel kartenSteuerung = new EigenPanel(4);
 		kartenSteuerung.setLayout(new BoxLayout(kartenSteuerung, BoxLayout.X_AXIS));
 		
-		JPanel linksSteuerung = new JPanel();
+		JPanel linksSteuerung = new EigenPanel(4);
 		linksSteuerung.setLayout(new BoxLayout(linksSteuerung, BoxLayout.Y_AXIS));	
 		linksSteuerung.setPreferredSize(new Dimension(linksStrBreite,linksStrHoehe));
 		linksSteuerung.setMaximumSize(new Dimension(linksStrBreite,linksStrHoehe));
 		linksSteuerung.setMinimumSize(new Dimension(linksStrBreite,linksStrHoehe));
 		
-		JPanel rechtsSteuerung = new JPanel();
+		JPanel rechtsSteuerung = new EigenPanel(4);
 		rechtsSteuerung.setLayout(new BoxLayout(rechtsSteuerung, BoxLayout.Y_AXIS));
 		rechtsSteuerung.setPreferredSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
 		rechtsSteuerung.setMaximumSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
 		rechtsSteuerung.setMinimumSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
 		
 		//Alle Container fï¿½r das  Panel jokerkarten werden gemacht		
-		JPanel buttons = new JPanel();
+		JPanel buttons = new EigenPanel(4);
 		buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		
@@ -459,7 +459,7 @@ public class Spieltisch extends JFrame{
 		buttons.add(jbtPassen);
 		
 		//Alle Container und Buttons fuer den Rechtssteuerung teil
-		JPanel eigeneKartenButtonsOben = new EigenPanel(3);
+		JPanel eigeneKartenButtonsOben = new EigenPanel(4);
 		eigeneKartenButtonsOben.setPreferredSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsOben.setMaximumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsOben.setMinimumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
@@ -479,7 +479,7 @@ public class Spieltisch extends JFrame{
 			kartenBound+=kartenBreite;
 		}
 		
-		JPanel eigeneKartenButtonsUnten = new EigenPanel(3);
+		JPanel eigeneKartenButtonsUnten = new EigenPanel(4);
 		eigeneKartenButtonsUnten.setPreferredSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsUnten.setMaximumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsUnten.setMinimumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
@@ -500,7 +500,7 @@ public class Spieltisch extends JFrame{
 			kartenBound+=kartenBreite;
 		}
 
-		JPanel jokerkarten = new EigenPanel(3);
+		JPanel jokerkarten = new EigenPanel(4);
 		jokerkarten.setLayout(new BoxLayout(jokerkarten, BoxLayout.X_AXIS));
 		
 		for(int i = 0; i<3;i++){
@@ -536,7 +536,7 @@ public class Spieltisch extends JFrame{
 		****************************************************************************************/
 		
 		//Chat		
-		JPanel chatPanel = new EigenPanel(3);
+		JPanel chatPanel = new EigenPanel(4);
 		chatPanel.setPreferredSize(new Dimension(chatPanelBreite, chatPanelHoehe));
 		chatPanel.setMaximumSize(new Dimension(chatPanelBreite, chatPanelHoehe));
 		chatPanel.setMinimumSize(new Dimension(chatPanelBreite, chatPanelHoehe));
@@ -584,7 +584,7 @@ public class Spieltisch extends JFrame{
 		chatPanel.add(jbtEingabe,cons);
 		
 		//Wetten
-		JPanel WettenPanel = new EigenPanel(3);
+		JPanel WettenPanel = new EigenPanel(4);
 		WettenPanel.setLayout(new BoxLayout(WettenPanel,BoxLayout.Y_AXIS));
 		lblEigeneWetten = new JLabel("Eigene Wette");
 		lblGegnerWetten = new JLabel("Gegner Wette");
@@ -653,10 +653,10 @@ public class Spieltisch extends JFrame{
 		
 		
 		//Componenten für 2 Layer
-		JPanel labelHalter = new EigenPanel(4);
+		JPanel labelHalter = new EigenPanel(3)(4);
 		labelHalter.setLayout(new FlowLayout());
 		JLabel lblEroeffnungText = new JLabel("Sobald Sie Spielbereit sind platzieren Sie ihre Wette");
-		JPanel WettenButtonPanel = new EigenPanel(4);
+		JPanel WettenButtonPanel = new EigenPanel(3)(4);
 		WettenButtonPanel.setLayout(new FlowLayout());
 		
 		

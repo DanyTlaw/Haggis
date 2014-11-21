@@ -102,7 +102,7 @@ public class Deck {
 		 double width = screenSize.getWidth();
 		 double height = screenSize.getHeight();
 		
-		if(height > 800){
+		if(height > 1000 && width > 1300){
 			 kartenBreite = 100;
 			 kartenHoehe = 150;
 		}
