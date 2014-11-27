@@ -820,10 +820,11 @@ public class Spieltisch extends JFrame{
 					
 				}
 				
+				
 				//Wenn die Karten eine Bombe sind können sie alles stechen ausser eine höhere Bombe
 				
 				//Bombe sticht eine andere Bombe wenn sie höher ist wie die andere Bombe
-				else if(istBombe(gespielteKarten) > istBombe(Client.game.getFeldkarten())){
+				else if(istBombe(gespielteKarten) < istBombe(Client.game.getFeldkarten())){
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -832,6 +833,11 @@ public class Spieltisch extends JFrame{
 				
 				//Bombe sticht alle anderen Kombinationen
 				else if(istBombe(gespielteKarten) > 0){
+					System.out.println("---------------------------VOR KARTE ANZEIGEN--------------------------------");
+					for (int k = 0; k<gespielteKarten.size();k++){
+						System.out.println(gespielteKarten.get(k).getWert());
+					}
+					System.out.println("-------------------------------------------------------------------------------");
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -1283,12 +1289,7 @@ public class Spieltisch extends JFrame{
  	}
  	
  	private void karteLoeschen(){
- 		
- 		System.out.println("Jokerkartenwert " + Client.game.getSpieler(Client.client_ID).getSpielerName() + " anfang karte löschen");
- 		for(int i = 0; i< 3; i++){
-			System.out.println(Client.game.getSpieler(0).getHandKarten().get(i).getPunkte());
-		}
-
+ 	
  		for(int i = 0;i<3;i++){
  			System.out.println(Client.game.getSpieler(0).getHandKarten().get(i));
 			if(jokerKarten[i].getBorder() == gedrucktBorder){
@@ -1297,15 +1298,9 @@ public class Spieltisch extends JFrame{
 				if(Client.game.getSpieler(0).getAmZug()){
 					Client.game.getSpieler(0).getHandKarten().get(i).setWert(0);
 					Client.game.getSpieler(0).getHandKarten().get(i).setPunkte(0);
-					System.out.println("---------------------Fucking Jokerkarte Spieler 0 umgsetzt---------------------------");
 				}else{
 					Client.game.getSpieler(1).getHandKarten().get(i).setWert(0);
 					Client.game.getSpieler(1).getHandKarten().get(i).setPunkte(0);
-					System.out.println("---------------------Fucking Jokerkarte Spieler 1 umgsetzt---------------------------");
-				}
-				System.out.println("ende For Schlaufe Jokerkarten Wert Spieler " + Client.game.getSpieler(Client.client_ID).getSpielerName());
-				for(int j = 0; j< 3; j++){
-					System.out.println(Client.game.getSpieler(0).getHandKarten().get(j).getPunkte());
 				}
 			}
 		}
@@ -1329,17 +1324,55 @@ public class Spieltisch extends JFrame{
 	//Methode welche die gespielten Karten in die Feldkarten kopiert
 	public void kartenFeldKopieren(ArrayList<Card> karten){
 			
-		for(int i = 0;i<karten.size();i++){
-			
-			if(Client.game.getFeldkarten().size()<karten.size()){
-				Client.game.getFeldkarten().add(new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
-			}else if(Client.game.getFeldkarten().size()==karten.size()){
-				Client.game.getFeldkarten().set(i,new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+		//Wenn eine Bombe ausgespielt wurde müssen gewisse sachen berücksichtig werden beim Kopieren in die Feldkarten da Feldkarten kleiner, grösser oder gleichgross sein kann wie ausgespielteKarten		
+		if(istBombe(karten)>0){
+			//For Schlaufe welche für die anzahl ausgespielte karten durchlauft
+			for(int i = 0;i<karten.size();i++){	
+				//Falls man mit einer Bombe eine kleiner Anzahl karten Sticht
+				if(Client.game.getFeldkarten().size()<karten.size()){
+					//If-Bedingung damit nur beim ersten Durchlauf der Schlaufe die folgende Schlaufe ausgeführt wird
+					if(i==0){
+						//Schlaufe welche die FeldKarten überschreibt mit dem Wert der Bombe
+						for(int k = 0; k<Client.game.getFeldkarten().size();k++){
+							Client.game.getFeldkarten().set(k,new Card(karten.get(k).getWert(),karten.get(k).getName(), karten.get(k).getBild(), karten.get(k).getPunkte(), karten.get(k).getFarbe(), karten.get(k).getJoker()));
+							//Inkrementiert die äusserste Schlaufe damit die richtige Karten geaddet wird
+							i++;
+						}
+					}
+					//Da die Feldkarten kleiner sind wie die ausgespielte Bombe müssen zusätzliche Karten in den Feldkarten geaddet werden
+					Client.game.getFeldkarten().add(new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+					}
+				else if(Client.game.getFeldkarten().size()==karten.size()){
+					Client.game.getFeldkarten().set(i,new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+				}
+				else if(Client.game.getFeldkarten().size()>karten.size()){
+					Client.game.getFeldkarten().set(i,new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+					if(i==karten.size()-1){
+						i++;
+						for(int k = 0; k<Client.game.getFeldkarten().size()-karten.size();k++){
+							anzeigeKarten[i].setIcon(null);
+							Client.game.getFeldkarten().remove(i);
+							i++;
+						}
+					}
+				}
+			}	
+		}
+		
+		else{
+			for(int i = 0;i<karten.size();i++){	
+				//Falls Feldkarten leer sind, werden die ausgepielte Karten folgendermasse in die Feldkarten kopiert
+				if(Client.game.getFeldkarten().size()<karten.size()){
+					Client.game.getFeldkarten().add(new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+				//Wenn gestochen wird sind die ausgespielte Karten immer gleich viel wie die Feldkarten desswegen kann folegendermassen kopiert werden, ausnahme Bomben(siehe oben)	
+				}else if(Client.game.getFeldkarten().size()==karten.size()){
+					Client.game.getFeldkarten().set(i,new Card(karten.get(i).getWert(),karten.get(i).getName(), karten.get(i).getBild(), karten.get(i).getPunkte(), karten.get(i).getFarbe(), karten.get(i).getJoker()));
+				}		
 			}
 			
-
-			
 		}
+			
+		
 		//Nimmt die ausgespielte Karten und fÃ¼gt sie der ArrayList der zu gewinnenden Karten hinzu
 		Client.game.addAusgespielteKarten(Client.game.getFeldkarten());
 		
@@ -1355,6 +1388,10 @@ public class Spieltisch extends JFrame{
 		for(int i =0;i<karten.size();i++){
 			anzeigeKarten[i].setIcon(karten.get(i).getBild());
 		}
+		for (int k = 0; k<karten.size();k++){
+			System.out.println(karten.get(k).getWert());
+		}
+		
 	}
 	
 	//Methode welche die die Wetten eingiebt
@@ -1386,8 +1423,7 @@ public class Spieltisch extends JFrame{
 		System.out.println("Wette wert: " + wette);
 		return wette;
 	}
-	
-	
+		
 	//Methode welche den Spieler auffordert einen Wert fuer den Joker einzugeben und diese zurï¿½ck gibt
 	public int jokerWert(int i){
 		
@@ -1714,7 +1750,7 @@ public class Spieltisch extends JFrame{
 	public void sendeGameObjekt(){
 		try{
 			
-			System.out.println("gesendet");
+			System.out.println("---------gesendet Game----------");
 
 			Spieltisch.out.writeObject(Client.game);
 			}catch (IOException e) {

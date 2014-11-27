@@ -67,54 +67,15 @@ public class GameLoop extends Thread{
 					
 					else if(inputObject instanceof Gameobjekt){
 
-						Gameobjekt game = (Gameobjekt) inputObject;
-						
-						System.out.println("~~~~~~~~~~~~~~~~~JokerKarten Spieler 0 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 0; i< 3; i++){
-							System.out.println(game.getSpieler(0).getHandKarten().get(i).getPunkte());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-						
-						System.out.println("~~~~~~~~~~~~~~~~~Handkarten Spieler 0 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 3; i< game.getSpieler(0).getHandKarten().size(); i++){
-							System.out.println(game.getSpieler(0).getHandKarten().get(i).getWert());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-						
-						System.out.println("~~~~~~~~~~~~~~~~~JokerKarten Spieler 1 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 0; i< 3; i++){
-							System.out.println(game.getSpieler(1).getHandKarten().get(i).getPunkte());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-						
-						System.out.println("~~~~~~~~~~~~~~~~~Handkarten Spieler 1 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 3; i< game.getSpieler(1).getHandKarten().size(); i++){
-							System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
+						Gameobjekt game = (Gameobjekt) inputObject;	
 						
 						//Wenn einer von beiden Spielern eine leeere Hand hat ist die Runde vorbei und die Logik wird angewandt
 						if(game.getSpieler(0).leereHand()){
-							System.out.println("leereHand Spieler 0");
-							
-							System.out.println("------------------JokerKarten Spieler 1------------------");
-							for(int i = 0; i< 3; i++){
-								System.out.println(game.getSpieler(1).getHandKarten().get(i).getPunkte());
-							}
-							System.out.println("---------------------------------------------------------");
-							
-							System.out.println("------------------Handkarten Spieler 1------------------");
-							for(int i = 3; i< game.getSpieler(1).getHandKarten().size(); i++){
-								System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
-							}
-							System.out.println("---------------------------------------------------------");
-							
+														
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(1).getHandKarten().size(); i++){
 								if(game.getSpieler(1).getHandKarten().get(i).getWert()!=0){
 									game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte()+5);
-									System.out.println(game.getSpieler(0).getPunkte());
 								}
 							}
 							
@@ -125,7 +86,7 @@ public class GameLoop extends Thread{
 							game.getSpieler(0).setPunkte(game.getSpieler(0).berechnePunkte());
 							game.getSpieler(1).setPunkte(game.getSpieler(1).berechnePunkte());
 							
-							System.out.println(game.getSpieler(0).getPunkte());
+							System.out.println("Spieler 0 Punkte : " + game.getSpieler(0).getPunkte());
 							
 							//Der Spieler der keine Karten mehr auf der Hand hat bekommt die Punkte der Wette
 							game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte() + game.getSpieler(0).getWette());
@@ -141,13 +102,12 @@ public class GameLoop extends Thread{
 
 						}
 						else if(game.getSpieler(1).leereHand()){
-							System.out.println("leereHand Spieler 1");
-							
+														
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(0).getHandKarten().size(); i++){
 								if(game.getSpieler(0).getHandKarten().get(i).getWert()!=0){
 									game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte()+5);
-									System.out.println(game.getSpieler(1).getPunkte());
+									
 								}
 							}
 							

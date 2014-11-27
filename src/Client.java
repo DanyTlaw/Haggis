@@ -78,7 +78,6 @@ public class Client {
 						System.out.println(client_ID);
 						
 						
-						
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
 							login.getTisch().amZugButtons(true);																					
@@ -86,7 +85,10 @@ public class Client {
 							login.getTisch().amZugButtons(false);						
 						}						
 						if(game.getFeldkarten().size()>0){
-							 login.getTisch().karteAnzeigen(game.getFeldkarten());							
+							
+							login.getTisch().karteAnzeigen(game.getFeldkarten());
+							
+							
 						}else{
 							login.getTisch().kartenFeldLoeschen();
 						}
