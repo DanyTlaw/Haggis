@@ -71,7 +71,10 @@ public class GameLoop extends Thread{
 						
 						//Wenn einer von beiden Spielern eine leeere Hand hat ist die Runde vorbei und die Logik wird angewandt
 						if(game.getSpieler(0).leereHand()){
-														
+							
+							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefügt werden
+							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+							
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(1).getHandKarten().size(); i++){
 								if(game.getSpieler(1).getHandKarten().get(i).getWert()!=0){
@@ -102,6 +105,9 @@ public class GameLoop extends Thread{
 
 						}
 						else if(game.getSpieler(1).leereHand()){
+							
+							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefügt werden
+							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
 														
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(0).getHandKarten().size(); i++){
@@ -158,7 +164,7 @@ public class GameLoop extends Thread{
 						game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
 						game.getSpieler(0).setPassen(false);
 						game.getAusgespielteKarten().removeAll(game.getAusgespielteKarten());
-						game.getFeldkarten().removeAll(game.getFeldkarten());
+						game.getFeldkarten().clear();
 					}
 					else if(game.getSpieler(1).getPassen()){
 						

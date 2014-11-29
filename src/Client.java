@@ -62,14 +62,16 @@ public class Client {
 					}
 					
 					if(game.getSpielBeendet()){
-						String resultat= "verloren";
+						String resultat = "verloren";
+						String titel = "Viel Glueck beim naechsten Mal!";
 
 						if(game.getSpieler(client_ID).getSieger()){
 							resultat = "gewonnen";
+							titel = "Herzlichen Glueckwunsch!";
 						}
 						
 						
-						JOptionPane.showMessageDialog (login.getTisch(),"Sie haben " + resultat ,"Ungueltige Farbe",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog (login.getTisch(),"Sie haben " + resultat ,titel,JOptionPane.INFORMATION_MESSAGE);
 					}
 					
 					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
@@ -110,6 +112,7 @@ public class Client {
 						login.getTisch().buttonsSichtbar();
 						
 						//Loescht alle Karten in der Mitte
+						game.getFeldkarten().clear();
 						login.getTisch().kartenFeldLoeschen();
 						
 						//Setzt die Variable neugestartet auf false
@@ -153,11 +156,6 @@ public class Client {
 					}else{
 						login.getTisch().getTxtAChat().setText(login.getTisch().getTxtAChat().getText() + "\n" + chat.getSpieler() +" : " +chat.getMessage());
 					}
-					
-					
-					
-					
-				
 				}
 				
 				// set Client_ID
