@@ -4,14 +4,21 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,6 +35,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -37,6 +45,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.OverlayLayout;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -56,6 +65,8 @@ import javax.swing.border.LineBorder;
 
 
 import javax.swing.border.TitledBorder;
+
+import com.sun.glass.events.WindowEvent;
 
 import java.lang.*;
 
@@ -129,6 +140,8 @@ public class Spieltisch extends JFrame{
 	private JLabel lblDame;
 	private JLabel lblBube;
 	
+	public JLabel lblInfo;
+	
 	//Chat
 	private JTextArea txtAEingabe;
 	private JTextArea txtAChat;
@@ -138,8 +151,6 @@ public class Spieltisch extends JFrame{
 	public JLabel lblPunkteEigen;
 	public JLabel lblPunkteGegner;
 	public JLabel lblHandkarten;
-	private Image imageHaggis;
-	private ImageIcon iconHaggis;
 	JPanel haggis = new EigenPanel(4);
 	public JLabel haggisKarten = new JLabel ("Haggis:");
 	public TitledBorder Haggisborder = new TitledBorder(null,haggisKarten.getText(),TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
@@ -152,8 +163,6 @@ public class Spieltisch extends JFrame{
 	private int spielfeldBreite = 545;
 	private int rueckseiteBreite = 80;
 	private int rueckseiteHoehe = 130;
-	private int haggisBreite = 200;
-	private int haggisHoehe = 100;
 	private int iconBreite = 60;
 	private int iconHoehe = 60;
 	private int linksStrBreite = 200;
@@ -162,31 +171,23 @@ public class Spieltisch extends JFrame{
 	private int rechtsStrHoehe = 240;
 	private int eigeneKartenBreite = 500;
 	private int eigeneKartenHoehe = 110;
-	private int chatHoehe = 200;
-	private int chatPanelBreite = 200;
-	private int chatPanelHoehe = 300;
+	public JButton jbtWetten;
 	
-	private JButton jbtNichtWetten;
-	private JButton jbtKleineWette;
-	private JButton jbtGrosseWette;
+	public JTextField EigeneWetten;
+	public JTextField GegnerWetten;
 	
-	private JLayeredPane mainPanel;
-	private JPanel eroeffnungLayer;
+	private boolean wette = false;
+
 	
 	
-	
-	
-	
-	
-	
-	
+
 	
 	
 	public Spieltisch(ObjectOutputStream out, ObjectInputStream in, String name){
 		
 		this.name = name;
-		this.out = out;
-		this.in= in;
+		Spieltisch.out = out;
+		Spieltisch.in= in;
 		
 		
 		clickHandler cHandler = new clickHandler();
@@ -195,16 +196,14 @@ public class Spieltisch extends JFrame{
 					
 		JFrame Tisch = new JFrame("Haggis");
 		
-		//Main Panel
-		 mainPanel = new JLayeredPane();
 		
-		//Hauptlayer
-		JPanel hauptLayer = new EigenPanel(4);
 		
-		//Layer für Spielanfang
-		eroeffnungLayer = new EigenPanel(4);
+		//HAUPTPANEL
+		JPanel hauptPanel = new EigenPanel(4);
+		
+		
 				
-		hauptLayer.setLayout(new GridBagLayout());
+		hauptPanel.setLayout(new GridBagLayout());
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.weightx = 0;
 		cons.weighty = 0;
@@ -218,8 +217,6 @@ public class Spieltisch extends JFrame{
 			 kartenHoehe = 150;
 			 spielfeldBreite = 825;
 			 spielfeldHoehe = 170;
-			 haggisBreite = 400;
-			 haggisHoehe = 200;			 
 			 iconBreite = 150;
 			 iconHoehe = 150;			
 			 linksStrBreite = 310;
@@ -230,16 +227,13 @@ public class Spieltisch extends JFrame{
 			 eigeneKartenHoehe = 170;
 			 rueckseiteBreite = 150;
 			 rueckseiteHoehe = 200;
-			 chatPanelBreite = 200;
-			 chatPanelHoehe = 400;
-			 chatHoehe = 300;
+		
 							 
 		 }
 		 
 		//border
 		LineBorder borderinvis = new LineBorder(Color.BLACK, 0, true);
 		LineBorder border = new LineBorder(Color.BLACK, 3, true);
-		LineBorder borderWhite = new LineBorder(Color.WHITE, 3, true);
 		TitledBorder Chatborder = new TitledBorder(border,"Chat",TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
 		TitledBorder Handkartenborder = new TitledBorder(borderinvis,"Handkarten",TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
 		TitledBorder Jokerkartenborder = new TitledBorder(borderinvis,"Jokerkarten",TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
@@ -247,26 +241,17 @@ public class Spieltisch extends JFrame{
 		
 				
 		/***************************************************************************************
-		NORTH TEIL DES hauptLayer
+		NORTH TEIL DES HAUPTPANEL
 		****************************************************************************************/
 		
 		//JPanel welche alle informationen ueber den Gegner beinhaltet
 		JPanel enemy = new EigenPanel(4);
 		JPanel enemyKarten = new EigenPanel(4);
-		
 		enemy.setLayout(new BoxLayout(enemy, BoxLayout.X_AXIS));
-		
 		enemyKarten.setLayout(new GridBagLayout());
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
-		
-		imageHaggis = new ImageIcon(pfad +"haggis.jpg").getImage();
-		iconHaggis = new ImageIcon(imageHaggis.getScaledInstance(haggisBreite, haggisHoehe, Image.SCALE_DEFAULT));	
-		JLabel lblHaggisImage = new JLabel();
-		lblHaggisImage.setIcon(iconHaggis);
-		
-		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
-		image = new ImageIcon(pfad +"icon.jpg").getImage();
+		image = new ImageIcon(pfad +"icon.png").getImage();
 		icon = new ImageIcon(image.getScaledInstance(iconBreite, iconHoehe, Image.SCALE_DEFAULT));	
 		JLabel lblImage = new JLabel();
 		lblImage.setIcon(icon);
@@ -280,7 +265,7 @@ public class Spieltisch extends JFrame{
 		PunkteInfo.setLayout(new GridBagLayout());
 		lblPunkteEigen = new JLabel("Punkte: ");
 		lblPunkteGegner = new JLabel("Gegnerische Punkte: ");
-		JLabel lblHolder = new JLabel();
+		
 		
 		
 		//Added alle Informationen dem JPanel enemyKarten
@@ -323,23 +308,71 @@ public class Spieltisch extends JFrame{
 		lblPunkteEigen.setForeground(Color.black);
 		lblPunkteGegner.setForeground(Color.black);
 		
+
+		//Wetten
+		JPanel WettenPanel = new EigenPanel(4);
+		WettenPanel.setLayout(new BoxLayout(WettenPanel, BoxLayout.Y_AXIS));
+		
+		JPanel EigenWette = new EigenPanel(4);
+		FlowLayout flow = new FlowLayout(FlowLayout.LEFT);
+		EigenWette.setLayout(flow);
+		
+		EigeneWetten = new JTextField(15);
+		EigeneWetten.setEditable(false);
+		EigeneWetten.addFocusListener(new FocusListener(){
+		        @Override
+		        public void focusGained(FocusEvent e){
+		        	if(EigeneWetten.getText().equals("Platzieren Sie hier ihre Wette!")){
+		        		EigeneWetten.setText("");
+		        	}else{
+		        		
+		        	}
+		        }
+				@Override
+				public void focusLost(FocusEvent e) {
+					// TODO Auto-generated method stub
+					if(EigeneWetten.getText().equals("")){
+						EigeneWetten.setText("Platzieren Sie hier ihre Wette!");
+					}
+				}
+		    });
+		
+		jbtWetten = new JButton ("Wetten!");
+		
+		JPanel GegnerWette = new EigenPanel(4);
+		GegnerWette.setLayout(new FlowLayout(FlowLayout.LEFT));
+		GegnerWetten = new JTextField(20);
+		GegnerWetten.setEditable(false);
+			
+		jbtWetten.addActionListener(bHandler);
+		jbtWetten.setEnabled(false);
+		
+		EigenWette.add(EigeneWetten);
+		EigenWette.add(Box.createRigidArea(new Dimension(55,0)));
+		EigenWette.add(jbtWetten);
+		
+		GegnerWette.add(GegnerWetten);
+	
+		WettenPanel.add(EigenWette);
+		WettenPanel.add(GegnerWette);
+		
 		//Added alle Componente dem JPanel enemy
-		
-		
-		enemy.add(lblImage);
+		enemy.add(Box.createRigidArea(new Dimension(100,0)));
 		enemy.add(enemyKarten);
-		enemy.add(lblHaggisImage);
+		enemy.add(Box.createRigidArea(new Dimension(10,0)));
+		enemy.add(lblImage);
+		enemy.add(Box.createRigidArea(new Dimension(10,0)));
 		enemy.add(PunkteInfo);
 		
 		cons.ipady = 0;
 		cons.ipadx = 0;		
 		
 		/***************************************************************************************
-		CENTER TEIL DES hauptLayer
+		CENTER TEIL DES HAUPTPANEL
 		****************************************************************************************/
 		JPanel spiel = new EigenPanel(4);
 		
-		JPanel spielfeld = new EigenPanel(3);
+		JPanel spielfeld = new EigenPanel(2);
 		
 		
 		spiel.setLayout(new FlowLayout());
@@ -349,60 +382,53 @@ public class Spieltisch extends JFrame{
 	
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
-		imageRueckseite = new ImageIcon(pfad +"rueckseite.jpg").getImage();
+		imageRueckseite = new ImageIcon(pfad +"rueckseite.png").getImage();
 		rueckseite = new ImageIcon(imageRueckseite.getScaledInstance(rueckseiteBreite, rueckseiteHoehe, Image.SCALE_DEFAULT));	
 		JLabel lblHaggis = new JLabel();
 		lblHaggis.setIcon(rueckseite);
 		
 		
 		//JPanel fuer den Oberen Teil des Spielfeld
-		JPanel spielfeldoben = new EigenPanel(4);
+		JPanel spielfeldoben = new EigenPanel(2);
 		spielfeldoben.setPreferredSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setMaximumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setMinimumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setLayout(new BoxLayout(spielfeldoben, BoxLayout.X_AXIS));
 			
-		Color bg = new Color(135,210,229);
-		spielfeldoben.setOpaque(true);
-		spielfeldoben.setBackground(bg);
+	
 		
 		//Schleife welches 7 Labels im oberen Spielfeld erstellt
 		spielfeldoben.add(Box.createHorizontalStrut(30));
 		for(int i = 0;i<7;i++){
 			JLabel anzeigeKarte = new JLabel();
-			anzeigeKarte.setPreferredSize(new Dimension(kartenBreite+6, kartenHoehe+5));
-			anzeigeKarte.setMaximumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
-			anzeigeKarte.setMinimumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
-			anzeigeKarte.setBorder(border);
+			anzeigeKarte.setPreferredSize(new Dimension(kartenBreite, kartenHoehe+5));
+			anzeigeKarte.setMaximumSize(new Dimension(kartenBreite, kartenHoehe+5));
+			anzeigeKarte.setMinimumSize(new Dimension(kartenBreite, kartenHoehe+5));
 			anzeigeKarten[i] = anzeigeKarte;
 			spielfeldoben.add(anzeigeKarten[i]);
 			spielfeldoben.add(Box.createHorizontalStrut(5));
 		}
 		
 		//JPanel fuer den unteren Teil des Spielfelds
-		JPanel spielfeldunten = new EigenPanel(4);
+		JPanel spielfeldunten = new EigenPanel(2);
 		spielfeldunten.setPreferredSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldunten.setMaximumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldunten.setMinimumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldunten.setLayout(new BoxLayout(spielfeldunten, BoxLayout.X_AXIS));
 					
 
-		spielfeldunten.setOpaque(true);
-		spielfeldunten.setBackground(bg);
 				
 		//Schleife welches 7 Labels im unteren Teil des Spielfelds erstellt
 		spielfeldunten.add(Box.createHorizontalStrut(30));
 		for(int i = 7;i<14;i++){
 			JLabel anzeigeKarte = new JLabel();
-			anzeigeKarte.setPreferredSize(new Dimension(kartenBreite+6, kartenHoehe+5));
-			anzeigeKarte.setMaximumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
-			anzeigeKarte.setMinimumSize(new Dimension(kartenBreite+6, kartenHoehe+5));
-			anzeigeKarte.setBorder(border);
+			anzeigeKarte.setPreferredSize(new Dimension(kartenBreite, kartenHoehe+5));
+			anzeigeKarte.setMaximumSize(new Dimension(kartenBreite, kartenHoehe+5));
+			anzeigeKarte.setMinimumSize(new Dimension(kartenBreite, kartenHoehe+5));
 			anzeigeKarten[i] = anzeigeKarte;
 			spielfeldunten.add(anzeigeKarten[i]);
 			spielfeldunten.add(Box.createHorizontalStrut(5));
 		}
-		
 				
 		haggis.add(lblHaggis);
 		haggis.setBorder(Haggisborder);
@@ -412,11 +438,11 @@ public class Spieltisch extends JFrame{
 		spielfeld.setBorder(border);
 		
 		spiel.add(haggis);
-		
 		spiel.add(spielfeld);
 		
+		
 		/***************************************************************************************
-		SOUTH TEIL DES hauptLayer
+		SOUTH TEIL DES HAUPTPANEL
 		****************************************************************************************/
 		
 		JPanel spielSteuerung = new EigenPanel(4);
@@ -437,7 +463,7 @@ public class Spieltisch extends JFrame{
 		rechtsSteuerung.setMaximumSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
 		rechtsSteuerung.setMinimumSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
 		
-		//Alle Container fï¿½r das  Panel jokerkarten werden gemacht		
+		//Alle Container fuer das  Panel jokerkarten werden gemacht		
 		JPanel buttons = new EigenPanel(4);
 		buttons.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
@@ -465,7 +491,7 @@ public class Spieltisch extends JFrame{
 		eigeneKartenButtonsOben.setMinimumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsOben.setLayout(new BoxLayout(eigeneKartenButtonsOben, BoxLayout.X_AXIS));
 		
-		//Generiert 7 Buttons und fï¿½gt sie dem Array hinzu	
+		//Generiert 7 Buttons und fuegt sie dem Array hinzu	
 		for(int i = 0;i<7;i++){
 			JButton jbtKarte = new JButton();
 			jbtKarte.setPreferredSize(new Dimension(kartenBreite,kartenHoehe));
@@ -485,7 +511,7 @@ public class Spieltisch extends JFrame{
 		eigeneKartenButtonsUnten.setMinimumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsUnten.setLayout(new BoxLayout(eigeneKartenButtonsUnten, BoxLayout.X_AXIS));
 		
-		//Generiert 7 Buttons und fï¿½gt sie dem Array hinzu	
+		//Generiert 7 Buttons und fuegt sie dem Array hinzu	
 		for(int i = 7;i<14;i++){
 			kartenBound = 0;
 			JButton jbtKarte = new JButton();
@@ -521,8 +547,11 @@ public class Spieltisch extends JFrame{
 		rechtsSteuerung.add(eigeneKartenButtonsUnten);
 		rechtsSteuerung.setBorder(Handkartenborder);
 		
+		
 		linksSteuerung.add(jokerkarten);
 		linksSteuerung.add(buttons);
+		buttons.add(Box.createVerticalGlue());
+		buttons.add(Box.createHorizontalGlue());
 		linksSteuerung.setBorder(Jokerkartenborder);
 		
 		kartenSteuerung.add(linksSteuerung);
@@ -537,90 +566,87 @@ public class Spieltisch extends JFrame{
 		
 		//Chat		
 		JPanel chatPanel = new EigenPanel(4);
-		chatPanel.setPreferredSize(new Dimension(chatPanelBreite, chatPanelHoehe));
-		chatPanel.setMaximumSize(new Dimension(chatPanelBreite, chatPanelHoehe));
-		chatPanel.setMinimumSize(new Dimension(chatPanelBreite, chatPanelHoehe));
-		chatPanel.setLayout(new GridBagLayout());
+	
+		chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
+		
+		JPanel chatEingabe = new EigenPanel(4);
+		chatEingabe.setLayout(new BoxLayout(chatEingabe, BoxLayout.X_AXIS));
 		
 		jbtEingabe = new JButton("Eingabe");
+		jbtEingabe.setEnabled(false);
 		jbtEingabe.addActionListener(bHandler);
 				
-		txtAChat = new JTextArea(10,20);
+		txtAChat = new JTextArea(20,20);
 		txtAChat.setLineWrap(true);
 	    txtAChat.setEditable(false);
 	  	txtAChat.setVisible(true);
 		txtAChat.setBorder(Chatborder);
-
-	    JScrollPane scroll = new JScrollPane (txtAChat);
-	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-	    scroll.add(txtAChat);
 		
-		txtAEingabe = new JTextArea(3,10);
+		JScrollPane scroll = new JScrollPane(txtAChat);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+ 
+		
+		txtAEingabe = new JTextArea(2,1);
 		txtAEingabe.setLineWrap(true);
+		txtAEingabe.setEditable(false);
+		
+		
+		JScrollPane scrollEingabe = new JScrollPane(txtAEingabe);
+		scrollEingabe.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		chatEingabe.add(scrollEingabe);
+		chatEingabe.add(jbtEingabe);
+		
+		chatPanel.add(scroll);
+		chatPanel.add(Box.createRigidArea(new Dimension(0,10)));
+		chatPanel.add(chatEingabe);
+		
+		
+		//Panel für Statusmeldung
+		JPanel lblHolder = new EigenPanel(3);
+		lblHolder.setLayout(new FlowLayout(FlowLayout.CENTER));
+		lblHolder.setPreferredSize(new Dimension(400,100));
+		lblHolder.setMaximumSize(new Dimension(400, 100));
+		lblHolder.setMinimumSize(new Dimension(400, 100));
+		lblHolder.setBorder(border);
+		
+		lblInfo = new JLabel("Warten auf Gegner!");
+		lblInfo.setFont(new Font("Verdana", Font.BOLD, 15));
+		lblInfo.setForeground(Color.black);
+	
+		
+		lblHolder.add(lblInfo);
 				
-		cons.weightx = 0.0;
-		cons.gridy = 1;
-		cons.gridx = 0;
-		cons.gridwidth = 2;
-		cons.fill = GridBagConstraints.HORIZONTAL;
-		cons.ipady = chatHoehe;
-		cons.ipadx = 1;
-		cons.insets = new Insets(10,0,0,0);
-		chatPanel.add(txtAChat, cons);
-		
-		cons.ipady = 0;
-		cons.fill = GridBagConstraints.BOTH;
-		cons.weightx = 0;
-		cons.weighty = 0;
-		cons.gridwidth = 1;
-		cons.gridy = 2;
-		cons.gridx = 0;
-		chatPanel.add(txtAEingabe, cons);
-		
-		
-		cons.gridy = 2;
-		cons.gridx = 1;
-		chatPanel.add(jbtEingabe,cons);
-		
-		//Wetten
-		JPanel WettenPanel = new EigenPanel(4);
-		WettenPanel.setLayout(new BoxLayout(WettenPanel,BoxLayout.Y_AXIS));
-		lblEigeneWetten = new JLabel("Eigene Wette");
-		lblGegnerWetten = new JLabel("Gegner Wette");
-			
-		WettenPanel.add(lblEigeneWetten);
-		WettenPanel.add(lblGegnerWetten);
-		
-				
-		//Alles dem hauptLayer adden
+		//Alles dem hauptPanel adden
 		cons.weightx=0;
 		cons.weighty=0;
+		cons.gridwidth = 1;
+		
 		
 		cons.gridx = 0;
 		cons.gridy = 0;
-		hauptLayer.add(enemy, cons);
+		hauptPanel.add(enemy, cons);
 		
 		cons.gridx = 0;
 		cons.gridy = 1;
-		hauptLayer.add(spiel, cons);
+		hauptPanel.add(spiel, cons);
 		
-		cons.weightx = 0;
-		cons.weighty = 0;
 		cons.gridx = 0;
 		cons.gridy = 2;
 		cons.gridwidth = 1;
-		hauptLayer.add(spielSteuerung,cons);
+		hauptPanel.add(spielSteuerung,cons);
+		
+		cons.gridx = 1;
+		cons.gridy = 0;
+		hauptPanel.add(WettenPanel,cons);
 		
 		cons.gridx = 1;
 		cons.gridy = 1;
-		hauptLayer.add(WettenPanel,cons);
-		
-		cons.weightx = 0;
-		cons.weighty = 0;
+		hauptPanel.add(lblHolder,cons);
+				
 		cons.gridx = 1;
 		cons.gridy = 2;
-		hauptLayer.add(chatPanel, cons);
+		hauptPanel.add(chatPanel, cons);
 		
 		
 		//Alle Panels transparent
@@ -642,51 +668,8 @@ public class Spieltisch extends JFrame{
 		jokerkarten.setBackground(new Color(0,0,0,1));
 		chatPanel.setBackground(new Color(0,0,0,1));
 		
-		/***************************************************************************************
-		2 Layer für Wetten
-		****************************************************************************************/
-		/*eroeffnungLayer.setLayout(new BoxLayout(eroeffnungLayer,BoxLayout.Y_AXIS));
-		eroeffnungLayer.setBounds((int) (width/2)-250, 200, 500, 100);
-		eroeffnungLayer.setOpaque(true);
-		
-		hauptLayer.setBounds(0,0,(int) width, (int) height-50);
-		
-		
-		//Componenten für 2 Layer
-		JPanel labelHalter = new EigenPanel(3)(4);
-		labelHalter.setLayout(new FlowLayout());
-		JLabel lblEroeffnungText = new JLabel("Sobald Sie Spielbereit sind platzieren Sie ihre Wette");
-		JPanel WettenButtonPanel = new EigenPanel(3)(4);
-		WettenButtonPanel.setLayout(new FlowLayout());
-		
-		
-		//Buttons um Wetten abzuschliessen	
-		jbtNichtWetten = new JButton ("Nicht Wetten");
-		jbtKleineWette = new JButton ("Kleine Wette");
-		jbtGrosseWette = new JButton ("Grosse Wette");
-		
-		jbtNichtWetten.addActionListener(bHandler);
-		jbtKleineWette.addActionListener(bHandler);
-		jbtGrosseWette.addActionListener(bHandler);
-		
-		WettenButtonPanel.add(jbtNichtWetten);
-		WettenButtonPanel.add(jbtKleineWette);
-		WettenButtonPanel.add(jbtGrosseWette);
-		
-		//Alles dem 2 Layer adden
-		labelHalter.add(lblEroeffnungText);
-		eroeffnungLayer.add(labelHalter);
-		eroeffnungLayer.add(WettenButtonPanel);
-		
-		
-		//Layer organisieren
-		mainPanel.add(hauptLayer, new Integer(0), 0);
-		mainPanel.add(eroeffnungLayer, JLayeredPane.POPUP_LAYER);*/
-		
-		
-		
-		Tisch.add(hauptLayer);
-		Tisch.setExtendedState(Tisch.MAXIMIZED_BOTH);
+		Tisch.add(hauptPanel);
+		Tisch.setExtendedState(Frame.MAXIMIZED_BOTH);
 		Tisch.setVisible(true);
 		Tisch.setResizable(false);
 		Tisch.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -752,6 +735,8 @@ public class Spieltisch extends JFrame{
 	public JTextArea getTxtAChat(){
 		return this.txtAChat;
 	}
+	
+	
 
 
 	/***************************************************************************************
@@ -810,6 +795,7 @@ public class Spieltisch extends JFrame{
 				for (int i = 0; i < gespielteKarten.size(); i++){
 					System.out.println(gespielteKarten.get(i).getWert());
 				}
+			
 				
 				//Wenn eine Einzelkarte gespielt wurde und sie hoecher ist wie die bereits gespielte Karte, stich erfolgreich
 				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){	
@@ -824,7 +810,9 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Bombe sind können sie alles stechen ausser eine höhere Bombe
 				
 				//Bombe sticht eine andere Bombe wenn sie höher ist wie die andere Bombe
-				else if(istBombe(gespielteKarten) < istBombe(Client.game.getFeldkarten())){
+				
+				else if(gespielteKarten.size() > 0 && istBombe(gespielteKarten) < istBombe(Client.game.getFeldkarten())){
+					
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -832,7 +820,8 @@ public class Spieltisch extends JFrame{
 				}
 				
 				//Bombe sticht alle anderen Kombinationen
-				else if(istBombe(gespielteKarten) > 0){
+				else if(istBombe(gespielteKarten) > 0 && !Client.game.getBombe()){
+					Client.game.setBombe(true);
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -1029,6 +1018,7 @@ public class Spieltisch extends JFrame{
 				
 				//Wenn die Karten eine Bombe sind
 				else if(istBombe(gespielteKarten) > 0){
+					Client.game.setBombe(true);
 					karteAnzeigen(gespielteKarten);
 					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
@@ -1318,13 +1308,21 @@ public class Spieltisch extends JFrame{
 	//Methode welche die gespielten Karten in die Feldkarten kopiert
 	public void kartenFeldKopieren(ArrayList<Card> karten){
 	
+		
 		//Clearet das Array welche Feldkarten speichert
 		Client.game.getFeldkarten().clear();
 		
+		System.out.println("KARTENFELDKOPIEREN______________________________");
+		
+		
 		//added dem Array die neu Ausgespielten Feldkarten
 		for (int k = 0; k < karten.size(); k++){
-			Client.game.getFeldkarten().add(new Card(karten.get(k).getWert(),karten.get(k).getName(), karten.get(k).getBild(), karten.get(k).getPunkte(), karten.get(k).getFarbe(), karten.get(k).getJoker()));
+			Client.game.getFeldkarten().add(new Card(karten.get(k).getWert(),karten.get(k).getName(), karten.get(k).getBild(), 
+					karten.get(k).getPunkte(), karten.get(k).getFarbe(), karten.get(k).getJoker()));
+			System.out.println(Client.game.getFeldkarten().get(k).getWert());
 		}
+		
+		
 		Client.game.addAusgespielteKarten(Client.game.getFeldkarten());
 			
 		gespielteKarten.clear();
@@ -1332,6 +1330,8 @@ public class Spieltisch extends JFrame{
 
 	//Methode welche die Karten in der Mitte anzeigt und die entsprechenden Handkarten nicht mehr sichtbar macht
 	public void karteAnzeigen(ArrayList<Card> karten){
+		
+		kartenFeldLoeschen();
 		
 		System.out.println("Karten anzeigen......................");	
 	
@@ -1345,33 +1345,45 @@ public class Spieltisch extends JFrame{
 	}
 	
 	//Methode welche die die Wetten eingiebt
-	public int wetten(){
+	public void wetten(){
 		int wette = 0;
-		
-		String[] choices = {"keine Wette", "kleine Wette", "Grosse Wette"};
-		int eingabe = JOptionPane.showOptionDialog(
-		                               null                     
-		                             , "Möchten Sie eine Wette abschliessen? kleine Wette = 15 Punkte, grosse Wette = 30 punkte"     
-		                             , "Wette abschliessen"             
-		                             , JOptionPane.YES_NO_OPTION  
-		                             , JOptionPane.PLAIN_MESSAGE 
-		                             , null                     
-		                             , choices                    
-		                             , "Wette wurde abgeschlossen"   
-		                           );
+		boolean gueltig = false;
+		int eingabe = Integer.parseInt(EigeneWetten.getText());
 	
-		if(eingabe == JOptionPane.YES_OPTION){
+		if(eingabe == 0){
 			wette = 0;
+			gueltig = true;
 		}
-		else if(eingabe == JOptionPane.NO_OPTION){
+		else if(eingabe == 15){
 			wette = 15;
+			gueltig = true;
 		}
-		else if(eingabe == JOptionPane.CANCEL_OPTION){
+		else if(eingabe == 30){
 			wette = 30;
+			gueltig = true;
 		}
+		else{
+			JOptionPane.showMessageDialog (null, "<html>Bitte ueberpruefen Sie die Eingabe nochmals <br>"
+					+ " Moegliche Eingaben : 0 (nicht Wetten) 15 (kleine Wette) 30 (grosse Wette)","Ungueltige Eigabe",1);
+		}
+	
 		
-		System.out.println("Wette wert: " + wette);
-		return wette;
+		
+		System.out.println("Wert Wette in Spieltisch: " + wette);
+		
+		if(gueltig){
+			for (int i = 0; i < Client.game.getSpielerList().size(); i++){
+				System.out.println("THIS NAME : " + this.name);
+				System.out.println("SPIELER NAME : " + Client.game.getSpielerList().get(i).getSpielerName());
+				if(this.name.equals(Client.game.getSpielerList().get(i).getSpielerName())){
+					System.out.println("If in wette");
+					setWette(true);
+					Client.game.getSpielerList().get(i).setWette(wette);
+					Client.game.getSpielerList().get(i).setGewettet(true);
+					
+				}
+			}
+		}
 	}
 		
 	//Methode welche den Spieler auffordert einen Wert fuer den Joker einzugeben und diese zurï¿½ck gibt
@@ -1667,7 +1679,6 @@ public class Spieltisch extends JFrame{
 		}
 		if(bedingungWert==karten.size()/set-1){
 			if(set>1){
-				System.out.println("bedingungWert :" + bedingungWert);
 				return true;
 			}else{
 				if((bedingungFarbe == karten.size()-1)){
@@ -1676,7 +1687,7 @@ public class Spieltisch extends JFrame{
 			}
 				
 		}
-		System.out.println("bedingungWert :" + bedingungWert);
+		
 		return false;
 	}
 	
@@ -1685,6 +1696,7 @@ public class Spieltisch extends JFrame{
 
 		this.jbtPassen.setEnabled(amZug);
 		this.jbtSpielen.setEnabled(amZug);
+		
 	}
 		
 	//Methode welche die Informationen des Gegners in den Spieltisch ladet
@@ -1698,21 +1710,22 @@ public class Spieltisch extends JFrame{
 		
 	//Methode zum senden des Spielobjektes
 	public void sendeGameObjekt(){
+		
 		try{
-			
-			System.out.println("---------gesendet Game----------");
-
 			Spieltisch.out.writeObject(Client.game);
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+			
 	}
+			
 
 	//Methode zum senden des Chatobjektes
 	public void sendeChatObjekt(){
 		try{
 
 			Spieltisch.out.writeObject(chat);
+			out.flush();
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -2332,6 +2345,8 @@ public class Spieltisch extends JFrame{
 	
 	//Ueberprueft ob es eine Bombe und welche im Ranking
 	public int istBombe(ArrayList<Card> karten){
+		
+		
 		/*
 		 * Bomben Ranking:
 		 * 1. 3 - 5 - 7 - 9 gleiche Farbe
@@ -2350,7 +2365,14 @@ public class Spieltisch extends JFrame{
 		int testBombe1 = 0;
 		
 		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
-		jokerWertWechsel(karten);
+		//jokerWertWechsel(karten);
+		
+		System.out.println("FELDKARTEN IN JOKER HUERESOHN MISSGEBURT FICKT MI AH AM 3:23");
+		if(Client.game.getFeldkarten().size()>0){
+			for(int i = 0; i < Client.game.getFeldkarten().size(); i++){
+				System.out.println(Client.game.getFeldkarten().get(i).getWert());
+			}
+		}
 
 		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
 		Collections.sort(karten);
@@ -2377,6 +2399,11 @@ public class Spieltisch extends JFrame{
 		
 		//Es muessen 2 Karten sein
 		if(karten.size() == 2){
+			
+			if(Client.game.getFeldkarten().size()>0){
+				for(int i = 0; i < Client.game.getFeldkarten().size(); i++){
+				}
+			}
 			for(int i = 0; i <karten.size(); i++){
 				if(karten.get(i).getWert() == 11 || karten.get(i).getWert() == 12){
 					testBombe5++;
@@ -2438,24 +2465,27 @@ public class Spieltisch extends JFrame{
 		
 		//Je nach Bombe wird gemaess der Rangliste eine anderen Wert zurueck gegeben
 		
-		if(testBombe6 == 4){
-			return 6;
-		}
-		else if(testBombe5 == 2){
-			return 5;
-		}
-		else if(testBombe4 == 2){
-			return 4;
-		}
-		else if(testBombe3 == 2){
-			return 3;
+		
+		
+		if(testBombe1 == 4){
+			return 1;
 		}
 		else if(testBombe2 == 3){
 			return 2;
 		}
-		else if(testBombe1 == 4){
-			return 1;
-		}else{
+		else if(testBombe3 == 2){
+			return 3;
+		}
+		else if(testBombe4 == 2){
+			return 4;
+		}
+		else if(testBombe5 == 2){
+			return 5;
+		}
+		else if(testBombe6 == 4){
+			return 6;
+		}
+		else{
 			return 0;
 		}
 		
@@ -2464,6 +2494,15 @@ public class Spieltisch extends JFrame{
 		
 		
 	}
+	
+	public void setWette(boolean wette){
+		this.wette = wette;
+	}
+	
+	public boolean getWette(){
+		return this.wette;
+	}
+	
 	
 	
 	/***************************************************************************************
@@ -2485,7 +2524,6 @@ public class Spieltisch extends JFrame{
 			//Handlet die gedruckten Karten und setzt ihnen einen Border oder nicht (JokerKarten)
 			for(int i = 0;i<3;i++){
 				if(e.getSource() == jokerKarten[i]){
-					System.out.println(gedrucktJoker[i]);
 					gedrucktJoker[i] = gedruckt(gedrucktJoker[i]);
 					if(gedrucktJoker[i]){
 						jokerKarten[i].setBorder(gedrucktBorder);
@@ -2544,14 +2582,20 @@ public class Spieltisch extends JFrame{
 				System.out.println("chat gesendent mit inhalt:");
 				System.out.println(chat.getMessage());
 			}
-			else if(e.getSource()==jbtNichtWetten){
+			else if(e.getSource()==jbtWetten){
+				wetten();
+				
+				sendeGameObjekt();
+			
+			}
+		
 				
 				
 				}
 			}
 		}
 		
-	}
+	
 
 	
 	

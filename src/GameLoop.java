@@ -46,7 +46,8 @@ public class GameLoop extends Thread{
 						
 						// creating Masterobject
 						if (userlist.size() == 2) {
-
+							
+							System.out.println("creating master objekt");
 							Gameobjekt game = new Gameobjekt(userlist);
 							//sleep - otherwise complications with Clients (update-problem)
 							try {
@@ -54,6 +55,9 @@ public class GameLoop extends Thread{
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
+							
+							
+							
 							// send Masterobject to Clients
 							Iterator<ObjectOutputStream> i = outlist.iterator();
 							while (i.hasNext()) {
@@ -69,8 +73,12 @@ public class GameLoop extends Thread{
 
 						Gameobjekt game = (Gameobjekt) inputObject;	
 						
+						
+						
 						//Wenn einer von beiden Spielern eine leeere Hand hat ist die Runde vorbei und die Logik wird angewandt
 						if(game.getSpieler(0).leereHand()){
+							
+							game.setRundenEnde(true);
 							
 							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugef¸gt werden
 							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
@@ -95,16 +103,12 @@ public class GameLoop extends Thread{
 							game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte() + game.getSpieler(0).getWette());
 							
 							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
-							if(game.getSpieler(0).getPunkte() >= game.getSpieler(0).getSiegesPunkte() && game.getSpieler(0).getPunkte() > game.getSpieler(1).getPunkte()){
-								game.getSpieler(0).setSieger(true);
-								game.setSpielBeendet(true);
-							}else{
-								game.setNeueRunde(true);
-								game.erstelleDeck();
-							}
+						
 
 						}
 						else if(game.getSpieler(1).leereHand()){
+							
+							game.setRundenEnde(true);
 							
 							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugef¸gt werden
 							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
@@ -130,16 +134,32 @@ public class GameLoop extends Thread{
 							game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte() + game.getSpieler(1).getWette());
 							
 							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
+							
+
+						}
+					
+						if(game.getRundenEnde()){
+								
+							if(game.getSpieler(0).getPunkte() >= game.getSpieler(0).getSiegesPunkte() && game.getSpieler(0).getPunkte() > game.getSpieler(1).getPunkte()){
+								game.getSpieler(0).setSieger(true);
+								game.setSpielBeendet(true);
+							}						
 							if(game.getSpieler(1).getPunkte() >= game.getSpieler(1).getSiegesPunkte() && game.getSpieler(1).getPunkte() > game.getSpieler(0).getPunkte()){
 								game.getSpieler(1).setSieger(true);
 								game.setSpielBeendet(true);
 							}else{
+								System.out.println("BOOOOBEN");
 								game.setNeueRunde(true);
+								game.setRundenEnde(false);
 								game.erstelleDeck();
+								game.setRunde(0);
 							}
-
 						}
-					
+						
+						
+						
+						
+						
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -161,21 +181,34 @@ public class GameLoop extends Thread{
 					//Uebergiebt dem nich passenden Spieler alle Karten da er der h√∂chste Stich hatte
 					if(game.getSpieler(0).getPassen()){
 						
-						game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+						game.setRunde(game.getRunde()+1);
+						if(game.getBombe()){
+							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+							game.setBombe(false);
+						}else{
+							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+						}
+						
 						game.getSpieler(0).setPassen(false);
-						game.getAusgespielteKarten().removeAll(game.getAusgespielteKarten());
+						game.getAusgespielteKarten().clear();
 						game.getFeldkarten().clear();
 					}
 					else if(game.getSpieler(1).getPassen()){
 						
-						game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+						game.setRunde(game.getRunde()+1);
+						if(game.getBombe()){
+							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+							game.setBombe(false);
+						}else{
+							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+						}
 						game.getSpieler(1).setPassen(false);
-						game.getAusgespielteKarten().removeAll(game.getAusgespielteKarten());
+						game.getAusgespielteKarten().clear();
 						game.getFeldkarten().removeAll(game.getFeldkarten());
 					}
 					
 					
-					
+										
 					Iterator<ObjectOutputStream> i = outlist.iterator();
 					while (i.hasNext()) {
 						i.next().writeObject(game);
@@ -184,11 +217,16 @@ public class GameLoop extends Thread{
 				}
 					else if(inputObject instanceof Chat){
 						Chat chat = (Chat) inputObject;
-											
+						
 						
 						System.out.println(chat.getMessage());
 						Iterator<ObjectOutputStream> i = outlist.iterator();
 						while (i.hasNext()) {
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							i.next().writeObject(chat);
 							
 						}
