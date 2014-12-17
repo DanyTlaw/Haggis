@@ -19,6 +19,7 @@ public class Client {
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	Object inputObject;
+	private String lblText;
 	
 	static int client_ID;
 	public static Gameobjekt game;
@@ -62,31 +63,85 @@ public class Client {
 					}
 					
 					if(game.getSpielBeendet()){
-						String resultat= "verloren";
+						login.getTisch().jbtWetten.setEnabled(false);
+						login.getTisch().jbtEingabe.setEnabled(false);
+						login.getTisch().EigeneWetten.setEditable(false);
+						login.getTisch().getTxtAEingabe().setEditable(false);
+						login.getTisch().amZugButtons(false);
+						String resultat = "verloren";
+						String titel = "Viel Glueck beim naechsten Mal!";
 
 						if(game.getSpieler(client_ID).getSieger()){
 							resultat = "gewonnen";
+							titel = "Herzlichen Glueckwunsch!";
 						}
 						
 						
-						JOptionPane.showMessageDialog (login.getTisch(),"Sie haben " + resultat ,"Ungueltige Farbe",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog (login.getTisch(),"Sie haben " + resultat ,titel,JOptionPane.INFORMATION_MESSAGE);
 					}
 					
+
+					if(game.getWettenAbwicklung()){
+						
+						if(login.getTisch().getWette()){
+													
+							login.getTisch().EigeneWetten.setEditable(false);
+							login.getTisch().jbtWetten.setEnabled(false);
+							login.getTisch().setWette(false);
+							
+							
+						}if(game.getSpieler(0).getGewettet() && game.getSpieler(1).getGewettet()){
+							
+							lblText = "Wette abgeschlossen, Spiel beginnt!";
+							game.setRunde(game.getRunde()+1);
+							login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + lblText + "<br>Runde: " + game.getRunde() + "<br/>"  + "</html>");
+							
+							game.setWettenAbwicklung(false);
+									
+							//Spieler eins darf anfangen die ist amZug variable wird true oder flase gesetzt
+							if(client_ID==0){
+								game.getSpieler(client_ID).setAmZug(true);
+								login.getTisch().EigeneWetten.setText("Ihre Wette: " + game.getSpieler(0).getWette());
+								login.getTisch().GegnerWetten.setText("Gegner Wette: " + game.getSpieler(1).getWette());	
+							}else{
+								game.getSpieler(client_ID).setAmZug(false);
+								login.getTisch().EigeneWetten.setText("Ihre Wette: " + game.getSpieler(1).getWette());
+								login.getTisch().GegnerWetten.setText("Gegner Wette: " + game.getSpieler(0).getWette());
+							}
+							System.out.println("Spieler"+ client_ID +" :"+ game.getSpieler(client_ID).getAmZug());
+							
+							System.out.println("---------------------------------------------");		
+							
+							//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
+							if(game.getSpieler(client_ID).getAmZug()){
+								login.getTisch().amZugButtons(true);
+								
+							}	
+
+						}
+					}
+					
+
 					//Wenn ein Spiel schon gestartet wurde wird das Gameobject hier nach der aufgaben ausführen
 					if(!game.getNeueRunde()){
+											
 						ladetGegnerInfo();
-						System.out.println(client_ID);
 						
-						
-						
+						if(game.getRunde()>1){
+							login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + "<br>Runde: " + game.getRunde() + "<br/>"  + "</html>");
+						}
+									
 						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
 						if(game.getSpieler(client_ID).getAmZug()){
 							login.getTisch().amZugButtons(true);																					
 						}else{
 							login.getTisch().amZugButtons(false);						
-						}						
+						}
+						
 						if(game.getFeldkarten().size()>0){
-							 login.getTisch().karteAnzeigen(game.getFeldkarten());							
+							
+							login.getTisch().karteAnzeigen(game.getFeldkarten());
+										
 						}else{
 							login.getTisch().kartenFeldLoeschen();
 						}
@@ -95,8 +150,34 @@ public class Client {
 					}
 					
 					
+					
 					//Wenn die Spieler noch keine Handkarten haben werden neue Handkarten in ihre Handgeladen
 					if(game.getNeueRunde()){
+						
+						
+						lblText = "<html>Gegner gefunden <br>  Spiel startet sobald Wetten Platziert wurden!";
+						login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + lblText + "</html>");
+						
+						ladetGegnerInfo();
+						
+						
+						login.getTisch().jbtWetten.setEnabled(true);
+						login.getTisch().jbtEingabe.setEnabled(true);
+						login.getTisch().EigeneWetten.setEditable(true);
+						login.getTisch().getTxtAEingabe().setEditable(true);
+						login.getTisch().EigeneWetten.setText("Platzieren Sie hier ihre Wette!");
+						login.getTisch().GegnerWetten.setText("Gegner hat noch keine Wette Platziert");
+						
+						login.getTisch().amZugButtons(false);
+						
+						for(int i = 0; i < game.getSpielerList().size(); i++){
+							game.getSpieler(i).setGewettet(false);
+							game.getSpieler(i).setWette(0);
+							game.getSpieler(i).setAmZug(false);
+						}
+							
+						System.out.println("Spieler 0 Wette :" +game.getSpieler(0).getWette() + " " + game.getSpieler(0).getGewettet());
+						System.out.println("Spieler 0 Wette :" +game.getSpieler(1).getWette() + " " + game.getSpieler(1).getGewettet());
 						
 						System.out.println("Neues Spiel wird gestartet");
 						
@@ -108,41 +189,14 @@ public class Client {
 						login.getTisch().buttonsSichtbar();
 						
 						//Loescht alle Karten in der Mitte
+						game.getFeldkarten().clear();
 						login.getTisch().kartenFeldLoeschen();
 						
-						//Setzt die Variable neugestartet auf false
 						game.setNeueRunde(false);
-						
-						//Spieler eins darf anfangen die ist amZug variable wird true oder flase gesetzt
-						if(this.client_ID==0){
-							game.getSpieler(client_ID).setAmZug(true);
-						}else{
-							game.getSpieler(client_ID).setAmZug(false);
-						}
-						System.out.println("Spieler"+ client_ID +" :"+ game.getSpieler(client_ID).getAmZug());
-						
-						System.out.println("---------------------------------------------");
-						
-						//Wetten k�nnen abgeschlossen werden
-						System.out.println("Wette kann getan werden");
-						game.getSpieler(client_ID).setWette(login.getTisch().wetten());
-						System.out.println("Die Wette ist: " + game.getSpieler(client_ID).getWette());
-						game.getSpieler(client_ID).setGewettet(true);
-						
-						if(game.getSpieler(0).getGewettet() & game.getSpieler(1).getGewettet()){
-							ladetGegnerInfo();
-						}
-						
-						
-						//Die Methode welche die Buttons disabled und enabled wird für beide Spieler aufgerufen
-						if(game.getSpieler(client_ID).getAmZug()){
-							login.getTisch().amZugButtons(true);
-						}						
+						game.setWettenAbwicklung(true);
 					}
-					
-					
-				} 
-				
+				}
+	
 				else if(inputObject instanceof Chat){
 					chat = (Chat) inputObject;
 					
@@ -151,11 +205,6 @@ public class Client {
 					}else{
 						login.getTisch().getTxtAChat().setText(login.getTisch().getTxtAChat().getText() + "\n" + chat.getSpieler() +" : " +chat.getMessage());
 					}
-					
-					
-					
-					
-				
 				}
 				
 				// set Client_ID
@@ -186,14 +235,10 @@ public class Client {
 			login.getTisch().setAnzahlKarten(game.getSpieler(1).getHandKarten().size()-3);
 			login.getTisch().lblPunkteGegner.setText("Gegnerische Punktzahl : " +game.getSpieler(1).getPunkte());
 			login.getTisch().lblPunkteEigen.setText("Punktzahl : " +game.getSpieler(0).getPunkte());
-			login.getTisch().lblEigeneWetten.setText("Eigene Wetten: " +game.getSpieler(0).getWette());
-			login.getTisch().lblGegnerWetten.setText("Gegner Wetten: " +game.getSpieler(1).getWette());
-			
 			
 			for (int i = 3; i < game.getSpieler(1).getHandKarten().size(); i++){
 				if(game.getSpieler(1).getHandKarten().get(i).getWert() != 0){
 					anzahlKarten += 1;
-					System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
 				}
 			}
 			
@@ -205,9 +250,7 @@ public class Client {
 			login.getTisch().setAnzahlKarten(game.getSpieler(0).getHandKarten().size()-3);
 			login.getTisch().lblPunkteGegner.setText("Gegnerische Punktzahl : " +game.getSpieler(0).getPunkte());
 			login.getTisch().lblPunkteEigen.setText("Punktzahl : " +game.getSpieler(1).getPunkte());
-			login.getTisch().lblEigeneWetten.setText("Eigene Wetten: " +game.getSpieler(1).getWette());
-			login.getTisch().lblGegnerWetten.setText("Gegner Wetten: " +game.getSpieler(0).getWette());
-			
+				
 			for (int i = 3; i < game.getSpieler(0).getHandKarten().size(); i++){
 				if(game.getSpieler(0).getHandKarten().get(i).getWert() != 0){
 					anzahlKarten += 1;

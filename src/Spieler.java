@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class Spieler implements Serializable {
 
+	/**
+	 * 
+	 */
+
 	//Spieler informationen
 	private String spielerName;
 	private int spieler_ID;
@@ -14,7 +18,7 @@ public class Spieler implements Serializable {
 	private int siegesPunkte;
 	private boolean sieger = false;
 	private int wette;
-	boolean gewettet = false;
+	private volatile boolean gewettet = false;
 	
 	public ArrayList<Card> gewonneneKarten = new ArrayList<Card>();
 	
@@ -156,9 +160,6 @@ public class Spieler implements Serializable {
 		
 		for(int i = 0; i<gewonneneKarten.size();i++){
 			punkte+=gewonneneKarten.get(i).getPunkte();
-			System.out.println("-------------------------------------------------------------------");
-			System.out.println(punkte);
-			System.out.println("-------------------------------------------------------------------");
 		}
 		return punkte;
 	}

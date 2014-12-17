@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 public class Gameobjekt implements Serializable {
 
-	public ArrayList<Spieler> spieler;
-	public ArrayList<Card> feldkarten = new ArrayList<Card>();
-	public ArrayList<Card> ausgespielteKarten = new ArrayList<Card>();
-	public ArrayList<Card> haeggis = new ArrayList<Card>();
+	private ArrayList<Spieler> spieler;
+	private ArrayList<Card> feldkarten = new ArrayList<Card>();
+	private ArrayList<Card> ausgespielteKarten = new ArrayList<Card>();
+	private ArrayList<Card> haeggis = new ArrayList<Card>();
 	
-	public boolean neueRunde;
-	public boolean spielBeendet;
+	private boolean neueRunde;
+	private boolean spielBeendet;
+	private boolean bombe = false;
+	private boolean wettenAbwicklung;
+	private boolean rundenEnde = false;
+	
+	private int runde = 0;
 	
 	
 	
@@ -69,6 +74,14 @@ public class Gameobjekt implements Serializable {
 		return this.spielBeendet;
 	}
 	
+	public boolean getBombe(){
+		return this.bombe;
+	}
+	
+	public void setBombe(boolean bombe){
+		this.bombe = bombe;
+	}
+	
 	public void erstelleDeck(){
 		
 		System.out.println("Deck wird erstellt");
@@ -80,6 +93,31 @@ public class Gameobjekt implements Serializable {
 		}
 
 		this.haeggis = deck.getHaeggis();
+	}
+	
+	public boolean getWettenAbwicklung(){
+		return this.wettenAbwicklung;
+	}
+	
+	public void setWettenAbwicklung(boolean wettenAbwicklung) {
+		this.wettenAbwicklung = wettenAbwicklung;
+		
+	}
+	
+	public void setRunde(int runde){
+		this.runde = runde;
+	}
+	
+	public int getRunde(){
+		return this.runde;
+	}
+	
+	public boolean getRundenEnde(){
+		return this.rundenEnde;
+	}
+	
+	public void setRundenEnde(boolean rundenEnde){
+		this.rundenEnde = rundenEnde;
 	}
 	
 }

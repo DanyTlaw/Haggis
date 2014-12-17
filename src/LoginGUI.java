@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -19,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import com.sun.glass.events.WindowEvent;
 
 
 public class LoginGUI extends JFrame implements ActionListener{
@@ -40,8 +44,10 @@ public class LoginGUI extends JFrame implements ActionListener{
 	private JLabel lblHolder3;
 	private JLabel lblHolder4;
 	
+	
+	
 	public String pfad = System.getProperty("user.dir") + "//images//";
-	public static Spieltisch tisch;
+	public Spieltisch tisch;
 	
 	
 	
@@ -120,14 +126,13 @@ public class LoginGUI extends JFrame implements ActionListener{
 			
 			try{
 				if(txtName.getText().length()> 0){
-				Spieler spieler = new Spieler(txtName.getText());
-				name = txtName.getText();
-				spieler.setSiegesPunkte(Integer.parseInt(txtPunkte.getText()));
-				this.out.writeObject(spieler);
+					name = txtName.getText();
+					Spieler spieler = new Spieler(name);
+					spieler.setSiegesPunkte(Integer.parseInt(txtPunkte.getText()));
+					this.out.writeObject(spieler);
+					setVisible(false);
+					tisch = new Spieltisch(this.out, this.in, this.name);
 				
-				setVisible(false);
-				tisch = new Spieltisch(this.out, this.in, this.name);
-				System.out.println(tisch);
 				}
 			}catch (java.io.IOException IOException){
 				IOException.printStackTrace();
@@ -146,36 +151,7 @@ public class LoginGUI extends JFrame implements ActionListener{
 		return this.name;
 	}
 	
-	/*public void keyPressed(KeyEvent e){
-		int key = e.getKeyCode();
-		
-		if(key == KeyEvent.VK_ENTER){
-			try{
-				if(txtName.getText().length()> 0){
-				Spieler spieler = new Spieler(txtName.getText());
-				spieler.setSiegesPunkte(Integer.parseInt(txtPunkte.getText()));
-				this.out.writeObject(spieler);
-				
-				setVisible(false);
-				tisch = new Spieltisch(this.out, this.in);
-				System.out.println(tisch);
-				}
-			}catch (java.io.IOException IOException){
-				IOException.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}*/
+	
+	
 	
 }

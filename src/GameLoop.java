@@ -46,7 +46,8 @@ public class GameLoop extends Thread{
 						
 						// creating Masterobject
 						if (userlist.size() == 2) {
-
+							
+							System.out.println("creating master objekt");
 							Gameobjekt game = new Gameobjekt(userlist);
 							//sleep - otherwise complications with Clients (update-problem)
 							try {
@@ -54,6 +55,9 @@ public class GameLoop extends Thread{
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
+							
+							
+							
 							// send Masterobject to Clients
 							Iterator<ObjectOutputStream> i = outlist.iterator();
 							while (i.hasNext()) {
@@ -67,54 +71,22 @@ public class GameLoop extends Thread{
 					
 					else if(inputObject instanceof Gameobjekt){
 
-						Gameobjekt game = (Gameobjekt) inputObject;
+						Gameobjekt game = (Gameobjekt) inputObject;	
 						
-						System.out.println("~~~~~~~~~~~~~~~~~JokerKarten Spieler 0 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 0; i< 3; i++){
-							System.out.println(game.getSpieler(0).getHandKarten().get(i).getPunkte());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 						
-						System.out.println("~~~~~~~~~~~~~~~~~Handkarten Spieler 0 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 3; i< game.getSpieler(0).getHandKarten().size(); i++){
-							System.out.println(game.getSpieler(0).getHandKarten().get(i).getWert());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-						
-						System.out.println("~~~~~~~~~~~~~~~~~JokerKarten Spieler 1 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 0; i< 3; i++){
-							System.out.println(game.getSpieler(1).getHandKarten().get(i).getPunkte());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-						
-						System.out.println("~~~~~~~~~~~~~~~~~Handkarten Spieler 1 bevor zug ende~~~~~~~~~~~~~~~~~");
-						for(int i = 3; i< game.getSpieler(1).getHandKarten().size(); i++){
-							System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
-						}
-						System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
 						
 						//Wenn einer von beiden Spielern eine leeere Hand hat ist die Runde vorbei und die Logik wird angewandt
 						if(game.getSpieler(0).leereHand()){
-							System.out.println("leereHand Spieler 0");
 							
-							System.out.println("------------------JokerKarten Spieler 1------------------");
-							for(int i = 0; i< 3; i++){
-								System.out.println(game.getSpieler(1).getHandKarten().get(i).getPunkte());
-							}
-							System.out.println("---------------------------------------------------------");
+							game.setRundenEnde(true);
 							
-							System.out.println("------------------Handkarten Spieler 1------------------");
-							for(int i = 3; i< game.getSpieler(1).getHandKarten().size(); i++){
-								System.out.println(game.getSpieler(1).getHandKarten().get(i).getWert());
-							}
-							System.out.println("---------------------------------------------------------");
+							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefügt werden
+							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
 							
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(1).getHandKarten().size(); i++){
 								if(game.getSpieler(1).getHandKarten().get(i).getWert()!=0){
 									game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte()+5);
-									System.out.println(game.getSpieler(0).getPunkte());
 								}
 							}
 							
@@ -125,29 +97,27 @@ public class GameLoop extends Thread{
 							game.getSpieler(0).setPunkte(game.getSpieler(0).berechnePunkte());
 							game.getSpieler(1).setPunkte(game.getSpieler(1).berechnePunkte());
 							
-							System.out.println(game.getSpieler(0).getPunkte());
+							System.out.println("Spieler 0 Punkte : " + game.getSpieler(0).getPunkte());
 							
 							//Der Spieler der keine Karten mehr auf der Hand hat bekommt die Punkte der Wette
 							game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte() + game.getSpieler(0).getWette());
 							
 							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
-							if(game.getSpieler(0).getPunkte() >= game.getSpieler(0).getSiegesPunkte() && game.getSpieler(0).getPunkte() > game.getSpieler(1).getPunkte()){
-								game.getSpieler(0).setSieger(true);
-								game.setSpielBeendet(true);
-							}else{
-								game.setNeueRunde(true);
-								game.erstelleDeck();
-							}
+						
 
 						}
 						else if(game.getSpieler(1).leereHand()){
-							System.out.println("leereHand Spieler 1");
 							
+							game.setRundenEnde(true);
+							
+							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefügt werden
+							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+														
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(0).getHandKarten().size(); i++){
 								if(game.getSpieler(0).getHandKarten().get(i).getWert()!=0){
 									game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte()+5);
-									System.out.println(game.getSpieler(1).getPunkte());
+									
 								}
 							}
 							
@@ -164,16 +134,32 @@ public class GameLoop extends Thread{
 							game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte() + game.getSpieler(1).getWette());
 							
 							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
+							
+
+						}
+					
+						if(game.getRundenEnde()){
+								
+							if(game.getSpieler(0).getPunkte() >= game.getSpieler(0).getSiegesPunkte() && game.getSpieler(0).getPunkte() > game.getSpieler(1).getPunkte()){
+								game.getSpieler(0).setSieger(true);
+								game.setSpielBeendet(true);
+							}						
 							if(game.getSpieler(1).getPunkte() >= game.getSpieler(1).getSiegesPunkte() && game.getSpieler(1).getPunkte() > game.getSpieler(0).getPunkte()){
 								game.getSpieler(1).setSieger(true);
 								game.setSpielBeendet(true);
 							}else{
+								System.out.println("BOOOOBEN");
 								game.setNeueRunde(true);
+								game.setRundenEnde(false);
 								game.erstelleDeck();
+								game.setRunde(0);
 							}
-
 						}
-					
+						
+						
+						
+						
+						
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -195,21 +181,34 @@ public class GameLoop extends Thread{
 					//Uebergiebt dem nich passenden Spieler alle Karten da er der hÃ¶chste Stich hatte
 					if(game.getSpieler(0).getPassen()){
 						
-						game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+						game.setRunde(game.getRunde()+1);
+						if(game.getBombe()){
+							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+							game.setBombe(false);
+						}else{
+							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+						}
+						
 						game.getSpieler(0).setPassen(false);
-						game.getAusgespielteKarten().removeAll(game.getAusgespielteKarten());
-						game.getFeldkarten().removeAll(game.getFeldkarten());
+						game.getAusgespielteKarten().clear();
+						game.getFeldkarten().clear();
 					}
 					else if(game.getSpieler(1).getPassen()){
 						
-						game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+						game.setRunde(game.getRunde()+1);
+						if(game.getBombe()){
+							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
+							game.setBombe(false);
+						}else{
+							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
+						}
 						game.getSpieler(1).setPassen(false);
-						game.getAusgespielteKarten().removeAll(game.getAusgespielteKarten());
+						game.getAusgespielteKarten().clear();
 						game.getFeldkarten().removeAll(game.getFeldkarten());
 					}
 					
 					
-					
+										
 					Iterator<ObjectOutputStream> i = outlist.iterator();
 					while (i.hasNext()) {
 						i.next().writeObject(game);
@@ -218,11 +217,16 @@ public class GameLoop extends Thread{
 				}
 					else if(inputObject instanceof Chat){
 						Chat chat = (Chat) inputObject;
-											
+						
 						
 						System.out.println(chat.getMessage());
 						Iterator<ObjectOutputStream> i = outlist.iterator();
 						while (i.hasNext()) {
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							i.next().writeObject(chat);
 							
 						}
