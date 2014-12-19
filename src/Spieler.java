@@ -90,6 +90,10 @@ public class Spieler implements Serializable {
 		this.gewettet = gewettet;
 	}
 	
+	public ArrayList<Card> getGewonneneKarten(){
+		return this.gewonneneKarten;
+	}
+	
 	
 	//Methode welche den gewonnen Karten immer neue hinzufügt
 	public void addGewonneneKarten(ArrayList<Card> karten){

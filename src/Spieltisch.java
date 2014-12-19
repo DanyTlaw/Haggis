@@ -77,6 +77,7 @@ public class Spieltisch extends JFrame{
 	 
 	//Diese Variable ist von Anfang and true wenn ein neuer Client geoeffnet wird
 	private boolean neuGestartet = true;
+	private boolean wette = false;
 	
 	int bubeAnzahl;
 	int dameAnzahl;
@@ -100,6 +101,7 @@ public class Spieltisch extends JFrame{
 	public JButton jbtSpielen;
 	public JButton jbtPassen;
 	public JButton jbtEingabe;
+	public JButton jbtWetten;
 	
 	public ArrayList<Card> hand; 
 	
@@ -110,7 +112,8 @@ public class Spieltisch extends JFrame{
 	public ArrayList<Card> gespielteKarten = new ArrayList<Card>();
 	
 	public String pfad = System.getProperty("user.dir") + "//images//";
-
+	
+	public String name;
 
 	
 	private Image imageRueckseite;
@@ -140,6 +143,10 @@ public class Spieltisch extends JFrame{
 	private JLabel lblDame;
 	private JLabel lblBube;
 	
+	public JLabel lblPunkteEigen;
+	public JLabel lblPunkteGegner;
+	public JLabel lblHandkarten;
+	
 	public JLabel lblInfo;
 	
 	//Chat
@@ -147,15 +154,18 @@ public class Spieltisch extends JFrame{
 	private JTextArea txtAChat;
 	public Chat chat;
 	
-	public String name;
-	public JLabel lblPunkteEigen;
-	public JLabel lblPunkteGegner;
-	public JLabel lblHandkarten;
+	//Wetten
+	public JTextField EigeneWetten;
+	public JTextField GegnerWetten;
+	
+	public JLabel lblEigeneWetten;
+	public JLabel lblGegnerWetten;
+	
+	
 	JPanel haggis = new EigenPanel(4);
 	public JLabel haggisKarten = new JLabel ("Haggis:");
 	public TitledBorder Haggisborder = new TitledBorder(null,haggisKarten.getText(),TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
-	public JLabel lblEigeneWetten;
-	public JLabel lblGegnerWetten;
+
 	
 	private int kartenBreite = 60;
 	private int kartenHoehe = 100;
@@ -171,16 +181,6 @@ public class Spieltisch extends JFrame{
 	private int rechtsStrHoehe = 240;
 	private int eigeneKartenBreite = 500;
 	private int eigeneKartenHoehe = 110;
-	public JButton jbtWetten;
-	
-	public JTextField EigeneWetten;
-	public JTextField GegnerWetten;
-	
-	private boolean wette = false;
-
-	
-	
-
 	
 	
 	public Spieltisch(ObjectOutputStream out, ObjectInputStream in, String name){
@@ -196,42 +196,39 @@ public class Spieltisch extends JFrame{
 					
 		JFrame Tisch = new JFrame("Haggis");
 		
-		
-		
-		//HAUPTPANEL
+		//GrundPanel fuer die GUI	
 		JPanel hauptPanel = new EigenPanel(4);
-		
-		
-				
 		hauptPanel.setLayout(new GridBagLayout());
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.weightx = 0;
 		cons.weighty = 0;
-		
-		 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		 double width = screenSize.getWidth();
-		 double height = screenSize.getHeight();
+			
+		//Variabel fuer die Aufloesung
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
 		 
-		 if(height > 1000 && width > 1300){
-			 kartenBreite = 100;
-			 kartenHoehe = 150;
-			 spielfeldBreite = 825;
-			 spielfeldHoehe = 170;
-			 iconBreite = 150;
-			 iconHoehe = 150;			
-			 linksStrBreite = 310;
-			 linksStrHoehe = 200; 
-			 rechtsStrBreite = 800;
-			 rechtsStrHoehe = 360;
-			 eigeneKartenBreite = 800;	
-			 eigeneKartenHoehe = 170;
-			 rueckseiteBreite = 150;
-			 rueckseiteHoehe = 200;
+		 //uberpruefung fuer aufloesung damit gui nicht zu gross
+		if(height > 1000 && width > 1300){
+			kartenBreite = 100;
+			kartenHoehe = 150;
+			spielfeldBreite = 825;
+			spielfeldHoehe = 170;
+			iconBreite = 150;
+			iconHoehe = 150;			
+			linksStrBreite = 310;
+			linksStrHoehe = 200; 
+			rechtsStrBreite = 800;
+			rechtsStrHoehe = 360;
+			eigeneKartenBreite = 800;	
+			eigeneKartenHoehe = 170;
+			rueckseiteBreite = 150;
+			rueckseiteHoehe = 200;
 		
 							 
 		 }
 		 
-		//border
+		//Border welche in der Gui verwendet werden
 		LineBorder borderinvis = new LineBorder(Color.BLACK, 0, true);
 		LineBorder border = new LineBorder(Color.BLACK, 3, true);
 		TitledBorder Chatborder = new TitledBorder(border,"Chat",TitledBorder.LEFT,TitledBorder.DEFAULT_POSITION, new Font("Arial",Font.BOLD, 12), Color.BLACK);
@@ -245,9 +242,11 @@ public class Spieltisch extends JFrame{
 		****************************************************************************************/
 		
 		//JPanel welche alle informationen ueber den Gegner beinhaltet
+		//GrundPanel des Noerdlichen Teil
 		JPanel enemy = new EigenPanel(4);
-		JPanel enemyKarten = new EigenPanel(4);
 		enemy.setLayout(new BoxLayout(enemy, BoxLayout.X_AXIS));
+		
+		JPanel enemyKarten = new EigenPanel(4);
 		enemyKarten.setLayout(new GridBagLayout());
 		
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
@@ -261,15 +260,8 @@ public class Spieltisch extends JFrame{
 		lblDame = new JLabel("Dame: " + dameAnzahl);
 		lblKoenig = new JLabel("Koenig: " + koenigAnzahl);
 		lblHandkarten = new JLabel("HandKarten: ");
-		JPanel PunkteInfo = new EigenPanel(4);
-		PunkteInfo.setLayout(new GridBagLayout());
-		lblPunkteEigen = new JLabel("Punkte: ");
-		lblPunkteGegner = new JLabel("Gegnerische Punkte: ");
-		
-		
-		
+			
 		//Added alle Informationen dem JPanel enemyKarten
-		
 		cons.ipadx = 15;
 		cons.ipady = 15;
 		
@@ -291,6 +283,13 @@ public class Spieltisch extends JFrame{
 		cons.gridwidth = 3;
 		enemyKarten.add(lblHandkarten, cons);
 		
+		//Panel fuer die anzeige der eigenen und gegnerischen Punkte
+		JPanel PunkteInfo = new EigenPanel(4);
+		PunkteInfo.setLayout(new GridBagLayout());
+		
+		lblPunkteEigen = new JLabel("Punkte: ");
+		lblPunkteGegner = new JLabel("Gegnerische Punkte: ");
+		
 		//Added alle Info der Componente Punkte Info
 		cons.gridy = 0;
 		cons.gridx = 0;
@@ -309,14 +308,15 @@ public class Spieltisch extends JFrame{
 		lblPunkteGegner.setForeground(Color.black);
 		
 
-		//Wetten
+		//GrundPanel fuer die Wetten
 		JPanel WettenPanel = new EigenPanel(4);
 		WettenPanel.setLayout(new BoxLayout(WettenPanel, BoxLayout.Y_AXIS));
 		
+		//Pane fuer die Eigene Wetten
 		JPanel EigenWette = new EigenPanel(4);
 		FlowLayout flow = new FlowLayout(FlowLayout.LEFT);
 		EigenWette.setLayout(flow);
-		
+		//Text feld zur EIngabe der eignenen Wette
 		EigeneWetten = new JTextField(15);
 		EigeneWetten.setEditable(false);
 		EigeneWetten.addFocusListener(new FocusListener(){
@@ -336,11 +336,12 @@ public class Spieltisch extends JFrame{
 					}
 				}
 		    });
-		
+		//Button um wette abzuschliessen
 		jbtWetten = new JButton ("Wetten!");
-		
+		//Panel fuer die Gegnerwette
 		JPanel GegnerWette = new EigenPanel(4);
 		GegnerWette.setLayout(new FlowLayout(FlowLayout.LEFT));
+		//Textfeld zur Anzeige der Gegner Wette
 		GegnerWetten = new JTextField(20);
 		GegnerWetten.setEditable(false);
 			
@@ -370,33 +371,29 @@ public class Spieltisch extends JFrame{
 		/***************************************************************************************
 		CENTER TEIL DES HAUPTPANEL
 		****************************************************************************************/
+		//Grundpanel fuer den Zentralen Teil
 		JPanel spiel = new EigenPanel(4);
-		
-		JPanel spielfeld = new EigenPanel(2);
-		
-		
 		spiel.setLayout(new FlowLayout());
-		haggis.setLayout(new BoxLayout(haggis, BoxLayout.Y_AXIS));
-		spielfeld.setLayout(new BoxLayout(spielfeld, BoxLayout.Y_AXIS));
-
-	
 		
+		//Panel fuer das SPielfeld
+		JPanel spielfeld = new EigenPanel(2);
+		spielfeld.setLayout(new BoxLayout(spielfeld, BoxLayout.Y_AXIS));
+		
+		haggis.setLayout(new BoxLayout(haggis, BoxLayout.Y_AXIS));
+				
 		//Erstellt einen Image in einem ImageIcon welches einem Label hinzugefuegt wird
 		imageRueckseite = new ImageIcon(pfad +"rueckseite.png").getImage();
 		rueckseite = new ImageIcon(imageRueckseite.getScaledInstance(rueckseiteBreite, rueckseiteHoehe, Image.SCALE_DEFAULT));	
 		JLabel lblHaggis = new JLabel();
 		lblHaggis.setIcon(rueckseite);
-		
-		
+			
 		//JPanel fuer den Oberen Teil des Spielfeld
 		JPanel spielfeldoben = new EigenPanel(2);
 		spielfeldoben.setPreferredSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setMaximumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setMinimumSize(new Dimension(spielfeldBreite, spielfeldHoehe));
 		spielfeldoben.setLayout(new BoxLayout(spielfeldoben, BoxLayout.X_AXIS));
-			
-	
-		
+
 		//Schleife welches 7 Labels im oberen Spielfeld erstellt
 		spielfeldoben.add(Box.createHorizontalStrut(30));
 		for(int i = 0;i<7;i++){
@@ -444,19 +441,19 @@ public class Spieltisch extends JFrame{
 		/***************************************************************************************
 		SOUTH TEIL DES HAUPTPANEL
 		****************************************************************************************/
-		
+		//Grundpanel fuer den Suedlichen teil
 		JPanel spielSteuerung = new EigenPanel(4);
 		spielSteuerung.setLayout(new BoxLayout(spielSteuerung, BoxLayout.Y_AXIS));
-		
+		//Panel fuer die Karten
 		JPanel kartenSteuerung = new EigenPanel(4);
 		kartenSteuerung.setLayout(new BoxLayout(kartenSteuerung, BoxLayout.X_AXIS));
-		
+		//Linker Panel fuer die Karten (Joker)
 		JPanel linksSteuerung = new EigenPanel(4);
 		linksSteuerung.setLayout(new BoxLayout(linksSteuerung, BoxLayout.Y_AXIS));	
 		linksSteuerung.setPreferredSize(new Dimension(linksStrBreite,linksStrHoehe));
 		linksSteuerung.setMaximumSize(new Dimension(linksStrBreite,linksStrHoehe));
 		linksSteuerung.setMinimumSize(new Dimension(linksStrBreite,linksStrHoehe));
-		
+		//Rechter Panel fuer die Karten (Handkarten)
 		JPanel rechtsSteuerung = new EigenPanel(4);
 		rechtsSteuerung.setLayout(new BoxLayout(rechtsSteuerung, BoxLayout.Y_AXIS));
 		rechtsSteuerung.setPreferredSize(new Dimension(rechtsStrBreite,rechtsStrHoehe));
@@ -484,7 +481,8 @@ public class Spieltisch extends JFrame{
 		buttons.setBorder(new EmptyBorder(0,0,0,10));
 		buttons.add(jbtPassen);
 		
-		//Alle Container und Buttons fuer den Rechtssteuerung teil
+		
+		//Panel fuer die Handkarten ausser Joker
 		JPanel eigeneKartenButtonsOben = new EigenPanel(4);
 		eigeneKartenButtonsOben.setPreferredSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsOben.setMaximumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
@@ -504,7 +502,7 @@ public class Spieltisch extends JFrame{
 			eigeneKartenButtonsOben.add(btnKarte[i]);
 			kartenBound+=kartenBreite;
 		}
-		
+		//Panel fuer die Handkarten ausser Joker
 		JPanel eigeneKartenButtonsUnten = new EigenPanel(4);
 		eigeneKartenButtonsUnten.setPreferredSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
 		eigeneKartenButtonsUnten.setMaximumSize(new Dimension(eigeneKartenBreite, eigeneKartenHoehe));
@@ -525,7 +523,7 @@ public class Spieltisch extends JFrame{
 			eigeneKartenButtonsUnten.add(btnKarte[i]);
 			kartenBound+=kartenBreite;
 		}
-
+		//Panel fuer die Jokerkarten
 		JPanel jokerkarten = new EigenPanel(4);
 		jokerkarten.setLayout(new BoxLayout(jokerkarten, BoxLayout.X_AXIS));
 		
@@ -550,8 +548,6 @@ public class Spieltisch extends JFrame{
 		
 		linksSteuerung.add(jokerkarten);
 		linksSteuerung.add(buttons);
-		buttons.add(Box.createVerticalGlue());
-		buttons.add(Box.createHorizontalGlue());
 		linksSteuerung.setBorder(Jokerkartenborder);
 		
 		kartenSteuerung.add(linksSteuerung);
@@ -561,36 +557,40 @@ public class Spieltisch extends JFrame{
 		spielSteuerung.add(kartenSteuerung);
 		
 		/***************************************************************************************
-		CHAT / WETTEN PANELS
+		CHAT / Status Panel
 		****************************************************************************************/
 		
 		//Chat		
+		//Panel fuer den gesamten Chat
 		JPanel chatPanel = new EigenPanel(4);
-	
 		chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
 		
+		//Panel fuer die Eingabe des Chat (Textfeld/Button)
 		JPanel chatEingabe = new EigenPanel(4);
 		chatEingabe.setLayout(new BoxLayout(chatEingabe, BoxLayout.X_AXIS));
 		
+		//Button zum Senden des Chats
 		jbtEingabe = new JButton("Eingabe");
 		jbtEingabe.setEnabled(false);
 		jbtEingabe.addActionListener(bHandler);
-				
+		
+		//Textfeld welcher Chat darstellt
 		txtAChat = new JTextArea(20,20);
 		txtAChat.setLineWrap(true);
 	    txtAChat.setEditable(false);
 	  	txtAChat.setVisible(true);
 		txtAChat.setBorder(Chatborder);
 		
+		//Scrollpane fuer den Chat
 		JScrollPane scroll = new JScrollPane(txtAChat);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
- 
 		
+		//Textfeld fuer die Eingabe
 		txtAEingabe = new JTextArea(2,1);
 		txtAEingabe.setLineWrap(true);
 		txtAEingabe.setEditable(false);
 		
-		
+		//Scrollpane fuer die Eingabe
 		JScrollPane scrollEingabe = new JScrollPane(txtAEingabe);
 		scrollEingabe.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
@@ -758,9 +758,7 @@ public class Spieltisch extends JFrame{
 				
 				//Diese zeile erstellt eine Copy der Karte in die kartenKontrolle		
 				gespielteKarten.add(new Card(hand.get(i).getWert(),hand.get(i).getName(),hand.get(i).getBild(),hand.get(i).getPunkte(),hand.get(i).getFarbe(),hand.get(i).getJoker(),jokerWert,jokerFarbe));
-				
-				
-				
+							
 			}
 		}
 		//Ist eine Karte angewaehlt wird sie der ArrayList gespielteKarte hinzugefuegt (Hand Karten)
@@ -780,28 +778,19 @@ public class Spieltisch extends JFrame{
 			gespielteKarten.clear();
 			
 		}else{
+			
 			//Sortiert die FeldKarten nach groesse
 			Collections.sort(gespielteKarten);
 			
 			
 			//Wenn bereits Karten ausgespielt wurden, muss Stechlogik ueberprueft werden
 			if(Client.game.getFeldkarten().size()>0){
-				System.out.println("Sticklogik angewandt");
-				System.out.println("-----------------------Feldkarten---------------------");
-				for (int i = 0; i < Client.game.getFeldkarten().size(); i++){
-					System.out.println(Client.game.getFeldkarten().get(i).getWert());
-				}
-				System.out.println("-----------------------gespielteKarten---------------------");
-				for (int i = 0; i < gespielteKarten.size(); i++){
-					System.out.println(gespielteKarten.get(i).getWert());
-				}
-			
-				
+					
 				//Wenn eine Einzelkarte gespielt wurde und sie hoecher ist wie die bereits gespielte Karte, stich erfolgreich
 				if(istEinzel(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){	
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 					
 				}
@@ -810,189 +799,187 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karten eine Bombe sind können sie alles stechen ausser eine höhere Bombe
 				
 				//Bombe sticht eine andere Bombe wenn sie höher ist wie die andere Bombe
-				
 				else if(gespielteKarten.size() > 0 && istBombe(gespielteKarten) < istBombe(Client.game.getFeldkarten())){
-					
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
-				//Bombe sticht alle anderen Kombinationen
+				//Bombe sticht alle anderen Kombinationen ausser hoeher Bomben
 				else if(istBombe(gespielteKarten) > 0 && !Client.game.getBombe()){
 					Client.game.setBombe(true);
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten ein Paar sind und sie hoecher sind wie das bereits gespielte Paar, Stich erfolgreich
 				else if(istPaar(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() &&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Drillinge sind und sie hoecher sind wie die bereits gespielten Drillinge, stich erfolgreich
 				else if(istDrilling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Vierlinge sind und sie hoecher sind wie die bereits gespielten Vierling, Stich erfolgriech
 				else if(istVierling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Fuenflinge sind und sie hoecher sind wie die bereits gespielten Fï¿½nflinge Stich erfolgreich
 				else if(istFuenfling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Sechslinge sind und sie hoecher sind wie die bereits gespielten Sechslinge, Stich erfolgreich
 				else if(istSechsling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}		
 				
 				//Wenn die Karten Sieblinge sind und sie hoecher sind wie die bereits gespielten Sieblinge, Stich erfolgreich
 				else if(istSiebling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Achtlinge sind und sie hoecher sind wie die bereits gespielten Achtlinge, Stich erfolgreich
 				else if(istAchtling(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert()&&  gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine dreier Strasse sind und sie hoecher sind wie die bereits gespielte dreier Strasse, stich erfolgreich
 				else if(istStrasseDrei(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine vierer Strasse sind und sie hoecher sind wie die bereits gespielte vierer Strasse, stich erfolgreich
 				else if(istStrasseVier(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine fuenfer Strasse sind und sie hoecher sind wie die bereits gespielte fuenfer Strasse, stich erfolgreich
 				else if(istStrasseFuenf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine sechser Strasse sind und sie hoecher sind wie die bereits gespielte sechser Strasse, stich erfolgreich
 				else if(istStrasseSechs(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine siebner Strasse sind und sie hoecher sind wie die bereits gespielte siebner Strasse, stich erfolgreich
 				else if(istStrasseSieben(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine achter Strasse sind und sie hoecher sind wie die bereits gespielte achter Strasse, stich erfolgriech
 				else if(istStrasseAcht(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine neuner Strasse sind und sie hoecher sind wie die bereits gespielte neuner Strasse, stich erfolgreich
 				else if(istStrasseNeun(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zehner Strasse sind und sie hoecher sind wie die bereits gespielte zehner Strasse, stich erfolgriech
 				else if(istStrasseZehn(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine elfer Strasse sind und sie hoecher sind wie die bereits gespielte elfer Strasse, stich erfolgriech
 				else if(istStrasseElf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zwoelfer Strasse sind und sie hoecher sind wie die bereits gespielte zwoelfer Strasse, stich erfolgreich
 				else if(istStrasseZwoelf(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Paar Strasse ist spiele und sie hoecher ist wie die bereits gespielte Paar Strasse, stich erfolgreich
 				else if(istPaarStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Drilling Strasse ist und sie hoecher ist wie die bereits gespielte Drilling Strasse, stich erfolgreich
 				else if(istDrillingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Vierling Strasse ist und sie hoecher ist wie die bereits gespielte Vierling Strasse, stich erfolgreich
 				else if(istVierlingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Fuenfling Strasse ist und sie hoecher ist wie die bereits gespielte Fuenflng Strasse, Stich erfolgreich
 				else if(istFuenflingStrasse(gespielteKarten) && gespielteKarten.get(0).getWert() > Client.game.getFeldkarten().get(0).getWert() && gespielteKarten.size() == Client.game.getFeldkarten().size()){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
@@ -1010,8 +997,8 @@ public class Spieltisch extends JFrame{
 				//Wenn die Karte eine einzelkarte ist dann Spiel sie aus
 				if(istEinzel(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 					
 				}
@@ -1020,175 +1007,175 @@ public class Spieltisch extends JFrame{
 				else if(istBombe(gespielteKarten) > 0){
 					Client.game.setBombe(true);
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				//Wenn die Karten ein Paar sind dann Spiel sie aus
 				else if(istPaar(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Drillinge sind dann Spiele sie aus
 				else if(istDrilling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Vierlinge sind dann Spiele sie aus
 				else if(istVierling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Fuenflinge sind dann Spiele sie aus
 				else if(istFuenfling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Sechslinge sind dann Spiele sie aus
 				else if(istSechsling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}		
 				
 				//Wenn die Karten Sieblinge sind dann Spiele sie aus
 				else if(istSiebling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten Achtlinge sind dann Spiele sie aus
 				else if(istAchtling(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine dreier Strasse sind spiele sie aus
 				else if(istStrasseDrei(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine vierer Strasse sind spiele sie aus
 				else if(istStrasseVier(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine fuenfer Strasse sind spiele sie aus
 				else if(istStrasseFuenf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine sechser Strasse sind spiele sie aus
 				else if(istStrasseSechs(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine siebner Strasse sind spiele sie aus
 				else if(istStrasseSieben(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine achter Strasse sind spiele sie aus
 				else if(istStrasseAcht(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine neuner Strasse sind spiele sie aus
 				else if(istStrasseNeun(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zehner Strasse sind spiele sie aus
 				else if(istStrasseZehn(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine elfer Strasse sind spiele sie aus
 				else if(istStrasseElf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine zwoelfer Strasse sind spiele sie aus
 				else if(istStrasseZwoelf(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Paar Strasse ist spiele sie aus
 				else if(istPaarStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Drilling Strasse ist spiele sie aus
 				else if(istDrillingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Vierling Strasse ist spiele sie aus
 				else if(istVierlingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
 				//Wenn die Karten eine Fuenfling Strasse ist spiele sie aus
 				else if(istFuenflingStrasse(gespielteKarten)){
 					karteAnzeigen(gespielteKarten);
-					karteLoeschen();
 					kartenFeldKopieren(gespielteKarten);
+					karteLoeschen();
 					sendeGameObjekt();
 				}
 				
@@ -1208,6 +1195,7 @@ public class Spieltisch extends JFrame{
 		keinBorder();
 	}
 	
+ 	//Methode zum passen eines Spielzuges
 	public void passen(){
 		
 		if(Client.game.getSpieler(0).getAmZug()){
@@ -1254,6 +1242,7 @@ public class Spieltisch extends JFrame{
 	
 	//Methode welche alle Borders der buttons zurÃ¼cksetzt
  	public void keinBorder(){
+ 		//Schlaufe fuer die Jokerkarten
  		for(int i = 0;i<3;i++){
 			if(jokerKarten[i].getBorder() == gedrucktBorder){
 				gedruckt(gedrucktJoker[i]);
@@ -1261,7 +1250,7 @@ public class Spieltisch extends JFrame{
 				gedrucktJoker[i] = gedruckt(gedrucktJoker[i]);
 			}
 		}
-		//Ist eine Karte angewaehlt wird sie der ArrayList gespielteKarte hinzugefuegt (Hand Karten)
+		//Schlaufe fuer die Handkartn
 		for(int i = 3;i<17;i++){
 			if(btnKarte[i-3].getBorder() == gedrucktBorder){
 				gedruckt(gedrucktHand[i-3]);
@@ -1272,10 +1261,12 @@ public class Spieltisch extends JFrame{
 		}
  	}
  	
+ 	//Setzt den Wert und die Punkte der Karten auf 0 wenn ausgespielt, dient zur Kontrolle ob Handkarten leer am Ende
  	private void karteLoeschen(){
- 	
+ 		
+ 		//Schlaufe für die JokerKarten
  		for(int i = 0;i<3;i++){
- 			System.out.println(Client.game.getSpieler(0).getHandKarten().get(i));
+ 			//Ueberpruefung welche sicherstellt das nur der Wert von ausgewählten Karten auf 0 gesetzt wird
 			if(jokerKarten[i].getBorder() == gedrucktBorder){
 				jokerKarten[i].setVisible(false);
 				//Die ausgespielte Karte wird auf null gesetzt, weil wir mit diesem Wert Ã¼berprÃ¼fen ob die Handkarten leer sind
@@ -1288,11 +1279,12 @@ public class Spieltisch extends JFrame{
 				}
 			}
 		}
-		//Ist eine Karte angewaehlt wird sie der ArrayList gespielteKarte hinzugefuegt (Hand Karten)
+		//Schlaufe für die restlichen Handkarten
 		for(int i = 3;i<17;i++){
+			//Ueberpruefung welche sicherstellt das nur der Wert von ausgewählten Karten auf 0 gesetzt wird
 			if(btnKarte[i-3].getBorder() == gedrucktBorder){
 				btnKarte[i-3].setVisible(false);
-				
+				//Ueberpruefung welcher Spieler am Zug ist
 				if(Client.game.getSpieler(0).getAmZug()){
 					Client.game.getSpieler(0).getHandKarten().get(i).setWert(0);
 					Client.game.getSpieler(0).getHandKarten().get(i).setPunkte(0);
@@ -1311,18 +1303,14 @@ public class Spieltisch extends JFrame{
 		
 		//Clearet das Array welche Feldkarten speichert
 		Client.game.getFeldkarten().clear();
-		
-		System.out.println("KARTENFELDKOPIEREN______________________________");
-		
-		
+			
 		//added dem Array die neu Ausgespielten Feldkarten
 		for (int k = 0; k < karten.size(); k++){
 			Client.game.getFeldkarten().add(new Card(karten.get(k).getWert(),karten.get(k).getName(), karten.get(k).getBild(), 
-					karten.get(k).getPunkte(), karten.get(k).getFarbe(), karten.get(k).getJoker()));
-			System.out.println(Client.game.getFeldkarten().get(k).getWert());
+					karten.get(k).getPunkte(), karten.get(k).getFarbe(), karten.get(k).getJoker(),karten.get(k).getJokerWert(),karten.get(k).getJokerFarbe()));
 		}
 		
-		
+		//Karten werden dem Array Ausgespielte Karten übergeben welche wiederum im Falle eines Runden Sieger diesem zur Punkteberechnung übergeben werden
 		Client.game.addAusgespielteKarten(Client.game.getFeldkarten());
 			
 		gespielteKarten.clear();
@@ -1331,15 +1319,12 @@ public class Spieltisch extends JFrame{
 	//Methode welche die Karten in der Mitte anzeigt und die entsprechenden Handkarten nicht mehr sichtbar macht
 	public void karteAnzeigen(ArrayList<Card> karten){
 		
+		//Bevor neue Karten angezeigt werden können müssen die vorhandenen Visuel gelöscht werden
 		kartenFeldLoeschen();
 		
-		System.out.println("Karten anzeigen......................");	
-	
+		//Schlaufe welche für die anzahl ausgespielter Karten durchläuft und diese visuell in die Mitte überträgt
 		for(int i =0;i<karten.size();i++){
 			anzeigeKarten[i].setIcon(karten.get(i).getBild());
-		}
-		for (int k = 0; k<karten.size();k++){
-			System.out.println(karten.get(k).getWert());
 		}
 		
 	}
@@ -1349,7 +1334,8 @@ public class Spieltisch extends JFrame{
 		int wette = 0;
 		boolean gueltig = false;
 		int eingabe = Integer.parseInt(EigeneWetten.getText());
-	
+		
+		//3 Moeglichkeiten zu Wetten gar nicht (0) klein (15) gross (30)
 		if(eingabe == 0){
 			wette = 0;
 			gueltig = true;
@@ -1362,21 +1348,18 @@ public class Spieltisch extends JFrame{
 			wette = 30;
 			gueltig = true;
 		}
+		//Falls eine Falsche Wette getätigt wurde muss der Benutzer Informiert werden
 		else{
 			JOptionPane.showMessageDialog (null, "<html>Bitte ueberpruefen Sie die Eingabe nochmals <br>"
 					+ " Moegliche Eingaben : 0 (nicht Wetten) 15 (kleine Wette) 30 (grosse Wette)","Ungueltige Eigabe",1);
 		}
-	
 		
-		
-		System.out.println("Wert Wette in Spieltisch: " + wette);
-		
+		//Ueberpruefung ob Erflogreich Gewettet wurde
 		if(gueltig){
+			//Falls erfolgreich gewettet wurde müssen Wetten auf den Spieler übertragen werden
 			for (int i = 0; i < Client.game.getSpielerList().size(); i++){
-				System.out.println("THIS NAME : " + this.name);
-				System.out.println("SPIELER NAME : " + Client.game.getSpielerList().get(i).getSpielerName());
+				//Spieltisch immer gleicher name wie Spieler daher kann anhand des Namens Identifiziert werden welche Wette zu Welchem Spieler
 				if(this.name.equals(Client.game.getSpielerList().get(i).getSpielerName())){
-					System.out.println("If in wette");
 					setWette(true);
 					Client.game.getSpielerList().get(i).setWette(wette);
 					Client.game.getSpielerList().get(i).setGewettet(true);
@@ -1424,7 +1407,7 @@ public class Spieltisch extends JFrame{
 			return farbe;
 		}
 		JOptionPane.showMessageDialog (this, "Gueltige Farben sind: rot, gelb, grau, gruen, orange","Ungueltige Farbe",1);
-		return "0";
+		return null;
 	}
 	
 	//Methode welche den Wert und die Farbe einer Jokerkarte wechselt
@@ -1457,7 +1440,6 @@ public class Spieltisch extends JFrame{
 		//Diese for Schleife dient dazu dem Spieler die JokerKarten zu verteilen
 		
 		//Die Zaehler Variable stellt die Anzahl Karten dar die in diesem Moment noch zu verteilen sind
-		
 		for(int i = 0; i<3; i++){
 			
 			if(hand.get(i).getName().equals("bube")){
@@ -1483,7 +1465,7 @@ public class Spieltisch extends JFrame{
 			
 		}
 		
-
+		//Diese for Schleife dient dazu die restlichen Handkarten zu verteilen
 		for(int i = 3; i< 17; i++){
 			
 			if(hand.get(i).getWert()==2){
@@ -1614,9 +1596,7 @@ public class Spieltisch extends JFrame{
 		
 		//Wenn eine Strasse aus Sets >1 zb Paar, Drilling etc besteht braucht es folgenge Logik
 		if(set>1){
-			
-	
-			
+		
 			//Es muss fuer jedes Set in der Strasse einmal das Set ueberprueft werden
 			for(int i = 0;i<karten.size()/set;i++){
 				
@@ -1637,7 +1617,8 @@ public class Spieltisch extends JFrame{
 			}else{
 				return false;
 			}
-			
+		
+		//Wenn kein Set vorhanden ist Handelt es sich um eine simple Strasse, folgende Logik wird angewant
 		}else{
 
 			for(int i = 0;i<karten.size()-1;i++){
@@ -2365,15 +2346,9 @@ public class Spieltisch extends JFrame{
 		int testBombe1 = 0;
 		
 		//Methode welche die Jokerwert in den Wert der Jokerkarte schreibt
-		//jokerWertWechsel(karten);
-		
-		System.out.println("FELDKARTEN IN JOKER HUERESOHN MISSGEBURT FICKT MI AH AM 3:23");
-		if(Client.game.getFeldkarten().size()>0){
-			for(int i = 0; i < Client.game.getFeldkarten().size(); i++){
-				System.out.println(Client.game.getFeldkarten().get(i).getWert());
-			}
-		}
+		jokerWertWechsel(karten);
 
+		
 		//Karten neu sotieren nach ihrem Wert sodass die Jokerkarte an ihrem richtigen Platz ist
 		Collections.sort(karten);
 		
@@ -2464,9 +2439,6 @@ public class Spieltisch extends JFrame{
 		}
 		
 		//Je nach Bombe wird gemaess der Rangliste eine anderen Wert zurueck gegeben
-		
-		
-		
 		if(testBombe1 == 4){
 			return 1;
 		}
@@ -2488,11 +2460,6 @@ public class Spieltisch extends JFrame{
 		else{
 			return 0;
 		}
-		
-		
-		
-		
-		
 	}
 	
 	public void setWette(boolean wette){
@@ -2572,7 +2539,12 @@ public class Spieltisch extends JFrame{
 				karteAuspielen();
 			}
 			else if(e.getSource()==jbtPassen){
-				passen();
+				if(Client.game.getFeldkarten().size()>0){
+					passen();
+				}else{
+					JOptionPane.showMessageDialog (null, "Sie sind am Zug und haben keine Karte ausgespielt!"
+							,"Passen nicht möglich",2);
+				}
 			}
 			else if(e.getSource()==jbtEingabe){
 				System.out.println("möchte Chat senden");

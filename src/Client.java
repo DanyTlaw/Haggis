@@ -62,43 +62,50 @@ public class Client {
 						e.printStackTrace();
 					}
 					
+					//ueberpruefung ob Sieger ermittelt
 					if(game.getSpielBeendet()){
+						//wenn Sieger Ermittelt Alle Buttons Sperren damit nicht weitergespielt werden kann
 						login.getTisch().jbtWetten.setEnabled(false);
 						login.getTisch().jbtEingabe.setEnabled(false);
 						login.getTisch().EigeneWetten.setEditable(false);
 						login.getTisch().getTxtAEingabe().setEditable(false);
 						login.getTisch().amZugButtons(false);
+						
 						String resultat = "verloren";
 						String titel = "Viel Glueck beim naechsten Mal!";
+						int endPunkte = game.getSpieler(client_ID).getPunkte();
 
 						if(game.getSpieler(client_ID).getSieger()){
 							resultat = "gewonnen";
 							titel = "Herzlichen Glueckwunsch!";
 						}
 						
-						
-						JOptionPane.showMessageDialog (login.getTisch(),"Sie haben " + resultat ,titel,JOptionPane.INFORMATION_MESSAGE);
+						//Information an die Spieler wer gewonnen hat
+						JOptionPane.showMessageDialog (login.getTisch(),"Sie haben " + resultat + " mit " + endPunkte + " Punkten!",
+								titel,JOptionPane.INFORMATION_MESSAGE);
 					}
 					
-
+					//Am Anfang jedes Spiels muiessen wetten Abgweickelt werden
 					if(game.getWettenAbwicklung()){
 						
+						//wenn gewettet Wurde Buttons und Textfeld Sperren damit nicht verändert werden kann bis zum Anfang naechsten speils
 						if(login.getTisch().getWette()){
 													
 							login.getTisch().EigeneWetten.setEditable(false);
 							login.getTisch().jbtWetten.setEnabled(false);
 							login.getTisch().setWette(false);
 							
-							
+						//Wenn beide Spieler gewettet haben kann das SPiel beginnen
 						}if(game.getSpieler(0).getGewettet() && game.getSpieler(1).getGewettet()){
 							
+							//Anpassen der Statusmeldung
 							lblText = "Wette abgeschlossen, Spiel beginnt!";
 							game.setRunde(game.getRunde()+1);
 							login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + lblText + "<br>Runde: " + game.getRunde() + "<br/>"  + "</html>");
 							
 							game.setWettenAbwicklung(false);
 									
-							//Spieler eins darf anfangen die ist amZug variable wird true oder flase gesetzt
+							//Spieler eins darf anfangen die ist amZug variable wird true oder flase gesetzt + Wetten Information angezeigt
 							if(client_ID==0){
 								game.getSpieler(client_ID).setAmZug(true);
 								login.getTisch().EigeneWetten.setText("Ihre Wette: " + game.getSpieler(0).getWette());
@@ -108,10 +115,7 @@ public class Client {
 								login.getTisch().EigeneWetten.setText("Ihre Wette: " + game.getSpieler(1).getWette());
 								login.getTisch().GegnerWetten.setText("Gegner Wette: " + game.getSpieler(0).getWette());
 							}
-							System.out.println("Spieler"+ client_ID +" :"+ game.getSpieler(client_ID).getAmZug());
-							
-							System.out.println("---------------------------------------------");		
-							
+														
 							//Die Methode welche die Buttons disabled und enabled wird fÃ¼r beide Spieler aufgerufen
 							if(game.getSpieler(client_ID).getAmZug()){
 								login.getTisch().amZugButtons(true);
@@ -127,6 +131,7 @@ public class Client {
 											
 						ladetGegnerInfo();
 						
+						//Anpassen der Statusmeldung
 						if(game.getRunde()>1){
 							login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + "<br>Runde: " + game.getRunde() + "<br/>"  + "</html>");
 						}
@@ -139,9 +144,9 @@ public class Client {
 						}
 						
 						if(game.getFeldkarten().size()>0){
-							
+											
 							login.getTisch().karteAnzeigen(game.getFeldkarten());
-										
+												
 						}else{
 							login.getTisch().kartenFeldLoeschen();
 						}
@@ -154,10 +159,18 @@ public class Client {
 					//Wenn die Spieler noch keine Handkarten haben werden neue Handkarten in ihre Handgeladen
 					if(game.getNeueRunde()){
 						
+						//falls noch keine der Beiden Spieler punkte besitzt handelt es sich um die aller erste Runde, folgender Info Text im Spielstatus
+						if(game.getSpieler(0).getPunkte() + game.getSpieler(1).getPunkte() == 0){
+							lblText = "<html>Gegner gefunden <br>  Spiel startet sobald Wetten Platziert wurden!";
+							login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + lblText + "</html>");
+						//Ansonsten handelt es sich nicht um ein Komplett neues Spiels somit muss Info Text wiefolgt aussehen
+						}else{
+							lblText = "<html>Noch kein Sieger ermittelt! <br> Spiel wird fortgesetzt sobald Wetten platziert wurden! </html>";
+							login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + lblText + "</html>");
+							
+						}
 						
-						lblText = "<html>Gegner gefunden <br>  Spiel startet sobald Wetten Platziert wurden!";
-						login.getTisch().lblInfo.setText("<html><div style=\"text-align: center;\">" + lblText + "</html>");
-						
+						//Methode welche Gegnerische Handkarten und Punkte in GUI anpasst
 						ladetGegnerInfo();
 						
 						

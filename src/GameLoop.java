@@ -80,6 +80,8 @@ public class GameLoop extends Thread{
 							
 							game.setRundenEnde(true);
 							
+							
+							
 							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefügt werden
 							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
 							
@@ -89,20 +91,25 @@ public class GameLoop extends Thread{
 									game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte()+5);
 								}
 							}
-							
+							System.out.println("Karten gegner Punkte: " + game.getSpieler(0).getPunkte());
 							//Added dem Sieger der Runde den Haggis hinzu
 							game.getSpieler(0).addGewonneneKarten(game.getHaeggis());
 							
-							//Berchnet die Punkte der gewonenen Karten für beide Spieler
-							game.getSpieler(0).setPunkte(game.getSpieler(0).berechnePunkte());
-							game.getSpieler(1).setPunkte(game.getSpieler(1).berechnePunkte());
+							System.out.println(" Karten punkte + Haggis: " + game.getSpieler(0).getPunkte());
 							
-							System.out.println("Spieler 0 Punkte : " + game.getSpieler(0).getPunkte());
+							//Berchnet die Punkte der gewonenen Karten für beide Spieler
+							for(int k = 0; k < game.getSpielerList().size(); k++){
+								game.getSpieler(k).setPunkte(game.getSpieler(k).berechnePunkte());
+								//Nachdem Punkte berechnet wurden muss gewonnene Karten gecleared werden fuer die naechste Runde
+								game.getSpieler(k).getGewonneneKarten().clear();
+							}
+							
+							
 							
 							//Der Spieler der keine Karten mehr auf der Hand hat bekommt die Punkte der Wette
 							game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte() + game.getSpieler(0).getWette());
 							
-							//Wenn ein Spieler die abgemachten Punkte erreicht hat, hat er gewonnen
+							
 						
 
 						}
@@ -115,6 +122,7 @@ public class GameLoop extends Thread{
 														
 							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(0).getHandKarten().size(); i++){
+								
 								if(game.getSpieler(0).getHandKarten().get(i).getWert()!=0){
 									game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte()+5);
 									
@@ -125,11 +133,12 @@ public class GameLoop extends Thread{
 							game.getSpieler(1).addGewonneneKarten(game.getHaeggis());
 							
 							//Berchnet die Punkte der gewonenen Karten für beide Spieler
-							game.getSpieler(1).setPunkte(game.getSpieler(1).berechnePunkte());
-							game.getSpieler(0).setPunkte(game.getSpieler(0).berechnePunkte());
-							
-							System.out.println(game.getSpieler(1).getPunkte());
-							
+							for(int k = 0; k < game.getSpielerList().size(); k++){
+								game.getSpieler(k).setPunkte(game.getSpieler(k).berechnePunkte());
+								//Nachdem Punkte berechnet wurden muss gewonnene Karten gecleared werden fuer die naechste Runde
+								game.getSpieler(k).getGewonneneKarten().clear();
+							}
+								
 							//Der Spieler der keine Karten mehr auf der Hand hat bekommt die Punkte der Wette
 							game.getSpieler(1).setPunkte(game.getSpieler(1).getPunkte() + game.getSpieler(1).getWette());
 							
@@ -137,18 +146,20 @@ public class GameLoop extends Thread{
 							
 
 						}
-					
+						
+						//Wenn ein Spieler eine leere hand hat ist die Runde beendet, nun muss ueberprueft werden ob ein Spieler die Siegespunkte erreicht hat
 						if(game.getRundenEnde()){
-								
+							
+							//Wenn ein Spieler Siegespunkte erreicht hat und mehr Punkte wie der Gegner hat, ist er der Sieger
 							if(game.getSpieler(0).getPunkte() >= game.getSpieler(0).getSiegesPunkte() && game.getSpieler(0).getPunkte() > game.getSpieler(1).getPunkte()){
 								game.getSpieler(0).setSieger(true);
 								game.setSpielBeendet(true);
 							}						
-							if(game.getSpieler(1).getPunkte() >= game.getSpieler(1).getSiegesPunkte() && game.getSpieler(1).getPunkte() > game.getSpieler(0).getPunkte()){
+							else if(game.getSpieler(1).getPunkte() >= game.getSpieler(1).getSiegesPunkte() && game.getSpieler(1).getPunkte() > game.getSpieler(0).getPunkte()){
 								game.getSpieler(1).setSieger(true);
 								game.setSpielBeendet(true);
+							//Wurde kein Sieger ermittelt geht das Spiel weiter
 							}else{
-								System.out.println("BOOOOBEN");
 								game.setNeueRunde(true);
 								game.setRundenEnde(false);
 								game.erstelleDeck();
@@ -180,11 +191,13 @@ public class GameLoop extends Thread{
 
 					//Uebergiebt dem nich passenden Spieler alle Karten da er der hÃ¶chste Stich hatte
 					if(game.getSpieler(0).getPassen()){
-						
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
 						game.setRunde(game.getRunde()+1);
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
 						if(game.getBombe()){
 							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
 							game.setBombe(false);
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
 						}else{
 							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
 						}
@@ -194,17 +207,19 @@ public class GameLoop extends Thread{
 						game.getFeldkarten().clear();
 					}
 					else if(game.getSpieler(1).getPassen()){
-						
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
 						game.setRunde(game.getRunde()+1);
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
 						if(game.getBombe()){
 							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
 							game.setBombe(false);
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
 						}else{
 							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
 						}
 						game.getSpieler(1).setPassen(false);
 						game.getAusgespielteKarten().clear();
-						game.getFeldkarten().removeAll(game.getFeldkarten());
+						game.getFeldkarten().clear();
 					}
 					
 					
