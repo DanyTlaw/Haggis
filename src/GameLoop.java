@@ -82,10 +82,10 @@ public class GameLoop extends Thread{
 							
 							
 							
-							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefügt werden
+							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefÃ¼gt werden
 							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
 							
-							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
+							//FÃ¼r jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(1).getHandKarten().size(); i++){
 								if(game.getSpieler(1).getHandKarten().get(i).getWert()!=0){
 									game.getSpieler(0).setPunkte(game.getSpieler(0).getPunkte()+5);
@@ -97,7 +97,7 @@ public class GameLoop extends Thread{
 							
 							System.out.println(" Karten punkte + Haggis: " + game.getSpieler(0).getPunkte());
 							
-							//Berchnet die Punkte der gewonenen Karten für beide Spieler
+							//Berchnet die Punkte der gewonenen Karten fÃ¼r beide Spieler
 							for(int k = 0; k < game.getSpielerList().size(); k++){
 								game.getSpieler(k).setPunkte(game.getSpieler(k).berechnePunkte());
 								//Nachdem Punkte berechnet wurden muss gewonnene Karten gecleared werden fuer die naechste Runde
@@ -117,10 +117,10 @@ public class GameLoop extends Thread{
 							
 							game.setRundenEnde(true);
 							
-							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefügt werden
+							//Damit die Zulezt ausgespielte Karte dem gewinner hinzugefÃ¼gt werden
 							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
 														
-							//Für jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
+							//FÃ¼r jede handkarte die noch auf der gegnerischen Hand ist bekommt der Sieger der Runde 5 Punkte
 							for(int i = 0; i< game.getSpieler(0).getHandKarten().size(); i++){
 								
 								if(game.getSpieler(0).getHandKarten().get(i).getWert()!=0){
@@ -132,7 +132,7 @@ public class GameLoop extends Thread{
 							//Added dem Sieger der Runde den Haggis hinzu
 							game.getSpieler(1).addGewonneneKarten(game.getHaeggis());
 							
-							//Berchnet die Punkte der gewonenen Karten für beide Spieler
+							//Berchnet die Punkte der gewonenen Karten fÃ¼r beide Spieler
 							for(int k = 0; k < game.getSpielerList().size(); k++){
 								game.getSpieler(k).setPunkte(game.getSpieler(k).berechnePunkte());
 								//Nachdem Punkte berechnet wurden muss gewonnene Karten gecleared werden fuer die naechste Runde
@@ -177,7 +177,7 @@ public class GameLoop extends Thread{
 						e.printStackTrace();
 					}
 					
-					//Setzt die am zugvaribale fÃ¼r zwei spieler
+					//Setzt die am zugvaribale fÃƒÂ¼r zwei spieler
 					if(game.getSpielerList().size()==2){
 						if(game.getSpieler(0).getAmZug()){
 							game.getSpieler(0).setAmZug(false);		
@@ -189,15 +189,15 @@ public class GameLoop extends Thread{
 					}
 
 
-					//Uebergiebt dem nich passenden Spieler alle Karten da er der hÃ¶chste Stich hatte
+					//Uebergiebt dem nich passenden Spieler alle Karten da er der hÃƒÂ¶chste Stich hatte
 					if(game.getSpieler(0).getPassen()){
-						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhÃ¶t
 						game.setRunde(game.getRunde()+1);
-						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhÃ¶t
 						if(game.getBombe()){
 							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
 							game.setBombe(false);
-						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhÃ¶t
 						}else{
 							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
 						}
@@ -207,13 +207,13 @@ public class GameLoop extends Thread{
 						game.getFeldkarten().clear();
 					}
 					else if(game.getSpieler(1).getPassen()){
-						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhÃ¶t
 						game.setRunde(game.getRunde()+1);
-						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhÃ¶t
 						if(game.getBombe()){
 							game.getSpieler(1).addGewonneneKarten(game.getAusgespielteKarten());
 							game.setBombe(false);
-						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhöt
+						//Wenn Spieler passt ist eine Runde beendet Rundenzaehler wird erhÃ¶t
 						}else{
 							game.getSpieler(0).addGewonneneKarten(game.getAusgespielteKarten());
 						}
@@ -253,10 +253,11 @@ public class GameLoop extends Thread{
 					
 				
 			}catch (ClassNotFoundException cnfException) {
-					cnfException.printStackTrace();
+					//cnfException.printStackTrace();
+					System.out.println("In/Out Streams geschlossen.");
 					} 
 		}catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("Client hat Verbindung abgebrochen.");
 		}
 	}
 }
