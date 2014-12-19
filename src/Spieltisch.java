@@ -1371,10 +1371,23 @@ public class Spieltisch extends JFrame{
 		
 	//Methode welche den Spieler auffordert einen Wert fuer den Joker einzugeben und diese zur�ck gibt
 	public int jokerWert(int i){
+		int karteWert = 15;
 		
-
-		String str = JOptionPane.showInputDialog (null, "Wert fuer die Jokerkarte:");
-		int karteWert = Integer.parseInt(str);
+		while(true){
+			
+			boolean kartenStatus = true;
+			try{
+				String str = JOptionPane.showInputDialog (null, "Wert fuer die Jokerkarte:");
+				karteWert = Integer.parseInt(str);
+			}catch(NumberFormatException e){
+				JOptionPane.showMessageDialog (this, "Bitte Gueltigen Wert Eingeben!","Ungueltiger Wert",1);
+				kartenStatus = false;
+			}
+			if(kartenStatus){
+				break;
+			}
+		}
+		
 		
 		//�berpr�ft um welche Jokerkarte es sich handelt und gibt falls noetig die anweisung einen Richtigen Wert enzugeben = return 0
 		if(i==0){
@@ -1400,15 +1413,21 @@ public class Spieltisch extends JFrame{
 	
 	//Methode welche den Spieler auffordert eine Farbe fuer den Joker einzugeben und diese zurueck gibt
 	public String jokerFarbe(){
+		String farbe = null;
 		
-		String farbe = JOptionPane.showInputDialog (null, "Wert fuer die Jokerfarbe:");
-		//ueberprueft ob die eingegeben farbe keine von den zulaessigen ist und teilt die moeglichkeiten dem Benutzer mit
-		if(farbe.equals("rot") || farbe.equals("gruen") || farbe.equals("gelb") || farbe.equals("grau") || farbe.equals("orange")){
-			return farbe;
+		while(true){
+			farbe = JOptionPane.showInputDialog (null, "Wert fuer die Jokerfarbe:");
+			
+			//ueberprueft ob die eingegeben farbe keine von den zulaessigen ist und teilt die moeglichkeiten dem Benutzer mit
+			if(farbe.equals("rot") || farbe.equals("gruen") || farbe.equals("gelb") || farbe.equals("grau") || farbe.equals("orange")){
+				break;
+			}
+			JOptionPane.showMessageDialog (this, "Gueltige Farben sind: rot, gelb, grau, gruen, orange","Ungueltige Farbe",1);
 		}
-		JOptionPane.showMessageDialog (this, "Gueltige Farben sind: rot, gelb, grau, gruen, orange","Ungueltige Farbe",1);
-		return null;
+		
+		return farbe;
 	}
+		
 	
 	//Methode welche den Wert und die Farbe einer Jokerkarte wechselt
 	public void jokerWertWechsel(ArrayList<Card> karten){
@@ -2534,6 +2553,7 @@ public class Spieltisch extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			boolean aStatus = true;
 			// TODO Auto-generated method stub
 			if(e.getSource()== jbtSpielen){
 				karteAuspielen();
@@ -2555,17 +2575,21 @@ public class Spieltisch extends JFrame{
 				System.out.println(chat.getMessage());
 			}
 			else if(e.getSource()==jbtWetten){
-				wetten();
 				
-				sendeGameObjekt();
-			
-			}
-		
-				
-				
+				try{
+					wetten();
+				}catch (NumberFormatException IOException){
+					JOptionPane.showMessageDialog(rootPane, "Bitte gueltige Wette eingeben.");
+					aStatus = false;
+				}
+				if(aStatus){
+					sendeGameObjekt();
 				}
 			}
+
 		}
+	}
+}
 		
 	
 

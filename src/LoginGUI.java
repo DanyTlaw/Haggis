@@ -137,7 +137,7 @@ public class LoginGUI extends JFrame implements ActionListener{
 			}catch (java.io.IOException IOException){
 				IOException.printStackTrace();
 			}catch (NumberFormatException IOException){
-				JOptionPane.showMessageDialog(rootPane, "Bitte gültige Punktzahl eingeben.");
+				JOptionPane.showMessageDialog(rootPane, "Bitte gueltige Punktzahl eingeben.");
 			}
 			
 			

@@ -44,7 +44,7 @@ public class Client {
 			out.flush();
 			in = new ObjectInputStream(socket.getInputStream());
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			System.out.println("Client konnte Verbindung nicht aufbauen!");
 			System.exit(1);
 				}
 		}
@@ -59,7 +59,7 @@ public class Client {
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						System.out.println("Thread unterbrochen!");
 					}
 					
 					//ueberpruefung ob Sieger ermittelt
@@ -213,11 +213,7 @@ public class Client {
 				else if(inputObject instanceof Chat){
 					chat = (Chat) inputObject;
 					
-					if(login.getTisch().getTxtAChat().getText().equals("")){
-						login.getTisch().getTxtAChat().setText(chat.getSpieler() +" : " +chat.getMessage());
-					}else{
-						login.getTisch().getTxtAChat().setText(login.getTisch().getTxtAChat().getText() + "\n" + chat.getSpieler() +" : " +chat.getMessage());
-					}
+					login.getTisch().getTxtAChat().append(chat.getSpieler() +" : " +chat.getMessage() + "\n" );
 				}
 				
 				// set Client_ID
@@ -227,8 +223,15 @@ public class Client {
 				
 				
 			}
-		} catch (ClassNotFoundException | IOException cnfException) {
-			cnfException.printStackTrace();
+		}catch (ClassNotFoundException | IOException cnfException) {
+				
+			System.out.println("Verbindung Unterbroche, schliesse Client!");
+			
+			JOptionPane.showMessageDialog (null, "Gegner hat Spiel verlassen, Client wird geschlossen!"
+					,"Verbindung Unterbrochen",2);
+			
+			
+			System.exit(1);
 		}
 	}
 	
