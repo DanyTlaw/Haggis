@@ -9,5 +9,6 @@
 /Server.class
 /Spieler.class
 /Spieltisch$1.class
-/Spieltisch$2.class
-/LoginGUI$1.class
+/Spieltisch$buttonHandler.class
+/Spieltisch$clickHandler.class
+/Spieltisch.class
